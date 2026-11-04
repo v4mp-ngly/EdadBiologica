@@ -849,6 +849,12 @@ html{scroll-behavior:smooth}body{background:radial-gradient(circle at 90% 2%,#e8
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
 </style>
+<style>
+/* NUMED V0.5: Cinematic reveal and functional metrics */
+body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!important}.numed-reveal{position:fixed;inset:0;z-index:20000;background:radial-gradient(circle at 50% 52%,#1d6480 0%,#0c3855 48%,#071c30 100%);color:#fff;display:flex;flex-direction:column;justify-content:space-between;isolation:isolate;overflow:hidden;padding:clamp(18px,3vw,42px);font-family:Montserrat,Arial,sans-serif}.numed-reveal-noise{position:absolute;inset:0;opacity:.2;background:linear-gradient(120deg,transparent 20%,#69c8c511 50%,transparent 80%);pointer-events:none}.numed-orbit{position:absolute;width:min(78vw,820px);aspect-ratio:1;border:1px solid #b9eacb2d;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;animation:numed-orbit 9s ease-in-out infinite alternate}.numed-orbit-two{width:min(62vw,660px);border-color:#a8cc3b50;animation-delay:-3s}.numed-reveal-top{display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;z-index:1}.numed-reveal-brand{display:flex;align-items:center;gap:13px;font-size:19px;font-weight:800;letter-spacing:1px}.numed-reveal-brand img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:12px;padding:4px}.numed-reveal-brand small{display:block;font-size:9px;letter-spacing:2px;color:#bfdfb6}.numed-skip{border:1px solid #ffffff45;background:#ffffff10;color:#fff;border-radius:40px;padding:13px 19px;cursor:pointer;font:600 12px Montserrat,Arial}.numed-reveal-center{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:19px;text-align:center;max-width:700px;margin:auto}.numed-pulse-circle{width:125px;height:125px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#a8cc3b25,#70c6c411 70%);border:1px solid #a8cc3b8c;box-shadow:0 0 0 15px #a8cc3b12,0 0 60px #a8cc3b2e;animation:numed-glow 3s ease-in-out infinite}.numed-pulse-circle span{font-size:62px;color:#c5e76f}.numed-reveal-step,.numed-eyebrow{font-size:11px;letter-spacing:3px;font-weight:800;color:#c5e76f}.numed-reveal h2{font-size:clamp(32px,5vw,65px);line-height:1.12;letter-spacing:-2px;max-width:760px}.numed-reveal p{font-size:clamp(14px,1.8vw,19px);line-height:1.7;max-width:590px;color:#d5e5ec}.numed-reveal-dots{display:flex;gap:8px;margin:5px}.numed-reveal-dot{width:9px;height:9px;border-radius:12px;background:#ffffff55;transition:.25s}.numed-reveal-dot.active{width:37px;background:#a8cc3b}.numed-reveal-cta{background:#a8cc3b;color:#173e4e;border:0;border-radius:16px;padding:19px 44px;font:800 15px Montserrat,Arial;cursor:pointer;min-width:230px}.numed-reveal-bottom{text-align:center;color:#bcd3dd;font-size:10px;letter-spacing:2px;position:relative;z-index:1}.numed-appear{animation:numed-appear .5s ease both}@keyframes numed-appear{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}@keyframes numed-glow{50%{box-shadow:0 0 0 24px #a8cc3b0b,0 0 95px #a8cc3b45;transform:scale(1.04)}}@keyframes numed-orbit{to{transform:translate(-50%,-50%) scale(1.13) rotate(15deg)}}
+.numed-functional-card{overflow:hidden}.numed-functional-header{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:24px}.numed-functional-header h2{font-size:clamp(20px,3vw,30px);line-height:1.2;margin:8px 0;color:#145578;letter-spacing:-1px}.numed-functional-header p{max-width:650px;line-height:1.7;color:#587083;font-size:13px}.numed-patient-chip{flex-shrink:0;display:flex;flex-direction:column;gap:8px;background:#eef6f0;padding:20px;border-radius:16px;color:#145578;font-size:12px}.numed-patient-chip strong{font-size:20px}.numed-functional-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.numed-functional-metric{display:flex;flex-direction:column;gap:10px;background:linear-gradient(140deg,#f5fafc,#fff);border:1px solid #dfeaec;border-radius:20px;padding:22px;min-height:200px}.numed-metric-emoji{font-size:24px}.numed-functional-metric>span:nth-child(2){color:#597384;font-size:12px;font-weight:650}.numed-functional-metric strong{font-size:clamp(22px,3vw,33px);color:#145578;letter-spacing:-1px}.numed-functional-metric small{color:#7a8e99;font-size:11px;line-height:1.5}.numed-functional-foot{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-top:22px;color:#587083;font-size:12px}.numed-functional-foot .btn{white-space:nowrap}.bio-age-hero .bah-age-unit{line-height:1.5}.delta-item .delta-value{font-size:15px}
+@media(max-width:900px){.numed-functional-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.numed-reveal{padding:18px}.numed-reveal-brand{font-size:14px}.numed-reveal-brand img{width:42px;height:42px}.numed-skip{font-size:10px;padding:10px}.numed-pulse-circle{width:100px;height:100px}.numed-reveal h2{letter-spacing:-.8px}.numed-functional-header,.numed-functional-foot{flex-direction:column;align-items:stretch}.numed-functional-grid{grid-template-columns:1fr}.numed-functional-metric{min-height:150px}}@media(prefers-reduced-motion:reduce){.numed-orbit,.numed-pulse-circle,.numed-appear{animation:none!important}}
+</style>
 </head>
 <body>
     <!-- ══════════════════════════════════════════════
@@ -859,9 +865,7 @@ html{scroll-behavior:smooth}body{background:radial-gradient(circle at 90% 2%,#e8
 
         <h1 class="wc-title">Descubre tu<br><span>Edad Biológica</span></h1>
         <p class="wc-subtitle">
-            En menos de 2 minutos analizamos tu fuerza muscular, 
-            composición corporal y estilo de vida para calcular 
-            cuántos años tiene realmente tu cuerpo.
+            Explora tu fuerza muscular, medidas corporales y estilo de vida con una evaluación funcional interactiva de NUMED.
         </p>
         <div class="wc-dots">
             <div class="wc-dot active"></div>
@@ -1087,7 +1091,7 @@ html{scroll-behavior:smooth}body{background:radial-gradient(circle at 90% 2%,#e8
             </div>
         </div>
 
-        <div class="clinical-notice" role="note"><strong>Modelo demostrativo sin validación clínica.</strong> La cifra de “edad biológica” y sus ajustes en años corresponden a la fórmula del sistema anterior; no deben interpretarse como una medición científica validada ni utilizarse para decisiones clínicas. Los indicadores medidos pueden revisarse por separado.</div>
+        <div class="clinical-notice" role="note"><strong>Edad biológica en años no disponible.</strong> Este prototipo muestra indicadores de evaluación funcional. El cálculo heredado de ajustes en años no se presenta porque no es un estimador validado. No utilices esta versión con pacientes reales.</div>
 
         <!-- Bio age hero -->
         <div class="bio-age-hero">
@@ -1100,17 +1104,29 @@ html{scroll-behavior:smooth}body{background:radial-gradient(circle at 90% 2%,#e8
                 </div>
                 <div class="bah-arrow" id="bio-age-arrow">→</div>
                 <div class="bah-age-block bah-bio">
-                    <div class="bah-age-lbl">Edad biológica</div>
+                    <div class="bah-age-lbl">Edad biológica validada</div>
                     <div class="bah-age-num bah-big" id="bio-age-display">—</div>
-                    <div class="bah-age-unit">años</div>
+                    <div class="bah-age-unit">No disponible en esta versión</div>
                 </div>
             </div>
             <div class="bah-badge" id="bio-age-badge">—</div>
         </div>
 
+<div class="card numed-functional-card" id="numed-functional-card">
+ <div class="card-title">Tu perfil funcional en detalle</div>
+ <div class="numed-functional-header"><div><span class="numed-eyebrow">EVALUACIÓN NUMED</span><h2>Más que un número, conoce tus indicadores.</h2><p>Resultados objetivos de la evaluación. Las interpretaciones deben revisarse según contexto clínico.</p></div><div class="numed-patient-chip"><span id="numed-metric-name">Participante</span><strong><span id="numed-metric-age">—</span> años</strong></div></div>
+ <div class="numed-functional-grid">
+ <article class="numed-functional-metric"><span class="numed-metric-emoji">⚖️</span><span>Índice de masa corporal</span><strong id="numed-metric-imc">—</strong><small>kg/m² · indicador antropométrico</small></article>
+ <article class="numed-functional-metric"><span class="numed-metric-emoji">📏</span><span>Cintura / talla</span><strong id="numed-metric-ratio">—</strong><small id="numed-ratio-note">Relación antropométrica</small></article>
+ <article class="numed-functional-metric"><span class="numed-metric-emoji">💪</span><span>Fuerza muscular</span><strong id="numed-metric-force">—</strong><small>Fuerza de agarre medida</small></article>
+ <article class="numed-functional-metric"><span class="numed-metric-emoji">🌿</span><span>Perímetro abdominal</span><strong id="numed-metric-waist">—</strong><small>Medición corporal</small></article>
+ </div>
+ <div class="numed-functional-foot"><span>La edad biológica expresada en años requiere un método validado.</span><button type="button" class="btn btn-navy" onclick="openNumedReveal()">▶ Repetir revelación</button></div>
+</div>
+
         <!-- Delta breakdown -->
         <div class="card">
-            <div class="card-title">Factores que influyeron</div>
+            <div class="card-title">Indicadores de la evaluación</div>
             <div class="delta-grid">
                 <div class="delta-item">
                     <div class="delta-icon gray" style="font-size:18px;">💪</div>
@@ -1169,7 +1185,7 @@ html{scroll-behavior:smooth}body{background:radial-gradient(circle at 90% 2%,#e8
     <!-- HISTORIAL -->
     <div id="history-section" style="display:none; margin-top:24px;">
         <div class="card">
-            <div class="card-title">Historial de evaluaciones</div>
+            <div class="card-title">Historial de demostraciones de este navegador</div><p style="color:#587083;font-size:12px;margin-bottom:14px">Los registros antiguos pueden contener estimaciones no validadas. No utilizar como expediente clínico.</p>
 
             <!-- Leyenda de columnas -->
             <div class="hist-legend">
@@ -1239,7 +1255,7 @@ html{scroll-behavior:smooth}body{background:radial-gradient(circle at 90% 2%,#e8
     </div>
 
     <footer style="text-align:center; margin-top:32px; font-size:11px; color:rgba(255,255,255,0.45); padding-bottom:8px;">
-        © 2025 Numed · Evaluación Interactiva de Edad Biológica<br>
+        © 2026 NUMED · Evaluación Interactiva de Edad Biológica<br>
         Fecha de evaluación: <span id="evaluation-date-footer"></span>
     </footer>
 
@@ -1250,256 +1266,71 @@ html{scroll-behavior:smooth}body{background:radial-gradient(circle at 90% 2%,#e8
 // ============================================================
 // UI PATCH — fills new design elements after evaluateStrength
 // ============================================================
-function updateNewUI(age, edadBiologicaFinal, deltaDetalle, comparacionTexto, biologicalAgeStatus) {
-    // Bio age hero — animated counters
-    function animateCount(el, from, to, duration, onDone) {
-        const start    = performance.now();
-        const range    = to - from;
-        function step(now) {
-            const elapsed  = now - start;
-            const progress = Math.min(elapsed / duration, 1);
-            // Ease out cubic
-            const eased = 1 - Math.pow(1 - progress, 3);
-            el.textContent = Math.round(from + range * eased);
-            if (progress < 1) {
-                requestAnimationFrame(step);
-            } else {
-                el.textContent = to;
-                // Pulse effect on the bio age number when it lands
-                if (el.id === 'bio-age-display') {
-                    el.classList.remove('pulse');
-                    void el.offsetWidth; // reflow
-                    el.classList.add('pulse');
-                }
-                if (onDone) onDone();
-            }
-        }
-        requestAnimationFrame(step);
-    }
-
-    const cronoEl = document.getElementById('bio-crono-display');
-    const bioEl   = document.getElementById('bio-age-display');
-    const badgeEl = document.getElementById('bio-age-badge');
-
-    // Hide badge initially
-    badgeEl.style.opacity = '0';
-    badgeEl.style.transform = 'translateY(8px)';
-    badgeEl.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-
-    // Animate crono first (fast), then bio (slower, more dramatic)
-    animateCount(cronoEl, 0, age, 600, () => {
-        animateCount(bioEl, 0, edadBiologicaFinal, 1200, () => {
-            // Reveal badge after bio age lands
-            setTimeout(() => {
-                badgeEl.style.opacity  = '1';
-                badgeEl.style.transform = 'translateY(0)';
-            }, 150);
-        });
-    });
-
-    const diff  = edadBiologicaFinal - age;
-    const arrow = document.getElementById('bio-age-arrow');
-    const badge = document.getElementById('bio-age-badge');
-
-    if (diff > 0) {
-        badge.textContent    = '▲ ' + diff + ' años por encima de su edad cronológica';
-        badge.style.background = 'rgba(229,62,62,0.25)';
-        badge.style.color    = '#ffcdd2';
-        if (arrow) { arrow.textContent = '→'; arrow.style.color = 'rgba(229,62,62,0.7)'; }
-    } else if (diff < 0) {
-        badge.textContent    = '▼ ' + Math.abs(diff) + ' años por debajo de su edad cronológica';
-        badge.style.background = 'rgba(47,133,90,0.25)';
-        badge.style.color    = '#c6f6d5';
-        if (arrow) { arrow.textContent = '→'; arrow.style.color = 'rgba(47,133,90,0.7)'; }
-    } else {
-        badge.textContent    = '= Igual a su edad cronológica';
-        badge.style.background = 'rgba(255,255,255,0.12)';
-        badge.style.color    = '#fff';
-        if (arrow) { arrow.textContent = '='; arrow.style.opacity = '0.5'; }
-    }
-
-    // Delta items
-    function setDelta(id, val) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        const sign = val > 0 ? '+' : '';
-        el.textContent = sign + val + ' años';
-        el.className = 'delta-value ' + (val < 0 ? 'neg' : val > 0 ? 'pos' : 'zero');
-        // also color the icon
-        const icon = el.closest('.delta-item').querySelector('.delta-icon');
-        if (icon) {
-            icon.className = 'delta-icon ' + (val < 0 ? 'green' : val > 0 ? 'red' : 'gray');
-        }
-    }
-    if (deltaDetalle) {
-        setDelta('delta-fuerza',  deltaDetalle.fuerza  || 0);
-        setDelta('delta-imc',     deltaDetalle.imc     || 0);
-        setDelta('delta-abdomen', deltaDetalle.abdomen || 0);
-        setDelta('delta-estilo',  deltaDetalle.estilo  || 0);
-    }
-
-    // Staggered reveal for delta cards
-    const deltaItems = document.querySelectorAll('.delta-item');
-    deltaItems.forEach((item, i) => {
-        item.style.opacity   = '0';
-        item.style.transform = 'translateY(16px)';
-        item.style.transition = `opacity 0.4s ease ${900 + i * 120}ms, transform 0.4s ease ${900 + i * 120}ms`;
-        setTimeout(() => {
-            item.style.opacity   = '1';
-            item.style.transform = 'translateY(0)';
-        }, 900 + i * 120);
-    });
-
-    // Staggered reveal for recommendation cards
-    const recCards = document.querySelectorAll('.rec-card');
-    recCards.forEach((card, i) => {
-        card.style.opacity   = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = `opacity 0.5s ease ${1400 + i * 150}ms, transform 0.5s ease ${1400 + i * 150}ms`;
-        setTimeout(() => {
-            card.style.opacity   = '1';
-            card.style.transform = 'translateY(0)';
-        }, 1400 + i * 150);
-    });
-
-    // Update evaluation date footer
-    const dateEl = document.getElementById('evaluation-date-footer');
-    if (dateEl) dateEl.textContent = document.getElementById('evaluation-date').textContent;
-
-    // Show results
-    document.getElementById('results').style.display = 'block';
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-}
-
-
-// ============================================================
-//  SUPABASE CONFIG
-// ============================================================
-const SUPABASE_URL = 'https://srjiijenbawijtefhjmg.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyamlpamVuYmF3aWp0ZWZoam1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0Mzk2MzIsImV4cCI6MjEwNzAxNTYzMn0.eJZ7vuUw2RabIzwQG92IhXmtfdIrXkqtF3f2cXqqSuo';
-const SUPABASE_TABLE = 'evaluaciones_edad_biologica';
-
-// ── Pure fetch — no library, no postMessage / DataCloneError ──────────────
-async function saveToSupabase(evaluationData) {
-  try {
-    if (!window.numedAccessToken && !(await iniciarSesionSupabase())) return;
-    const row = {
-      fecha:                 evaluationData.fecha,
-      nombre:                evaluationData.nombre,
-      telefono:              evaluationData.telefono              || null,
-      edad:                  evaluationData.edad                  || null,
-      genero:                evaluationData.genero                || null,
-      fuerza_original:       evaluationData.fuerzaOriginal        || null,
-      fuerza_ajustada:       evaluationData.fuerzaAjustada        || null,
-      abdomen:               evaluationData.abdomen               || null,
-      edad_biologica:        evaluationData.edadBiologica         || null,
-      estilo_vida_score:     evaluationData.estiloVidaScore       || null,
-      nivel_fuerza:          evaluationData.nivelFuerza           || null,
-      estado_edad_biologica: evaluationData.estadoEdadBiologica   || null,
-      nivel_abdomen:         evaluationData.nivelAbdomen          || null,
-      peso:                  evaluationData.peso                  || null,
-      talla:                 evaluationData.talla                 || null,
-      imc:                   evaluationData.imc                   || null,
-      imc_categoria:         evaluationData.imcCategoria          || null,
-      q_fuma:                evaluationData.q_fuma                ?? null,
-      q_ex_fumador:          evaluationData.q_ex_fumador          ?? null,
-      q_alcohol:             evaluationData.q_alcohol             ?? null,
-      q_actividad:           evaluationData.q_actividad           ?? null,
-      q_fuerza:              evaluationData.q_fuerza              ?? null,
-      q_sueno:               evaluationData.q_sueno               ?? null,
-      q_estres:              evaluationData.q_estres              ?? null,
-      q_dieta:               evaluationData.q_dieta               ?? null,
-      q_cronicas:            evaluationData.q_cronicas            ?? null,
-      q_imc:                 evaluationData.q_imc                 ?? null,
-      q_familia:             evaluationData.q_familia             ?? null
-    };
-
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type':  'application/json',
-          'apikey':        SUPABASE_KEY,
-          'Authorization': `Bearer ${window.numedAccessToken || SUPABASE_KEY}`,
-          'Prefer':        'return=minimal'
-        },
-        body: JSON.stringify(row)
-      }
-    );
-
-    if (!res.ok) {
-      const err = await res.text();
-      console.error('Supabase insert error:', res.status, err);
-    } else {
-      console.log('Evaluación guardada en Supabase ✅');
-    }
-  } catch (err) {
-    console.error('Error inesperado al guardar en Supabase:', err);
-  }
-}
-
-async function iniciarSesionSupabase() {
-  const email = prompt('Correo del personal autorizado de NUMED:');
-  if (!email) return false;
-  const password = prompt('Contraseña de Supabase Auth:');
-  if (!password) return false;
-  const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-    method: 'POST',
-    headers: {'apikey': SUPABASE_KEY, 'Content-Type': 'application/json'},
-    body: JSON.stringify({email, password})
+function updateNewUI(age, _legacyBiologicalAge, deltaDetalle, comparacionTexto, biologicalAgeStatus) {
+  // Clinical safety: the original +/- years formula is not a validated biological age estimator.
+  const chrono=document.getElementById('bio-crono-display');
+  const bio=document.getElementById('bio-age-display');
+  const badge=document.getElementById('bio-age-badge');
+  if(chrono) chrono.textContent=Number.isFinite(+age) ? age : '—';
+  if(bio) {bio.textContent='—';bio.classList.remove('pulse');}
+  if(badge) {badge.textContent='Pendiente de metodología validada';badge.style.background='rgba(255,255,255,.12)';badge.style.color='#fff';badge.style.opacity='1';}
+  const arrow=document.getElementById('bio-age-arrow');if(arrow)arrow.textContent='→';
+  ['delta-fuerza','delta-imc','delta-abdomen','delta-estilo'].forEach(id=>{
+    const el=document.getElementById(id);if(el){el.textContent='Ver indicador';el.className='delta-value zero';}
   });
-  if (!response.ok) { alert('No se pudo iniciar sesión. Verifica el usuario y contraseña.'); return false; }
-  const session = await response.json();
-  window.numedAccessToken = session.access_token;
-  return true;
+  const d=document.getElementById('evaluation-date-footer');
+  if(d)d.textContent=document.getElementById('evaluation-date')?.textContent||'';
+  populateFunctionalPanel();
+  document.getElementById('results').style.display='block';
+  openNumedReveal();
 }
-
-async function loadFromSupabase() {
-  try {
-    if (!window.numedAccessToken && !(await iniciarSesionSupabase())) return;
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?select=*&order=fecha.desc&limit=100`,
-      {
-        headers: {
-          'apikey':        SUPABASE_KEY,
-          'Authorization': `Bearer ${window.numedAccessToken || SUPABASE_KEY}`
-        }
-      }
-    );
-
-    if (!res.ok) {
-      console.error('Supabase load error:', res.status);
-      return;
-    }
-
-    const data = await res.json();
-    if (data && data.length > 0) {
-      window.evaluations = data.map(row => ({
-        fecha:        row.fecha,
-        nombre:       row.nombre,
-        telefono:     row.telefono,
-        edad:         row.edad,
-        genero:       row.genero,
-        fuerzaOriginal: row.fuerza_original,
-        fuerzaAjustada: row.fuerza_ajustada,
-        abdomen:      row.abdomen,
-        peso:         row.peso,
-        talla:        row.talla,
-        imc:          row.imc,
-        imcCategoria: row.imc_categoria,
-        edadBiologica: row.edad_biologica,
-        estiloVidaScore: row.estilo_vida_score,
-        _id:          row.id
-      }));
-      renderHistoryTable();
-    }
-  } catch (err) {
-    console.error('Error inesperado al cargar desde Supabase:', err);
-  }
+function numedValue(id){return parseFloat(document.getElementById(id)?.value||'');}
+function populateFunctionalPanel(){
+  const wt=numedValue('patient-weight'),ht=numedValue('patient-height'),waist=numedValue('abdominal-perimeter');
+  const imc=(wt>0&&ht>0)? wt/((ht/100)**2) : null;
+  const ratio=(waist>0&&ht>0)?waist/ht:null;
+  const force=numedValue('strength-value');
+  const fmt=(n,d=1)=> Number.isFinite(n)?n.toFixed(d):'—';
+  const v=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+  v('numed-metric-imc',fmt(imc));v('numed-metric-ratio',fmt(ratio,2));
+  v('numed-metric-force',fmt(force)+' kg');v('numed-metric-waist',fmt(waist)+' cm');
+  v('numed-metric-age',document.getElementById('result-age')?.textContent||'—');
+  const name=document.getElementById('result-name')?.textContent||'Participante';v('numed-metric-name',name);
+  const note=document.getElementById('numed-ratio-note');
+  if(note)note.textContent=ratio===null?'Faltan medidas':`Relación cintura/talla: ${fmt(ratio,2)}. Interpretar según características individuales.`;
 }
+let numedRevealStep=0;
+const numedRevealSlides=[
+ {step:'01 / 03',heading:'Tu cuerpo cuenta una historia',sub:'Cada medición aporta información sobre tu salud funcional.'},
+ {step:'02 / 03',heading:'Tus indicadores están listos',sub:'Revisamos fuerza muscular, medidas corporales y hábitos registrados.'},
+ {step:'03 / 03',heading:'Descubre tu perfil funcional',sub:'Una visión clara de tus indicadores, sin atribuir una edad biológica no validada.'}
+];
+function setNumedRevealStep(i){
+ numedRevealStep=Math.max(0,Math.min(2,i));const d=numedRevealSlides[numedRevealStep];
+ for(const [id,text] of [['numed-reveal-step',d.step],['numed-reveal-heading',d.heading],['numed-reveal-sub',d.sub]]){
+  const el=document.getElementById(id);if(el){el.classList.remove('numed-appear');void el.offsetWidth;el.textContent=text;el.classList.add('numed-appear');}
+ }
+ const dots=document.querySelectorAll('.numed-reveal-dot');dots.forEach((dot,j)=>dot.classList.toggle('active',j===numedRevealStep));
+ const next=document.getElementById('numed-reveal-next');if(next)next.textContent=numedRevealStep===2?'Ver mis indicadores':'Continuar';
+}
+function openNumedReveal(){
+ const modal=document.getElementById('numed-reveal');if(!modal)return;
+ modal.hidden=false;document.body.classList.add('numed-modal-open');setNumedRevealStep(0);
+}
+function closeNumedReveal(){
+ document.getElementById('numed-reveal').hidden=true;document.body.classList.remove('numed-modal-open');
+ document.getElementById('results').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+}
+function nextNumedReveal(){if(numedRevealStep>=2)closeNumedReveal();else setNumedRevealStep(numedRevealStep+1);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('numed-reveal')?.hidden)closeNumedReveal();});
 
-        // Variables globales seguras
+// V0.5: Supabase persistence intentionally disabled until V0.6 RLS/Auth is configured.
+// Never send personal information to the previous project's database.
+async function saveToSupabase() { return false; }
+async function loadFromSupabase() { return []; }
+async function iniciarSesionSupabase() { return false; }
+
+// Variables globales seguras
 window.questionnaireCompleted = false;
 window.lifestyleScore = 0;
 window.lifestyleDisplay = { normalized: 0, label: 'No calculado' };
@@ -1774,10 +1605,10 @@ const evaluationData = {
   fuerzaOriginal: strength,
   fuerzaAjustada: strength,
   abdomen: abdomenValue,
-  edadBiologica: edadBiologicaFinal,
+  edadBiologica: null,
   estiloVidaScore: lifestyleScore,
   nivelFuerza: level.level || '',
-  estadoEdadBiologica: biologicalAgeStatus || '',
+  estadoEdadBiologica: 'Pendiente de validación',
   nivelAbdomen: abdomenResult.level || '',
   peso: parseFloat(document.getElementById('patient-weight').value) || null,
   talla: parseFloat(document.getElementById('patient-height').value) || null,
@@ -2332,7 +2163,38 @@ const seasonalHTML = `
             }
         }
 
-        function downloadPDF() {
+function downloadPDF(){
+ if(!window.jspdf?.jsPDF){alert('No se pudo cargar la herramienta PDF. Verifica tu conexión.');return;}
+ const H=window._historyMode?(window._historyData||{}):null;
+ const tx=id=>(document.getElementById(id)?.textContent||'').trim();
+ const input=id=>(document.getElementById(id)?.value||'').trim();
+ const doc=new window.jspdf.jsPDF({unit:'mm',format:'a4'});
+ const name=H?.nombre||tx('result-name')||input('patient-name')||'Participante';
+ const age=H?.edad??tx('result-age');
+ const weight=H?.peso??input('patient-weight');const height=H?.talla??input('patient-height');
+ const force=H?.fuerzaOriginal??input('strength-value');const waist=H?.abdomen??input('abdominal-perimeter');
+ const imc=(Number(weight)>0&&Number(height)>0)?Number(weight)/((Number(height)/100)**2):null;
+ const ratio=(Number(waist)>0&&Number(height)>0)?Number(waist)/Number(height):null;
+ doc.setFillColor(20,85,120);doc.rect(0,0,210,38,'F');
+ doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(19);doc.text('NUMED | Perfil funcional',16,20);
+ doc.setFontSize(9);doc.setFont('helvetica','normal');doc.text('Reporte demostrativo - Edad biologica no validada',16,29);
+ doc.setTextColor(23,56,76);doc.setFontSize(12);doc.setFont('helvetica','bold');doc.text('Datos de la evaluacion',16,53);
+ doc.setFontSize(10);doc.setFont('helvetica','normal');
+ const rows=[['Nombre',name],['Edad cronologica',String(age||'—')+' anos'],['Peso',String(weight||'—')+' kg'],['Talla',String(height||'—')+' cm'],['Fuerza de agarre',String(force||'—')+' kg'],['Perimetro abdominal',String(waist||'—')+' cm'],['IMC',imc!==null?imc.toFixed(1):'—'],['Relacion cintura/talla',ratio!==null?ratio.toFixed(2):'—']];
+ let y=63;rows.forEach(([key,val])=>{doc.setFont('helvetica','bold');doc.text(key+':',16,y);doc.setFont('helvetica','normal');doc.text(String(val).slice(0,78),72,y);y+=10;});
+ doc.setDrawColor(168,204,59);doc.line(16,y+3,193,y+3);y+=16;
+ doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text('Interpretacion y recomendaciones',16,y);y+=8;
+ doc.setFont('helvetica','normal');doc.setFontSize(9);
+ const plain=H?'Consulte la interpretacion en el sistema original bajo supervision del equipo.':(document.getElementById('recommendations-content')?.innerText||'Consulte sus indicadores con el equipo NUMED.');
+ const cleaned=plain.replace(/[\u{1F300}-\u{1FAFF}]/gu,'').replace(/\s+/g,' ').slice(0,1400);
+ doc.splitTextToSize(cleaned,175).forEach(line=>{if(y>267){doc.addPage();y=20;}doc.text(line,16,y);y+=5;});
+ if(y>255){doc.addPage();y=20;}else y+=10;
+ doc.setFont('helvetica','bold');doc.text('Aviso de uso',16,y);y+=7;doc.setFont('helvetica','normal');
+ doc.splitTextToSize('Este documento muestra indicadores funcionales y no una edad biologica cientificamente validada. Prototipo local V0.5; no utilizar con datos clinicos reales.',175).forEach(l=>{doc.text(l,16,y);y+=5;});
+ doc.save('NUMED_Perfil_Funcional_Demo.pdf');
+}
+
+        function downloadPDFLegacy_NoUsar() {
             const { jsPDF } = window.jspdf;
 
             // ── Helpers básicos ────────────────────────────────────────────
@@ -2487,7 +2349,7 @@ const seasonalHTML = `
                 doc.setFont(FONT,'normal');
                 doc.setFontSize(7.5);
                 doc.setTextColor(...SLATE);
-                doc.text('© 2025 Numed · Informe orientativo. No sustituye la valoración clínica integral.', 105, 287, { align:'center' });
+                doc.text('© 2026 NUMED · Informe orientativo. No sustituye la valoración clínica integral.', 105, 287, { align:'center' });
                 doc.setFont(FONT,'bold');
                 doc.setTextColor(...NAVY);
                 doc.text(`Pag. ${p} / ${total}`, 198, 287, { align:'right' });
@@ -2948,7 +2810,7 @@ function renderHistoryTable() {
       <td style="text-align:center">${ev.peso ?? '—'}</td>
       <td style="text-align:center">${ev.talla ?? '—'}</td>
       <td style="text-align:center">${ev.imc ?? '—'}</td>
-      <td style="text-align:center;font-weight:700;color:var(--navy)">${ev.edadBiologica ?? '—'}${badge}</td>
+      <td style="text-align:center;font-weight:700;color:var(--navy)">No validada</td>
       <td style="text-align:center">${ev.estiloVidaScore ?? '—'}</td>
       <td style="text-align:center"><button class="btn-hist-pdf" onclick="downloadPDFFromHistory(${realIndex})">⬇ PDF</button></td>
     `;
@@ -3134,5 +2996,11 @@ function showWelcomeScreen() {
         });
     })();
     </script>
+<section id="numed-reveal" class="numed-reveal" hidden role="dialog" aria-modal="true" aria-label="Revelación de resultados NUMED">
+ <div class="numed-reveal-noise"></div><div class="numed-orbit numed-orbit-one"></div><div class="numed-orbit numed-orbit-two"></div>
+ <header class="numed-reveal-top"><div class="numed-reveal-brand"><img src="logo-numed-original.jpg" alt="Logo NUMED"><span>NUMED <small>EXPERIENCE 360°</small></span></div><button type="button" class="numed-skip" onclick="closeNumedReveal()">Saltar animación ✕</button></header>
+ <div class="numed-reveal-center"><div class="numed-pulse-circle"><span>✦</span></div><div id="numed-reveal-step" class="numed-reveal-step">01 / 03</div><h2 id="numed-reveal-heading" class="numed-appear">Tu cuerpo cuenta una historia</h2><p id="numed-reveal-sub" class="numed-appear">Cada medición aporta información sobre tu salud funcional.</p><div class="numed-reveal-dots"><i class="numed-reveal-dot active"></i><i class="numed-reveal-dot"></i><i class="numed-reveal-dot"></i></div><button type="button" class="numed-reveal-cta" id="numed-reveal-next" onclick="nextNumedReveal()">Continuar</button></div>
+ <footer class="numed-reveal-bottom">PERFIL FUNCIONAL · INFORMACIÓN EDUCATIVA · NUMED CARE</footer>
+</section>
 </body>
 </html>
