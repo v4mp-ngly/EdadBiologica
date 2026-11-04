@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script defer src="supabase-config.js"></script>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -833,7 +835,23 @@
             0%   { opacity: 1; transform: scale(1); }
             100% { opacity: 0; transform: scale(1.04); }
         }
-    </style>
+    
+/* NUMED V0.6 staff authentication + persistence notifications */
+#numed-auth-gate{position:fixed;inset:0;background:linear-gradient(145deg,#092d49ed,#145578f5);z-index:11000;display:flex;align-items:center;justify-content:center;padding:20px}
+#numed-auth-gate[hidden]{display:none!important}
+.numed-auth-card{background:#fff;max-width:440px;width:100%;padding:32px;border-radius:25px;box-shadow:0 24px 70px #061d3240;color:#145578}
+.numed-auth-card img{height:74px;max-width:175px;object-fit:contain;display:block;margin:0 auto 18px}
+.numed-auth-card h2{font-size:22px;margin:0 0 9px;text-align:center}.numed-auth-card p{font-size:12px;line-height:1.6;text-align:center;color:#566e7e;margin-bottom:18px}
+.numed-auth-card label{font-size:12px;font-weight:700;display:block;margin:13px 0 5px}
+.numed-auth-card input{width:100%;border:1px solid #d3e2e9;padding:13px 15px;border-radius:12px;font-size:15px;font-family:inherit;background:#f8fbfd}
+.numed-auth-card button{width:100%;background:#145578;color:#fff;border:0;border-radius:13px;padding:14px;font:700 14px Montserrat,sans-serif;margin-top:18px;cursor:pointer}
+#numed-auth-error{color:#af2638;text-align:center;font-size:12px;min-height:22px;margin-top:12px}
+#numed-session-bar{position:sticky;top:0;z-index:900;background:#eaf3f7;border-bottom:1px solid #d7e7ee;padding:9px 16px;display:flex;justify-content:center;align-items:center;gap:12px;color:#145578;font-size:12px}
+#numed-session-bar[hidden]{display:none!important}
+#numed-session-bar button{background:#145578;border:none;color:white;border-radius:9px;padding:7px 12px;cursor:pointer}
+#numed-save-status{font-size:12px;font-weight:600;color:#155879;min-height:1.7em;text-align:center;margin:12px 0}
+@media(max-width:550px){.numed-auth-card{padding:24px}}
+</style>
 <style>
 
 /* NUMED EXPERIENCE 360 — visual layer V04. Functional logic preserved. */
@@ -857,6 +875,20 @@ body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!importa
 </style>
 </head>
 <body>
+<section id="numed-auth-gate" role="dialog" aria-modal="true" aria-labelledby="numed-auth-heading">
+  <div class="numed-auth-card">
+    <img src="logo-numed-original.jpg" alt="NUMED">
+    <h2 id="numed-auth-heading">Acceso del personal NUMED</h2>
+    <p>Inicia sesión para registrar y consultar evaluaciones de forma segura. No utilices la estación pública con esta sesión abierta.</p>
+    <form id="numed-auth-form">
+      <label for="numed-email">Correo electrónico</label><input type="email" id="numed-email" required autocomplete="username" placeholder="correo@numed.com">
+      <label for="numed-password">Contraseña</label><input type="password" id="numed-password" required autocomplete="current-password" placeholder="Contraseña">
+      <button id="numed-auth-submit" type="submit">Entrar a NUMED</button>
+      <div id="numed-auth-error" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+<div id="numed-session-bar" hidden><strong id="numed-staff-label">Personal NUMED</strong><span>· Base de datos segura</span><button type="button" onclick="numedLogout()">Cerrar sesión</button></div>
     <!-- ══════════════════════════════════════════════
          PANTALLA DE BIENVENIDA
     ══════════════════════════════════════════════ -->
@@ -1183,6 +1215,7 @@ body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!importa
     </div>
 
     <!-- HISTORIAL -->
+    <div id="numed-save-status" role="status" aria-live="polite"></div>
     <div id="history-section" style="display:none; margin-top:24px;">
         <div class="card">
             <div class="card-title">Historial de demostraciones de este navegador</div><p style="color:#587083;font-size:12px;margin-bottom:14px">Los registros antiguos pueden contener estimaciones no validadas. No utilizar como expediente clínico.</p>
@@ -1213,7 +1246,7 @@ body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!importa
                     </div>
                     <div class="hist-leg-item">
                         <span class="hist-leg-icon">🧬</span>
-                        <div><strong>Edad biológica</strong><p>Edad funcional calculada. El badge ▲▼ muestra cuántos años está por encima o por debajo de la edad real.</p></div>
+                        <div><strong>Edad biológica</strong><p>Pendiente de una metodología de cálculo validada; actualmente se presentan indicadores funcionales.</p></div>
                     </div>
                     <div class="hist-leg-item">
                         <span class="hist-leg-icon">🌱</span>
@@ -1248,8 +1281,8 @@ body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!importa
                 </table>
             </div>
             <div class="btn-group" style="justify-content:flex-end; margin-top:16px;">
-                <button class="btn btn-primary" style="padding:8px 18px; font-size:12px;" onclick="exportEvaluationsCSV()">Exportar CSV</button>
-                <button class="btn btn-outline"  style="padding:8px 18px; font-size:12px;" onclick="clearEvaluations()">🗑 Borrar historial</button>
+                <button class="btn btn-outline" style="padding:8px 18px; font-size:12px;" onclick="loadFromSupabase()">↻ Actualizar historial</button><button class="btn btn-primary" style="padding:8px 18px; font-size:12px;" onclick="exportEvaluationsCSV()">Exportar CSV</button>
+                <span style="font-size:11px;color:#617d91">Historial protegido: sin borrado desde el quiosco.</span>
             </div>
         </div>
     </div>
@@ -1324,26 +1357,115 @@ function closeNumedReveal(){
 function nextNumedReveal(){if(numedRevealStep>=2)closeNumedReveal();else setNumedRevealStep(numedRevealStep+1);}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('numed-reveal')?.hidden)closeNumedReveal();});
 
-// V0.5: Supabase persistence intentionally disabled until V0.6 RLS/Auth is configured.
-// Never send personal information to the previous project's database.
-async function saveToSupabase() { return false; }
-async function loadFromSupabase() { return []; }
-async function iniciarSesionSupabase() { return false; }
-
-// Variables globales seguras
+// NUMED V0.6: Supabase-only clinical persistence. No local patient cache.
+let numedClient = null;
+let numedUser = null;
+let numedSaving = false;
+window.evaluations = [];
 window.questionnaireCompleted = false;
 window.lifestyleScore = 0;
 window.lifestyleDisplay = { normalized: 0, label: 'No calculado' };
-
-// 🔹 Historial de evaluaciones guardado en este navegador
-window.evaluations = JSON.parse(localStorage.getItem('numedEvaluaciones') || '[]');
-
-// Al cargar la página, dibuja la tabla si ya hay datos guardados
-window.addEventListener('load', () => {
-  renderHistoryTable();
-  loadFromSupabase();
-});
-
+function numedMessage(message, isError=false) {
+  const el = document.getElementById('numed-save-status');
+  if (el) { el.textContent = message; el.style.color = isError ? '#b52d36' : '#145578'; }
+}
+function numedAuthError(message){const el=document.getElementById('numed-auth-error');if(el)el.textContent=message;}
+function numedRequireAuth(){
+  if (numedUser) return true;
+  document.getElementById('numed-auth-gate').hidden=false;
+  numedAuthError('Inicia sesión para continuar.');return false;
+}
+async function numedBoot(){
+  const config=window.NUMED_SUPABASE;
+  if(!config?.url||!config?.anonKey||!window.supabase?.createClient){
+    numedAuthError('No se pudo iniciar Supabase. Comprueba internet y supabase-config.js.');return;
+  }
+  numedClient=window.supabase.createClient(config.url,config.anonKey,{
+    auth:{persistSession:false,autoRefreshToken:true,detectSessionInUrl:false}
+  });
+  document.getElementById('numed-auth-form').addEventListener('submit',async ev=>{
+    ev.preventDefault();numedAuthError('');
+    const button=document.getElementById('numed-auth-submit');button.disabled=true;button.textContent='Verificando acceso…';
+    try {
+      const email=document.getElementById('numed-email').value.trim();
+      const password=document.getElementById('numed-password').value;
+      const {data,error}=await numedClient.auth.signInWithPassword({email,password});
+      if(error)throw error;
+      const {data:staff,error:staffErr}=await numedClient.from('numed_staff')
+        .select('display_name,role,active').eq('user_id',data.user.id).eq('active',true).maybeSingle();
+      if(staffErr || !staff){await numedClient.auth.signOut();throw new Error('Esta cuenta no está habilitada como personal NUMED. Solicita acceso al administrador.');}
+      numedUser=data.user;
+      document.getElementById('numed-auth-gate').hidden=true;
+      document.getElementById('numed-session-bar').hidden=false;
+      document.getElementById('numed-staff-label').textContent=staff.display_name+' · '+staff.role;
+      document.getElementById('numed-password').value='';
+      await loadFromSupabase();
+      numedMessage('Conectado a Supabase. Puedes registrar evaluaciones.');
+    }catch(e){numedAuthError(e.message||'No se pudo iniciar sesión.');}
+    finally{button.disabled=false;button.textContent='Entrar a NUMED';}
+  });
+}
+async function numedLogout(){
+  if(numedClient)await numedClient.auth.signOut();
+  numedUser=null;window.evaluations=[];renderHistoryTable();
+  document.getElementById('results').style.display='none';
+  document.getElementById('numed-session-bar').hidden=true;
+  document.getElementById('numed-auth-gate').hidden=false;
+  numedMessage('');numedAuthError('Sesión cerrada.');
+}
+async function loadFromSupabase(){
+  if(!numedClient||!numedUser)return [];
+  const {data,error}=await numedClient.from('numed_evaluations')
+    .select('id,evaluated_at,age_years,gender,weight_kg,height_cm,waist_cm,grip_kg,bmi,waist_height_ratio,lifestyle_score,grip_category,waist_category,bmi_category,questionnaire,history_payload,numed_patients(full_name,phone)')
+    .order('evaluated_at',{ascending:true}).limit(500);
+  if(error){numedMessage('Error al cargar historial: '+error.message,true);return [];}
+  window.evaluations=(data||[]).map(row=>({
+    ...(row.history_payload||{}),
+    id:row.id,fecha:row.evaluated_at,
+    nombre:row.numed_patients?.full_name||'',telefono:row.numed_patients?.phone||'',
+    edad:row.age_years,genero:row.gender,
+    fuerzaOriginal:row.grip_kg,abdomen:row.waist_cm,peso:row.weight_kg,talla:row.height_cm,
+    imc:row.bmi,estiloVidaScore:row.lifestyle_score,
+    nivelFuerza:row.grip_category,nivelAbdomen:row.waist_category,imcCategoria:row.bmi_category,
+    edadBiologica:null
+  }));
+  renderHistoryTable();return window.evaluations;
+}
+async function saveEvaluation(evaluation){
+  if(numedSaving)return false;
+  if(!numedRequireAuth())return false;
+  numedSaving=true;numedMessage('Guardando la evaluación en Supabase…');
+  const button=document.getElementById('evaluate-btn');if(button)button.disabled=true;
+  try{
+    // Reuse patient ONLY on an exact normalized phone AND matching full name.
+    const phone=evaluation.telefono.trim().replace(/[^0-9+]/g,'');
+    if(phone.length<10)throw new Error('El teléfono debe tener al menos 10 dígitos.');
+    const fullName=evaluation.nombre.trim().replace(/\s+/g,' ');
+    const {data:matches,error:searchErr}=await numedClient.from('numed_patients')
+      .select('id,full_name,phone').eq('phone',phone).limit(20);
+    if(searchErr)throw searchErr;
+    let patient=(matches||[]).find(p=>p.full_name.toLocaleLowerCase('es')===fullName.toLocaleLowerCase('es'));
+    if(!patient){
+      const {data, error}=await numedClient.from('numed_patients').insert({full_name:fullName,phone,created_by:numedUser.id}).select('id').single();
+      if(error)throw error;patient=data;
+    }
+    const payload={
+      patient_id:patient.id,evaluated_by:numedUser.id,
+      age_years:evaluation.edad,gender:evaluation.genero,
+      weight_kg:evaluation.peso,height_cm:evaluation.talla,waist_cm:evaluation.abdomen,
+      grip_kg:evaluation.fuerzaOriginal,lifestyle_score:Number.isFinite(evaluation.estiloVidaScore)?evaluation.estiloVidaScore:null,
+      questionnaire:window._questionnaireAnswers||{},history_payload:{...evaluation,edadBiologica:null},
+      grip_category:evaluation.nivelFuerza||null,waist_category:evaluation.nivelAbdomen||null,
+      bmi_category:evaluation.imcCategoria||null,biological_age_years:null,biological_age_method:null
+    };
+    const {error}=await numedClient.from('numed_evaluations').insert(payload);
+    if(error)throw error;
+    await loadFromSupabase();numedMessage('✓ Evaluación guardada correctamente en Supabase.');return true;
+  }catch(e){numedMessage('No se guardó la evaluación: '+(e.message||e),true);alert('No se guardó la evaluación. Comprueba los datos y la conexión.\n'+(e.message||e));return false;}
+  finally{numedSaving=false;if(button)button.disabled=false;}
+}
+function clearEvaluations(){ alert('El historial clínico no se elimina desde esta pantalla.'); }
+window.addEventListener('load',numedBoot);
 
 // ============================================================
 //  CÁLCULO DE IMC
@@ -1430,7 +1552,8 @@ function classifyAbdominalPerimeter(gender, value) {
   return { level, interpretation };
 }
 
-function evaluateStrength() {
+async function evaluateStrength() {
+    if (!numedRequireAuth() || numedSaving) return;
     console.log("Ejecutando evaluateStrength()");
     const name = document.getElementById('patient-name').value.trim();
     const phone = document.getElementById('patient-phone').value.trim();
@@ -1628,7 +1751,7 @@ const evaluationData = {
   q_familia:    window._questionnaireAnswers ? window._questionnaireAnswers.familia      : null
 };
 
-saveEvaluation(evaluationData);
+await saveEvaluation(evaluationData);
 
 }
 
@@ -2767,20 +2890,7 @@ alert('Cuestionario completado correctamente. Puede continuar con la evaluación
 //  HISTORIAL DE EVALUACIONES
 // ======================
 
-function saveEvaluation(evaluation) {
-  // aseguramos tener array
-  if (!Array.isArray(window.evaluations)) {
-    window.evaluations = [];
-  }
-
-  window.evaluations.push(evaluation);
-  localStorage.setItem('numedEvaluaciones', JSON.stringify(window.evaluations));
-  renderHistoryTable();
-
-  // Guardar también en Supabase
-  saveToSupabase(evaluation);
-}
-
+function numedEscape(s){return String(s??"—").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
 function renderHistoryTable() {
   const section   = document.getElementById('history-section');
   const tableBody = document.querySelector('#history-table tbody');
@@ -2801,17 +2911,17 @@ function renderHistoryTable() {
       `<span style="margin-left:5px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:50px;background:${diff>0?'#FED7D7':diff<0?'#C6F6D5':'#E2E8F0'};color:${diff>0?'#C53030':diff<0?'#276749':'#4A5568'}">${diff>0?'▲':diff<0?'▼':'='} ${Math.abs(diff)}a</span>`;
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="font-size:11px;white-space:nowrap">${ev.fecha || '—'}</td>
-      <td style="font-weight:600">${ev.nombre || '—'}</td>
-      <td style="text-align:center">${ev.edad ?? '—'}</td>
-      <td style="text-transform:capitalize">${ev.genero || '—'}</td>
-      <td style="text-align:center">${ev.fuerzaOriginal ?? '—'}</td>
-      <td style="text-align:center">${ev.abdomen ?? '—'}</td>
-      <td style="text-align:center">${ev.peso ?? '—'}</td>
-      <td style="text-align:center">${ev.talla ?? '—'}</td>
-      <td style="text-align:center">${ev.imc ?? '—'}</td>
+      <td style="font-size:11px;white-space:nowrap">${numedEscape(ev.fecha || '—')}</td>
+      <td style="font-weight:600">${numedEscape(ev.nombre || '—')}</td>
+      <td style="text-align:center">${numedEscape(ev.edad ?? '—')}</td>
+      <td style="text-transform:capitalize">${numedEscape(ev.genero || '—')}</td>
+      <td style="text-align:center">${numedEscape(ev.fuerzaOriginal ?? '—')}</td>
+      <td style="text-align:center">${numedEscape(ev.abdomen ?? '—')}</td>
+      <td style="text-align:center">${numedEscape(ev.peso ?? '—')}</td>
+      <td style="text-align:center">${numedEscape(ev.talla ?? '—')}</td>
+      <td style="text-align:center">${numedEscape(ev.imc ?? '—')}</td>
       <td style="text-align:center;font-weight:700;color:var(--navy)">No validada</td>
-      <td style="text-align:center">${ev.estiloVidaScore ?? '—'}</td>
+      <td style="text-align:center">${numedEscape(ev.estiloVidaScore ?? '—')}</td>
       <td style="text-align:center"><button class="btn-hist-pdf" onclick="downloadPDFFromHistory(${realIndex})">⬇ PDF</button></td>
     `;
     tableBody.appendChild(tr);
@@ -2869,7 +2979,7 @@ function exportEvaluationsCSV() {
 
   const csvContent = [headers, ...rows]
     .map(r => r
-      .map(field => `"${String(field).replace(/"/g, '""')}"`)
+      .map(field => `"${(/^[=+@\-\t\r]/.test(String(field)) ? "'" : "") + String(field).replace(/"/g, '""')}"`)
       .join(';')
     )
     .join('\r\n');
@@ -2925,15 +3035,6 @@ function resetForm() {
   // Scroll al top
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
-function clearEvaluations() {
-  if (!confirm('¿Seguro que desea borrar todo el historial de evaluaciones de este navegador?')) return;
-
-  window.evaluations = [];
-  localStorage.removeItem('numedEvaluaciones');
-  renderHistoryTable();
-}
-
 
 // ── Welcome screen ────────────────────────────────────────────────────────────
 // Cycle dots on the welcome screen
