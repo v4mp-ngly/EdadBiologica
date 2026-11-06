@@ -1143,6 +1143,37 @@ body.numed-touch .numed-functional-metric{min-height:195px}
 
         <div class="clinical-notice" role="note"><strong>Edad biológica en años no disponible.</strong> Aquí se muestran las mediciones objetivas y sus interpretaciones. Esta evaluación no es un reloj biológico validado ni sustituye una valoración clínica. No utilizar con pacientes reales antes de completar las pruebas y la revisión institucional.</div>
 
+<style>
+/* NUMED 0.8.1: unambiguous, staff-only display of UNVALIDATED scoring */
+.numed-exp-result[hidden],.numed-exp-result [hidden]{display:none!important}
+.numed-exp-result{background:#f5fafb;border:2px solid #9bc6d6;border-radius:25px;padding:clamp(18px,3vw,30px);margin:22px 0;color:#0b304a}
+.numed-exp-top{display:flex;justify-content:space-between;gap:18px;align-items:center;flex-wrap:wrap}
+.numed-exp-kicker{font-size:10px;letter-spacing:.12em;color:#356981;font-weight:800}.numed-exp-top h2{font-size:clamp(20px,3vw,27px);margin:5px 0 0}
+.numed-exp-stamp{border-radius:100px;background:#fff0d4;color:#7a4712;padding:10px 14px;font-size:11px;font-weight:800;letter-spacing:.04em}
+.numed-exp-ethics{font-size:13px;line-height:1.7;color:#4d6370;max-width:850px;margin:14px 0 20px}
+.numed-exp-numbers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.numed-exp-numbers>div{background:white;border:1px solid #d8e7eb;padding:20px;border-radius:17px;display:flex;flex-direction:column;gap:7px}
+.numed-exp-numbers>div>span{color:#647e8a;font-size:12px}.numed-exp-numbers strong{font-size:clamp(26px,4vw,42px);font-weight:800}
+.numed-exp-numbers .numed-exp-result-highlight{background:#0b304a;color:#fff;border-color:#0b304a}
+.numed-exp-numbers .numed-exp-result-highlight>span{color:#d0e4ec}.numed-exp-numbers small{font-size:15px}
+.numed-exp-breakdown{margin-top:15px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.numed-exp-breakdown>div{border:1px solid #d8e7eb;border-radius:13px;background:#fff;padding:14px;display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.numed-exp-breakdown b{font-size:17px}.numed-exp-math{font-size:12px;color:#456575;margin-top:15px}
+.numed-exp-blocked{border:1px solid #e3cba1;border-radius:13px;padding:14px;background:#fff9ed;color:#704c1e;line-height:1.7;white-space:pre-wrap}
+@media(max-width:650px){.numed-exp-numbers{grid-template-columns:1fr}.numed-exp-breakdown{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+        <!-- Cálculo experimental visible al administrador, no exportable ni validado -->
+        <section id="numed-experimental-result" class="numed-exp-result" hidden aria-live="polite">
+          <div class="numed-exp-top"><div><div class="numed-exp-kicker">SOLO REVISIÓN MÉDICA · MODELO EXPERIMENTAL</div><h2>Edad Biológica NUMED · cálculo de prueba</h2></div><span class="numed-exp-stamp">NO VALIDADO</span></div>
+          <p class="numed-exp-ethics">Esta cifra es el resultado aritmético de la escala NUMED (1 punto = 1 año, según hipótesis de diseño). No es una edad biológica clínicamente validada ni debe compartirse como diagnóstico.</p>
+          <div id="numed-exp-success" hidden>
+            <div class="numed-exp-numbers"><div><span>Edad cronológica</span><strong id="numed-exp-chrono">—</strong></div><div><span>Puntuación total</span><strong id="numed-exp-points">—</strong></div><div class="numed-exp-result-highlight"><span>Resultado experimental</span><strong><span id="numed-exp-age">—</span> <small>años</small></strong></div></div>
+            <div class="numed-exp-breakdown" id="numed-exp-breakdown"></div>
+            <p class="numed-exp-math" id="numed-exp-equation"></p>
+          </div>
+          <div id="numed-exp-blocked" class="numed-exp-blocked" hidden></div>
+        </section>
+
         <!-- Bio age hero -->
         <div class="bio-age-hero">
             <div class="bah-label">Resultado de la Evaluación</div>
@@ -1471,10 +1502,10 @@ async function numedBoot(){
 async function numedLogout(){
   if(numedClient)await numedClient.auth.signOut();
   numedUser=null;window.evaluations=[];renderHistoryTable();
-  numedCloseResearch();document.getElementById('numed-research-button').hidden=true;
+  numedCloseResearch();numedClearActualExperimentalCalculation();document.getElementById('numed-research-button').hidden=true;
   document.getElementById('results').style.display='none';
   ['patient-name','patient-age','patient-phone','strength-value','abdominal-perimeter','patient-weight','patient-height'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('patient-gender').value='';document.getElementById('questionnaire-form').reset();window._questionnaireAnswers=null;window.questionnaireCompleted=false;
+  document.getElementById('patient-gender').value='';document.getElementById('questionnaire-form').reset();window._questionnaireAnswers=null;window.questionnaireCompleted=false;numedClearActualExperimentalCalculation();
   document.getElementById('numed-session-bar').hidden=true;
   document.getElementById('numed-auth-gate').hidden=false;
   numedMessage('');numedAuthError('Sesión cerrada.');
@@ -1620,6 +1651,7 @@ function classifyAbdominalPerimeter(gender, value) {
 
 async function evaluateStrength() {
     if (!numedRequireAuth() || numedSaving) return;
+    numedClearActualExperimentalCalculation();
     console.log("Ejecutando evaluateStrength()");
     const name = document.getElementById('patient-name').value.trim();
     const phone = document.getElementById('patient-phone').value.trim();
@@ -1758,7 +1790,7 @@ const evaluationData = {
 };
 
 const savedOK = await saveEvaluation(evaluationData);
-if(savedOK) { openNumedReveal(); } else { numedMessage('La evaluación no fue guardada. Revisa la conexión y vuelve a intentar.', true); }
+if(savedOK) { numedRenderActualExperimentalCalculation(); openNumedReveal(); } else { numedClearActualExperimentalCalculation(); numedMessage('La evaluación no fue guardada. Revisa la conexión y vuelve a intentar.', true); }
 
 }
 
@@ -2400,6 +2432,49 @@ function showWelcomeScreen() {
 </div>
 <script src="numed-experimental-engine.js"></script>
 <script>
+function numedClearActualExperimentalCalculation(){
+  const panel=document.getElementById('numed-experimental-result');if(panel)panel.hidden=true;
+  const good=document.getElementById('numed-exp-success');if(good)good.hidden=true;
+  const bad=document.getElementById('numed-exp-blocked');if(bad)bad.hidden=true;
+}
+function numedRenderActualExperimentalCalculation(){
+  numedClearActualExperimentalCalculation();
+  // This is deliberately an admin-only review of the actual entered measurements.
+  const researchButton=document.getElementById('numed-research-button');
+  if(!numedUser||!researchButton||researchButton.hidden||!window.NUMED_EXP)return;
+  const panel=document.getElementById('numed-experimental-result');
+  const blocked=document.getElementById('numed-exp-blocked');
+  const success=document.getElementById('numed-exp-success');
+  if(!panel)return;
+  panel.hidden=false;
+  const val=id=>Number(document.getElementById(id)?.value);
+  const answers={};
+  for(const field of NUMED_EXP.REQUIRED){
+    const raw=window._questionnaireAnswers?.[field];
+    if(raw!==null&&raw!==undefined&&raw!=='')answers[field]=Number(raw);
+  }
+  const age=val('patient-age');
+  let result;
+  try{result=NUMED_EXP.evaluate({age,sex:document.getElementById('patient-gender')?.value,
+    weightKg:val('patient-weight'),heightCm:val('patient-height'),
+    waistCm:val('abdominal-perimeter'),gripKg:val('strength-value'),answers});}
+  catch(e){result={status:'blocked',errors:['No se pudo calcular el escenario experimental: '+e.message]};}
+  if(result.status!=='experimental'){
+    blocked.hidden=false;blocked.textContent='Cálculo experimental no disponible con estos datos.\n'+(result.errors||[]).join('\n')+'\nNo se debe sustituir una referencia inexistente por valores inventados.';
+    return;
+  }
+  success.hidden=false;
+  const put=(id,text)=>{const node=document.getElementById(id);if(node)node.textContent=text;};
+  put('numed-exp-chrono',age);
+  put('numed-exp-points',(result.points>0?'+':'')+result.points);
+  put('numed-exp-age',result.hypotheticalAge);
+  const rows=[['Fuerza',result.components.fuerza],['IMC',result.components.imc],['Cintura/talla',result.components.cintura],['Hábitos',result.components.habitos]];
+  const detail=document.getElementById('numed-exp-breakdown');detail.replaceChildren();
+  for(const [label,score] of rows){const div=document.createElement('div'),l=document.createElement('span'),b=document.createElement('b');
+    l.textContent=label;b.textContent=(score>0?'+':'')+score;div.append(l,b);detail.append(div);}
+  put('numed-exp-equation',`Fórmula de prueba: ${age} + (${rows.map(x=>x[1]).join(' + ')}) = ${result.hypotheticalAge}. No corresponde a edad biológica validada.`);
+  // Deliberately does not change clinical results, history, PDF or biological_age_years.
+}
 function numedOpenResearch(){if(!numedUser||document.getElementById('numed-research-button').hidden)return;const m=document.getElementById('numed-research');m.hidden=false;document.body.style.overflow='hidden';const q=document.getElementById('nr-answers');if(!q.dataset.ready){for(const field of NUMED_EXP.REQUIRED){const label=document.createElement('label');const title=document.createElement('span');title.textContent=field.replaceAll('_',' ');const sel=document.createElement('select');sel.dataset.field=field;const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Selecciona una respuesta';sel.append(placeholder);for(const item of NUMED_EXP.RULES.questionnaire[field]){const opt=document.createElement('option');opt.value=String(item.points);opt.textContent=item.label+' ('+(item.points>0?'+':'')+item.points+')';sel.append(opt)}label.append(title,sel);q.append(label)}q.dataset.ready='yes'}}
 function numedCloseResearch(){const m=document.getElementById('numed-research');if(m)m.hidden=true;document.body.style.overflow='';}
 function numedRunResearch(){const n=id=>Number(document.getElementById(id).value);const answers={};for(const s of document.querySelectorAll('#nr-answers select'))if(s.value!=='')answers[s.dataset.field]=Number(s.value);const result=NUMED_EXP.evaluate({age:n('nr-age'),sex:document.getElementById('nr-sex').value,weightKg:n('nr-weight'),heightCm:n('nr-height'),waistCm:n('nr-waist'),gripKg:n('nr-grip'),answers});const out=document.getElementById('nr-output');if(result.status==='blocked'){out.textContent='CÁLCULO BLOQUEADO\n'+result.errors.join('\n');return;}out.textContent=`SIMULACIÓN HIPOTÉTICA — NO ES UNA EDAD BIOLÓGICA VALIDADA\n\nIMC: ${result.metrics.bmi.toFixed(2)} (${result.metrics.bmiCategory})\nCintura/talla: ${result.metrics.ratio.toFixed(3)} (${result.metrics.waistCategory})\nHandgrip: ${result.metrics.gripKg} kg (${result.metrics.gripCategory})\nPuntos: Fuerza ${result.components.fuerza}, IMC ${result.components.imc}, Cintura ${result.components.cintura}, Hábitos ${result.components.habitos} (suma preguntas ${result.metrics.rawHabits})\nTotal: ${result.points>0?'+':''}${result.points} puntos\nHipótesis matemática (NO CLÍNICA): ${n('nr-age')} + (${result.points}) = ${result.hypotheticalAge}\nEdad biológica validada: NO DISPONIBLE`;}
