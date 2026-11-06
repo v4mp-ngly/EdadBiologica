@@ -873,6 +873,24 @@ body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!importa
 .numed-functional-card{overflow:hidden}.numed-functional-header{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:24px}.numed-functional-header h2{font-size:clamp(20px,3vw,30px);line-height:1.2;margin:8px 0;color:#145578;letter-spacing:-1px}.numed-functional-header p{max-width:650px;line-height:1.7;color:#587083;font-size:13px}.numed-patient-chip{flex-shrink:0;display:flex;flex-direction:column;gap:8px;background:#eef6f0;padding:20px;border-radius:16px;color:#145578;font-size:12px}.numed-patient-chip strong{font-size:20px}.numed-functional-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.numed-functional-metric{display:flex;flex-direction:column;gap:10px;background:linear-gradient(140deg,#f5fafc,#fff);border:1px solid #dfeaec;border-radius:20px;padding:22px;min-height:200px}.numed-metric-emoji{font-size:24px}.numed-functional-metric>span:nth-child(2){color:#597384;font-size:12px;font-weight:650}.numed-functional-metric strong{font-size:clamp(22px,3vw,33px);color:#145578;letter-spacing:-1px}.numed-functional-metric small{color:#7a8e99;font-size:11px;line-height:1.5}.numed-functional-foot{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-top:22px;color:#587083;font-size:12px}.numed-functional-foot .btn{white-space:nowrap}.bio-age-hero .bah-age-unit{line-height:1.5}.delta-item .delta-value{font-size:15px}
 @media(max-width:900px){.numed-functional-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.numed-reveal{padding:18px}.numed-reveal-brand{font-size:14px}.numed-reveal-brand img{width:42px;height:42px}.numed-skip{font-size:10px;padding:10px}.numed-pulse-circle{width:100px;height:100px}.numed-reveal h2{letter-spacing:-.8px}.numed-functional-header,.numed-functional-foot{flex-direction:column;align-items:stretch}.numed-functional-grid{grid-template-columns:1fr}.numed-functional-metric{min-height:150px}}@media(prefers-reduced-motion:reduce){.numed-orbit,.numed-pulse-circle,.numed-appear{animation:none!important}}
 </style>
+<style id="numed-v07-css">
+/* NUMED V0.7 - touch-friendly staff workflow, not an anonymous public kiosk */
+.numed-insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:24px 0 6px}
+.numed-insight{border:1px solid #dce9ee;background:linear-gradient(150deg,#fff,#f6fafb);border-radius:18px;padding:20px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-width:0}
+.numed-insight-tag{font-size:10px;letter-spacing:1.8px;font-weight:800;color:#237451;background:#e9f5dc;border-radius:7px;padding:6px 9px}
+.numed-insight strong{font-size:15px;color:#153e59;line-height:1.4}.numed-insight p{font-size:12px;line-height:1.7;color:#566b7c;margin:0}
+#numed-session-bar{flex-wrap:wrap}#numed-session-bar button{min-height:40px}
+#numed-touch-toggle[aria-pressed="true"]{background:#a8cc3b;color:#0b304a}
+body.numed-touch{--radius-sm:17px;--radius-md:24px}
+body.numed-touch .page{max-width:1420px;font-size:17px}
+body.numed-touch input,body.numed-touch select,body.numed-touch textarea{min-height:58px;font-size:19px}
+body.numed-touch .btn,body.numed-touch .wc-btn,body.numed-touch #numed-session-bar button,body.numed-touch .numed-reveal-cta{min-height:58px;font-size:17px}
+body.numed-touch label{font-size:14px}
+body.numed-touch input[type="radio"],body.numed-touch input[type="checkbox"]{min-width:22px;min-height:22px}
+body.numed-touch .numed-functional-metric{min-height:195px}
+@media(max-width:750px){.numed-insights{grid-template-columns:1fr}.numed-insight{padding:16px}}
+@media(prefers-reduced-motion:reduce){.numed-insight{transition:none!important}}
+</style>
 </head>
 <body>
 <section id="numed-auth-gate" role="dialog" aria-modal="true" aria-labelledby="numed-auth-heading">
@@ -888,7 +906,7 @@ body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!importa
     </form>
   </div>
 </section>
-<div id="numed-session-bar" hidden><strong id="numed-staff-label">Personal NUMED</strong><span>· Base de datos segura</span><button type="button" onclick="numedLogout()">Cerrar sesión</button></div>
+<div id="numed-session-bar" hidden><strong id="numed-staff-label">Personal NUMED</strong><span>· Supabase</span><button type="button" id="numed-touch-toggle" onclick="numedToggleTouchMode()" aria-pressed="false">Modo táctil</button><button type="button" onclick="numedLogout()">Cerrar sesión</button></div>
     <!-- ══════════════════════════════════════════════
          PANTALLA DE BIENVENIDA
     ══════════════════════════════════════════════ -->
@@ -920,7 +938,7 @@ body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!importa
             <img id="fixed-logo" src="logo-numed-original.jpg" alt="Numed">
         </div>
         <div class="header-text">
-            <h1>Evaluación de<br>Edad Biológica</h1>
+            <h1>NUMED Experience 360°<br><span style="font-size:.6em">Evaluación funcional</span></h1>
             <span class="header-accent"></span>
         </div>
     </div>
@@ -928,7 +946,7 @@ body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!importa
     <!-- FORMULARIO -->
     <div class="card">
         <div class="card-title">Datos del paciente</div>
-        <div class="clinical-notice"><strong>Versión de revisión.</strong> Este prototipo conserva almacenamiento local del sistema original. Utiliza únicamente datos ficticios hasta implementar Supabase, autenticación y permisos.</div>
+        <div class="clinical-notice"><strong>NUMED Experience 360° — V0.7.</strong> Evaluación funcional sin laboratorio. Solo personal autorizado. El perfil funcional no equivale a una edad biológica medida en años. Usar datos ficticios hasta completar las pruebas y revisión institucional.</div>
         <div class="form-grid">
             <div class="field">
                 <label for="patient-name">Nombre completo</label>
@@ -1123,7 +1141,7 @@ body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!importa
             </div>
         </div>
 
-        <div class="clinical-notice" role="note"><strong>Edad biológica en años no disponible.</strong> Este prototipo muestra indicadores de evaluación funcional. El cálculo heredado de ajustes en años no se presenta porque no es un estimador validado. No utilices esta versión con pacientes reales.</div>
+        <div class="clinical-notice" role="note"><strong>Edad biológica en años no disponible.</strong> Aquí se muestran las mediciones objetivas y sus interpretaciones. Esta evaluación no es un reloj biológico validado ni sustituye una valoración clínica. No utilizar con pacientes reales antes de completar las pruebas y la revisión institucional.</div>
 
         <!-- Bio age hero -->
         <div class="bio-age-hero">
@@ -1153,6 +1171,7 @@ body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!importa
  <article class="numed-functional-metric"><span class="numed-metric-emoji">💪</span><span>Fuerza muscular</span><strong id="numed-metric-force">—</strong><small>Fuerza de agarre medida</small></article>
  <article class="numed-functional-metric"><span class="numed-metric-emoji">🌿</span><span>Perímetro abdominal</span><strong id="numed-metric-waist">—</strong><small>Medición corporal</small></article>
  </div>
+ <div id="numed-functional-insights" class="numed-insights" aria-live="polite"></div>
  <div class="numed-functional-foot"><span>La edad biológica expresada en años requiere un método validado.</span><button type="button" class="btn btn-navy" onclick="openNumedReveal()">▶ Repetir revelación</button></div>
 </div>
 
@@ -1218,7 +1237,7 @@ body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!importa
     <div id="numed-save-status" role="status" aria-live="polite"></div>
     <div id="history-section" style="display:none; margin-top:24px;">
         <div class="card">
-            <div class="card-title">Historial de demostraciones de este navegador</div><p style="color:#587083;font-size:12px;margin-bottom:14px">Los registros antiguos pueden contener estimaciones no validadas. No utilizar como expediente clínico.</p>
+            <div class="card-title">Historial seguro de evaluaciones · Supabase</div><p style="color:#587083;font-size:12px;margin-bottom:14px">Los registros se recuperan de Supabase. La edad biológica en años permanece sin calcular hasta contar con una metodología validada.</p>
 
             <!-- Leyenda de columnas -->
             <div class="hist-legend">
@@ -1288,7 +1307,7 @@ body.numed-modal-open{overflow:hidden}.numed-reveal[hidden]{display:none!importa
     </div>
 
     <footer style="text-align:center; margin-top:32px; font-size:11px; color:rgba(255,255,255,0.45); padding-bottom:8px;">
-        © 2026 NUMED · Evaluación Interactiva de Edad Biológica<br>
+        © 2026 NUMED · Experience 360° · Perfil funcional<br>
         Fecha de evaluación: <span id="evaluation-date-footer"></span>
     </footer>
 
@@ -1315,7 +1334,7 @@ function updateNewUI(age, _legacyBiologicalAge, deltaDetalle, comparacionTexto, 
   if(d)d.textContent=document.getElementById('evaluation-date')?.textContent||'';
   populateFunctionalPanel();
   document.getElementById('results').style.display='block';
-  openNumedReveal();
+  // La revelación se abrirá ÚNICAMENTE tras guardar en Supabase.
 }
 function numedValue(id){return parseFloat(document.getElementById(id)?.value||'');}
 function populateFunctionalPanel(){
@@ -1330,8 +1349,51 @@ function populateFunctionalPanel(){
   v('numed-metric-age',document.getElementById('result-age')?.textContent||'—');
   const name=document.getElementById('result-name')?.textContent||'Participante';v('numed-metric-name',name);
   const note=document.getElementById('numed-ratio-note');
-  if(note)note.textContent=ratio===null?'Faltan medidas':`Relación cintura/talla: ${fmt(ratio,2)}. Interpretar según características individuales.`;
+  if(note)note.textContent=ratio===null?'Faltan medidas':`Relación cintura/talla observada: ${fmt(ratio,2)}.`;
+  numedRenderFunctionalInsights();
 }
+function numedFunctionalInterpretation({bmi, ratio, waist, grip, age, gender}) {
+ const insights=[];
+ if(Number.isFinite(bmi)){
+   let category='Fuera del rango habitual de IMC para adultos';
+   if(age>=18){category=bmi<18.5?'IMC inferior a 18.5':bmi<25?'IMC de 18.5 a 24.9':bmi<30?'IMC de 25 a 29.9':'IMC de 30 o más';}
+   else category='Interpretación de IMC en menores: requiere percentiles por edad y sexo';
+   insights.push({tag:'IMC',title:category,detail:age>=18?'Clasificación orientativa en adultos; no determina la composición corporal.':'No utilizar puntos de corte de adultos para menores.'});
+ }
+ if(Number.isFinite(ratio)){
+   let detail='Relación cintura/talla observada: '+ratio.toFixed(2)+'.';
+   if(age>=18 && Number.isFinite(bmi) && bmi<35 && ratio>=.4){
+     const label=ratio<.5?'Menor de 0.50':ratio<.6?'Entre 0.50 y 0.59':'0.60 o más';
+     detail+=' '+label+'; interpretación orientativa de adiposidad central basada en NICE para adultos con IMC menor de 35. No equivale a diagnóstico.';
+   }else detail+=' Sin clasificación automática; requiere contexto clínico.';
+   insights.push({tag:'CINTURA / TALLA',title:'Indicador de adiposidad central',detail});
+ }
+ if(Number.isFinite(grip)) insights.push({tag:'FUERZA',title:grip.toFixed(1)+' kg de fuerza de agarre',detail:'Medición observada. Para clasificar por edad y sexo es necesario comprobar referencias y protocolo del dinamómetro utilizado.'});
+ if(Number.isFinite(waist)) insights.push({tag:'CINTURA',title:waist.toFixed(1)+' cm de perímetro',detail:'Interpretar junto con talla, edad y contexto clínico.'});
+ insights.push({tag:'HÁBITOS',title:'Cuestionario completado',detail:'Las respuestas orientan recomendaciones individuales; la puntuación interna no es una escala clínica validada ni representa años de vida.'});
+ return insights;
+}
+function numedRenderFunctionalInsights(){
+ const el=document.getElementById('numed-functional-insights');if(!el)return;
+ const age=Number(document.getElementById('patient-age')?.value);
+ const weight=numedValue('patient-weight'), height=numedValue('patient-height'),waist=numedValue('abdominal-perimeter'),grip=numedValue('strength-value');
+ const data=numedFunctionalInterpretation({bmi:(weight>0&&height>0)?weight/(height/100)**2:NaN,ratio:(waist>0&&height>0)?waist/height:NaN,waist,grip,age,gender:document.getElementById('patient-gender')?.value});
+ el.replaceChildren();
+ for(const entry of data){
+   const article=document.createElement('article');article.className='numed-insight';
+   const tag=document.createElement('span');tag.className='numed-insight-tag';tag.textContent=entry.tag;
+   const title=document.createElement('strong');title.textContent=entry.title;
+   const desc=document.createElement('p');desc.textContent=entry.detail;
+   article.append(tag,title,desc);el.append(article);
+ }
+}
+function numedToggleTouchMode(){
+ const on=document.body.classList.toggle('numed-touch');
+ const toggle=document.getElementById('numed-touch-toggle');
+ if(toggle){toggle.textContent=on?'Modo estándar':'Modo táctil';toggle.setAttribute('aria-pressed',String(on));}
+ // Modo táctil = interfaz ampliada para PERSONAL NUMED, no quiosco público autónomo.
+}
+
 let numedRevealStep=0;
 const numedRevealSlides=[
  {step:'01 / 03',heading:'Tu cuerpo cuenta una historia',sub:'Cada medición aporta información sobre tu salud funcional.'},
@@ -1409,6 +1471,8 @@ async function numedLogout(){
   if(numedClient)await numedClient.auth.signOut();
   numedUser=null;window.evaluations=[];renderHistoryTable();
   document.getElementById('results').style.display='none';
+  ['patient-name','patient-age','patient-phone','strength-value','abdominal-perimeter','patient-weight','patient-height'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('patient-gender').value='';document.getElementById('questionnaire-form').reset();window._questionnaireAnswers=null;window.questionnaireCompleted=false;
   document.getElementById('numed-session-bar').hidden=true;
   document.getElementById('numed-auth-gate').hidden=false;
   numedMessage('');numedAuthError('Sesión cerrada.');
@@ -1450,7 +1514,7 @@ async function saveEvaluation(evaluation){
       if(error)throw error;patient=data;
     }
     const payload={
-      patient_id:patient.id,evaluated_by:numedUser.id,
+      patient_id:patient.id,evaluated_by:numedUser.id,assessment_version:'numed-functional-v0.7',
       age_years:evaluation.edad,gender:evaluation.genero,
       weight_kg:evaluation.peso,height_cm:evaluation.talla,waist_cm:evaluation.abdomen,
       grip_kg:evaluation.fuerzaOriginal,lifestyle_score:Number.isFinite(evaluation.estiloVidaScore)?evaluation.estiloVidaScore:null,
@@ -1620,81 +1684,21 @@ const abdomenResult = classifyAbdominalPerimeter(gender, abdomenValue);
   // Calcular nivel de fuerza con las tablas de referencia
   const level = calculateStrengthLevel(age, gender, strength);
 
-  // ============================================================
-  // FÓRMULA REAL DE EDAD BIOLÓGICA
-  // Edad Biológica = Edad Cronológica + Δfuerza + ΔIMC + Δabdomen + Δestilo de vida
-  // ============================================================
-  let deltaTotal = 0;
-  let deltaDetalle = {};
-
-  // Δ FUERZA
-  let deltaFuerza = 0;
-  if (level.level === 'Alto')      deltaFuerza = -3;
-  else if (level.level === 'Bajo') deltaFuerza = +3;
-  deltaTotal += deltaFuerza;
-  deltaDetalle.fuerza = deltaFuerza;
-
-  // Δ IMC
-  let deltaIMC = 0;
-  const imcVal = window.imcCalculado ? parseFloat(window.imcCalculado.value) : null;
-  if (imcVal !== null) {
-    if      (imcVal < 18.5)  deltaIMC = +2;
-    else if (imcVal < 25)    deltaIMC = -1;
-    else if (imcVal < 30)    deltaIMC = +2;
-    else if (imcVal < 35)    deltaIMC = +4;
-    else if (imcVal < 40)    deltaIMC = +6;
-    else                     deltaIMC = +8;
-  }
-  deltaTotal += deltaIMC;
-  deltaDetalle.imc = deltaIMC;
-
-  // Δ PERÍMETRO ABDOMINAL
-  const abdomen = parseFloat(document.getElementById('abdominal-perimeter').value);
-  let deltaAbdomen = 0;
-  if (gender === 'masculino') {
-    if      (abdomen >= 102) deltaAbdomen = +4;
-    else if (abdomen >= 95)  deltaAbdomen = +2;
-  } else {
-    if      (abdomen >= 88)  deltaAbdomen = +4;
-    else if (abdomen >= 82)  deltaAbdomen = +2;
-  }
-  deltaTotal += deltaAbdomen;
-  deltaDetalle.abdomen = deltaAbdomen;
-
-  // Δ ESTILO DE VIDA (basado en puntaje crudo del cuestionario)
-  let deltaEstilo = 0;
-  if      (lifestyleScore <= -2) deltaEstilo = -3;
-  else if (lifestyleScore <= 3)  deltaEstilo =  0;
-  else if (lifestyleScore <= 7)  deltaEstilo = +3;
-  else                           deltaEstilo = +5;
-  deltaTotal += deltaEstilo;
-  deltaDetalle.estilo = deltaEstilo;
-
-  // EDAD BIOLÓGICA FINAL con límites razonables
-  let edadBiologicaFinal = age + deltaTotal;
-  edadBiologicaFinal = Math.max(age - 10, Math.min(age + 15, edadBiologicaFinal));
-  edadBiologicaFinal = Math.round(edadBiologicaFinal);
-
-  // Guardar globales para PDF y resultados
-  window._edadBiologicaFinal = edadBiologicaFinal;
+  // NUMED V0.7: NO calcular edad en años con incrementos arbitrarios.
+  // Se conservan exclusivamente las mediciones observadas.
+  const edadBiologicaFinal = null;
+  const deltaDetalle = {fuerza:null, imc:null, abdomen:null, estilo:null};
+  const deltaTotal = null;
+  window._edadBiologicaFinal = null;
   window._deltaDetalle = deltaDetalle;
-  window._deltaTotal = deltaTotal;
+  window._deltaTotal = null;
   window.adjustedStrengthGlobal = strength;
-  window._evalPeso  = parseFloat(document.getElementById('patient-weight').value) || null;
+  window._evalPeso = parseFloat(document.getElementById('patient-weight').value) || null;
   window._evalTalla = parseFloat(document.getElementById('patient-height').value) || null;
-  window.totalScoreGlobal = deltaTotal;
-
-  // Clasificación
-  let biologicalAgeStatus = '';
-  if      (edadBiologicaFinal > age) biologicalAgeStatus = 'Edad biológica mayor que la cronológica';
-  else if (edadBiologicaFinal < age) biologicalAgeStatus = 'Edad biológica menor que la cronológica';
-  else                               biologicalAgeStatus = 'Edad biológica acorde con la cronológica';
+  window.totalScoreGlobal = null;
+  const biologicalAgeStatus = 'Edad biológica en años no estimada';
+  const comparacionTexto = 'No se calcula una diferencia de edad sin una metodología validada.';
   window.biologicalResultGlobal = biologicalAgeStatus;
-
-  let comparacionTexto = '';
-  if      (edadBiologicaFinal > age) comparacionTexto = 'es mayor que su edad cronológica.';
-  else if (edadBiologicaFinal < age) comparacionTexto = 'es menor que su edad cronológica.';
-  else                               comparacionTexto = 'es igual que su edad cronológica.';
   window._comparacionTexto = comparacionTexto;
 
   const adjustedLevel = calculateStrengthLevel(age, gender, strength);
@@ -1709,7 +1713,7 @@ document.getElementById('result-strength').textContent = strength.toFixed(1);
 
 
 // 🔹 Mensaje de aviso (solo para depuración o feedback visual)
-console.log(`Fuerza: ${strength} kg | Δ total: ${deltaTotal} | Edad biológica: ${edadBiologicaFinal}`);
+console.info('NUMED V0.7: evaluacion funcional; no se estima edad biologica.');
 
 document.getElementById('results').style.display = 'block';
 document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
@@ -1718,7 +1722,7 @@ displayResults(adjustedLevel, strength);
   // Update new UI elements
   updateNewUI(age, edadBiologicaFinal, window._deltaDetalle, comparacionTexto, biologicalAgeStatus);
 
-// 🔹 Guardar evaluación en historial (localStorage)
+// Guardar evaluación en Supabase: nunca en localStorage
 const evaluationData = {
   fecha: today.toISOString().split('T')[0],  // Formato YYYY-MM-DD para Supabase
   nombre: name,
@@ -1751,7 +1755,8 @@ const evaluationData = {
   q_familia:    window._questionnaireAnswers ? window._questionnaireAnswers.familia      : null
 };
 
-await saveEvaluation(evaluationData);
+const savedOK = await saveEvaluation(evaluationData);
+if(savedOK) { openNumedReveal(); } else { numedMessage('La evaluación no fue guardada. Revisa la conexión y vuelve a intentar.', true); }
 
 }
 
@@ -1920,55 +1925,23 @@ const abdomenValue2 = parseFloat(document.getElementById('abdominal-perimeter').
 const genderValue   = document.getElementById('patient-gender').value;
 const abdomenEval   = classifyAbdominalPerimeter(genderValue, abdomenValue2);
 const lifestyle     = window.lifestyleDisplay || { label: "No evaluado" };
-const bio           = window.biologicalResultGlobal || "";
-const edadFinal     = window._edadBiologicaFinal;
-const edadCrono     = parseInt(document.getElementById('patient-age').value);
-const diff          = edadFinal - edadCrono;
+// Age in years is deliberately unavailable: a fitness profile is not a biological clock.
+const bioColor='rc-blue';
+const bioIcon='🧬';
+const bioTitle='Tu perfil funcional NUMED';
+const bioDesc='Presentamos mediciones funcionales y hábitos registrados. No se estima edad biológica en años ni se calculan diferencias con la edad cronológica.';
+const recFuerzaHTML=numedSafeStrengthRecommendations(levelData, strength);
+const fuerzaColor='rc-blue';
+const abdColor='rc-blue';
+const abdIcon='📏';
+const lsColor='rc-blue';
+const lsIcon='🌿';
 
-// — Card 1: Resultado edad biológica —
-const bioColor   = diff > 0 ? 'rc-red' : diff < 0 ? 'rc-green' : 'rc-teal';
-const bioIcon    = diff > 0 ? '⚠️' : diff < 0 ? '✅' : '⚖️';
-const bioTitle   = diff > 0 ? 'Edad biológica mayor que la cronológica'
-                 : diff < 0 ? 'Edad biológica menor que la cronológica'
-                 : 'Edad biológica acorde a la cronológica';
-const bioDesc    = diff > 0 ? 'Existen factores que están envejeciendo su organismo por encima de su edad real. Es importante actuar sobre ellos.'
-                 : diff < 0 ? 'Su organismo funciona mejor de lo esperado para su edad. Tiene una excelente reserva funcional y perfil metabólico.'
-                 : 'Sus indicadores muestran un equilibrio entre estilo de vida, fuerza y parámetros metabólicos.';
-
-// Get strength recommendations HTML
-const recFuerzaHTML = getRecommendations();
-
-// — Card 2: Fuerza —
-const fuerzaColor = bio.includes('mayor') ? 'rc-orange' : bio.includes('menor') ? 'rc-lime' : 'rc-blue';
-
-// — Card 3: Abdomen —
-const abdColor = abdomenEval.level === 'Normal' ? 'rc-green' : abdomenEval.level === 'Elevado' ? 'rc-orange' : 'rc-red';
-const abdIcon  = abdomenEval.level === 'Normal' ? '✅' : '⚠️';
-
-// — Card 4: Estilo de vida —
-const lsColor = lifestyle.label.includes('Saludable') ? 'rc-green'
-              : lifestyle.label.includes('Moderado')  ? 'rc-orange'
-              : 'rc-red';
-const lsIcon  = lifestyle.label.includes('Saludable') ? '🌿'
-              : lifestyle.label.includes('Moderado')  ? '🔶' : '🔴';
-
-let lsItems = [];
-if (lifestyle.label.includes('Saludable')) {
-  lsItems = ['Mantener actividad física regular (≥150 min/semana).',
-             'Continuar con una alimentación balanceada y variada.',
-             'Conservar hábitos de sueño adecuados (7–9 h por noche).',
-             'Control médico general una vez al año.'];
-} else if (lifestyle.label.includes('Moderado')) {
-  lsItems = ['Aumentar la actividad física progresivamente.',
-             'Mejorar la calidad del sueño estableciendo una rutina.',
-             'Reducir consumo de alcohol y alimentos procesados.',
-             'Reevaluar hábitos en 8–12 semanas.'];
-} else {
-  lsItems = ['Iniciar un plan estructurado de actividad física con supervisión.',
-             'Eliminar tabaco y reducir el alcohol completamente.',
-             'Buscar asesoramiento nutricional profesional.',
-             'Evaluar apoyo médico para el manejo del estrés.'];
-}
+const lsItems = [
+ 'Mantener o incorporar actividad física acorde con tu condición y orientación profesional.',
+ 'Priorizar horarios regulares de descanso y alimentación variada.',
+ 'Conversar con el equipo NUMED sobre los hábitos registrados y objetivos personales.'
+];
 
 const pillList = (items) => items.map(i =>
   `<div class="rec-pill"><span class="rp-dot"></span><span>${i}</span></div>`
@@ -2029,246 +2002,14 @@ document.getElementById('abdominal-message').style.display = 'none';
 document.getElementById('resultado-integrado').style.display = 'none';
 }
 
-function getRecommendations() {
-    const bio = window.biologicalResultGlobal || "";
-
-    // Determinar cuál bloque mostrar según edad biológica
-    let forceLevelForRecommendations = "";
-
-    if (bio.includes("mayor")) {
-        forceLevelForRecommendations = "Bajo";   // Muestra el más débil
-    } 
-    else if (bio.includes("acorde") || bio.includes("igual")) {
-        forceLevelForRecommendations = "Medio";  // Muestra el intermedio
-    }
-    else if (bio.includes("menor")) {
-        forceLevelForRecommendations = "Alto";   // Muestra el más fuerte
-    }
-
-    let subtitleMain = "";
-    let descriptionMain = "";
-
-    // Subtítulo principal según edad biológica
-    if (bio.includes("mayor")) {
-        subtitleMain = "Edad biológica mayor que la cronológica.";
-        descriptionMain = "Indica que existen factores que incrementan la edad biológica del paciente.";
-    } 
-    else if (bio.includes("menor")) {
-        subtitleMain = "Edad biológica menor que la cronológica.";
-        descriptionMain = "Indica una excelente reserva funcional y perfil metabólico favorable.";
-    }
-    else {
-        subtitleMain = "Edad biológica acorde a la cronológica.";
-        descriptionMain = "Indica un equilibrio general entre estilo de vida, fuerza y parámetros metabólicos.";
-    }
-
-    const recommendations = {
-        'Bajo': {
-            title: `Recomendaciones para usted según su fuerza`,
-            blocks: [
-                {
-                    subtitle: subtitleMain,
-                    text: descriptionMain
-                },
-                {
-                    subtitle:'Observaciones:',
-                    items:[
-                        'La fuerza de agarre se encuentra por debajo del rango esperado para su grupo de edad y sexo. Esto puede sugerir menor reserva funcional y mayor riesgo de fragilidad si se asocia a otros hallazgos clínicos.',
-                        'Su nivel de fuerza muscular se encuentra por debajo de lo esperado para su edad y sexo. Estudios científicos han mostrado que una baja fuerza muscular se asocia con un mayor riesgo relativo de desarrollar enfermedades crónicas, especialmente en mujeres mayores de 50 años.'
-                    ],
-                }
-            ]
-        },
-        
-        'Medio': {
-            title: `Recomendaciones para usted según su fuerza`,
-            blocks: [
-                {
-                    subtitle: subtitleMain,
-                    text: descriptionMain
-                },
-                {
-                    subtitle:'Observaciones:',
-                    items:[
-                        'La fuerza de agarre está dentro del rango esperado para su edad y sexo. Indica una capacidad funcional acorde con su edad biológica.',
-                        'Su fuerza muscular se encuentra dentro del rango esperado para su edad y sexo. Este nivel de fuerza se asocia a un riesgo promedio o moderado de enfermedades crónicas, similar al de la población general. Mantener su masa muscular y fuerza a lo largo del tiempo puede contribuir a prevenir enfermedades crónicas.'
-                    ],
-                }
-            ]
-        },
-        'Alto': {
-            title: `Recomendaciones para usted según su fuerza`,
-            blocks: [
-                {
-                    subtitle: subtitleMain,
-                    text: descriptionMain
-                },
-                {
-                    subtitle:'Observaciones:',
-                    items:[
-                        'La fuerza de agarre supera el rango esperado para su edad y sexo. Sugiere mayor reserva funcional',
-                        'Su nivel de fuerza muscular es superior al promedio para su edad y sexo. Un buen estado de fuerza se ha relacionado en diversos estudios con un menor riesgo de enfermedades crónicas.',
-                        'Esto no garantiza inmunidad frente a enfermedades, pero indica un perfil funcional favorable, con mayor reserva fisiológica y menor vulnerabilidad a factores de riesgo.'
-                    ],
-                }
-            ]
-        }
-    };
-
-    const rec = recommendations[forceLevelForRecommendations];
-
-    if (!rec) return '<div class="recommendation-card"><p>No hay recomendaciones disponibles.</p></div>';
-
-    // Generar HTML a partir de los bloques existentes
-    const blocksHTML = rec.blocks.map(block => {
-        const subtitleHTML = block.subtitle ? `<h4 style="margin:8px 0 6px;color:#003366;">${block.subtitle}</h4>` : '';
-        const textHtml = block.text ? `<p style="margin:6px 0 10px;font-size:13px;color:#333;">${block.text}</p>` : '';
-        const listArray = block.items || block.list || [];
-        const listHtml = listArray.length
-            ? `<ul style="padding-left:18px;margin:6px 0 10px;">${listArray.map(i => `<li style="margin-bottom:6px;">${i}</li>`).join('')}</ul>`
-            : '';
-        return `<div class="recommendation-block">${subtitleHTML}${textHtml}${listHtml}</div>`;
-    }).join('');
-
-    // 🧩 NUEVO BLOQUE: “Matiz” según época del año + fuerza + edad biológica
-    const month = new Date().getMonth(); // 0–11
-    let focoActividad = '';
-    let focoAlimentacion = '';
-
-    // Muy simple: meses cálidos (abril–septiembre) vs resto
-    if (month >= 3 && month <= 8) {
-        // Época más calurosa
-        focoActividad = 'priorizar actividades aeróbicas moderadas (caminar, bicicleta estática, natación) evitando las horas de mayor calor y manteniendo hidratación adecuada.';
-        focoAlimentacion = 'aumentar el consumo de frutas y vegetales frescos, incluir alimentos ricos en agua (ensaladas, frutas) y mantener una buena ingesta de proteínas magras.';
-    } else {
-        // Época más fresca / neutra
-        focoActividad = 'mantener una combinación de entrenamiento de fuerza 2–3 veces por semana y ejercicio aeróbico 3–5 días por semana, adaptando la intensidad a su nivel actual.';
-        focoAlimentacion = 'priorizar alimentos naturales: vegetales, frutas, legumbres, proteínas magras y grasas saludables, reduciendo azúcares añadidos y ultraprocesados.';
-    }
-
-    // Texto según fuerza
-    let fuerzaTexto = '';
-    if (forceLevelForRecommendations === 'Alto') {
-        fuerzaTexto = 'Su nivel de fuerza actual es una fortaleza; esta época del año es ideal para consolidar ese beneficio manteniendo la progresión del entrenamiento.';
-    } else if (forceLevelForRecommendations === 'Medio') {
-        fuerzaTexto = 'Su fuerza se encuentra en un rango adecuado; pequeños ajustes en el volumen y la frecuencia del entrenamiento pueden ayudarle a seguir mejorando.';
-    } else {
-        fuerzaTexto = 'Su nivel de fuerza está por debajo de lo esperado; es especialmente importante que el plan de actividad física sea progresivo, seguro y constante.';
-    }
-
-    // Texto según edad biológica
-    let edadBioTexto = '';
-    if (bio.includes('mayor')) {
-        edadBioTexto = 'Dado que su edad biológica es mayor que la cronológica, estas recomendaciones buscan reducir el impacto de los factores de riesgo y mejorar su reserva funcional.';
-    } else if (bio.includes('menor')) {
-        edadBioTexto = 'Su edad biológica menor que la cronológica indica un buen perfil global; estas recomendaciones le ayudarán a mantener esa ventaja a largo plazo.';
-    } else {
-        edadBioTexto = 'Con una edad biológica acorde a la cronológica, el objetivo es mantener el equilibrio actual y prevenir un deterioro acelerado en los próximos años.';
-    }
-
-    const seasonalSubtitle =
-  'Recomendaciones integradas según la época del año, su fuerza y su edad biológica';
-
-const seasonalHTML = `
-  <div class="recommendation-block">
-    <h4 style="margin:8px 0 6px;color:#003366;">
-      ${seasonalSubtitle}
-    </h4>
-
-    <p style="margin:4px 0 6px;font-size:13px;color:#333;">
-      En esta época del año se recomienda ajustar el plan de salud teniendo en cuenta:
-    </p>
-
-    <ul style="padding-left:18px;margin:4px 0 8px;">
-      <li style="margin-bottom:4px;">
-        <strong>Alimentación:</strong> ${focoAlimentacion}
-      </li>
-      <li style="margin-bottom:4px;">
-        <strong>Actividad física:</strong> ${focoActividad}
-      </li>
-    </ul>
-
-    <p style="margin:6px 0 4px;font-size:13px;color:#333;">
-      ${fuerzaTexto}
-    </p>
-
-    <p style="margin:0 0 4px;font-size:13px;color:#333;">
-      ${edadBioTexto}
-    </p>
-  </div>
-`;
-
-
-    // Resultado final (se suma el bloque “clásico” + el nuevo bloque de contexto)
-    // Map each recommendation-block into a styled pill-list card
-    const styledBlocks = blocksHTML
-        .split('<div class="recommendation-block">')
-        .filter(Boolean)
-        .map(block => {
-            const subtitleMatch = block.match(/<h4[^>]*>(.*?)<\/h4>/s);
-            const paraMatch     = block.match(/<p[^>]*>(.*?)<\/p>/s);
-            const itemMatches   = [...block.matchAll(/<li[^>]*>(.*?)<\/li>/gs)];
-
-            const subtitle = subtitleMatch ? subtitleMatch[1].replace(/<[^>]+>/g,'').trim() : '';
-            const para     = paraMatch     ? paraMatch[1].replace(/<[^>]+>/g,'').trim()     : '';
-            const items    = itemMatches.map(m => m[1].replace(/<[^>]+>/g,'').trim());
-
-            let html = '';
-            if (subtitle) html += `<div class="rec-obs-title">${subtitle}</div>`;
-            if (para)     html += `<p class="rec-obs-desc">${para}</p>`;
-            if (items.length) {
-                html += `<div class="rec-pill-list">` +
-                    items.map(i => `<div class="rec-pill"><span class="rp-dot"></span><span>${i}</span></div>`).join('') +
-                `</div>`;
-            }
-            return html ? `<div class="rec-obs-block">${html}</div>` : '';
-        }).join('');
-
-    // Seasonal block — two mini cards side by side
-    const seasonParts = seasonalHTML
-        .replace(/<[^>]+>/g, ' ')
-        .trim();
-
-    // Parse alimentacion / actividad from seasonalHTML
-    const alimMatch = seasonalHTML.match(/Alimentaci[oó]n.*?<\/li>/s);
-    const activMatch = seasonalHTML.match(/Actividad.*?<\/li>/s);
-    const fuerzaMatch = seasonalHTML.match(/Su nivel de fuerza[^<]*/);
-    const edadMatch   = seasonalHTML.match(/Su edad biol[oó]gica[^<]*/);
-    const seasonTitle = seasonalHTML.match(/<h3[^>]*>(.*?)<\/h3>/s);
-
-    const alimText  = alimMatch  ? alimMatch[0].replace(/<[^>]+>/g,'').trim()  : '';
-    const activText = activMatch ? activMatch[0].replace(/<[^>]+>/g,'').trim() : '';
-    const fuerzaTxt = fuerzaMatch ? fuerzaMatch[0].trim() : '';
-    const edadTxt   = edadMatch   ? edadMatch[0].trim()   : '';
-    const seasonTitleTxt = seasonTitle ? seasonTitle[1].replace(/<[^>]+>/g,'').trim() : 'Recomendaciones integradas';
-
-    const seasonCard = `
-      <div class="rec-season-header">${seasonTitleTxt}</div>
-      <div class="rec-season-grid">
-        ${alimText ? `<div class="rec-season-card rec-season-food">
-          <div class="rec-season-icon">🥗</div>
-          <div class="rec-season-label">Alimentación</div>
-          <div class="rec-season-text">${alimText.replace(/^Alimentaci[oó]n:\s*/i,'')}</div>
-        </div>` : ''}
-        ${activText ? `<div class="rec-season-card rec-season-move">
-          <div class="rec-season-icon">🏃</div>
-          <div class="rec-season-label">Actividad física</div>
-          <div class="rec-season-text">${activText.replace(/^Actividad f[ií]sica:\s*/i,'')}</div>
-        </div>` : ''}
-      </div>
-      ${fuerzaTxt || edadTxt ? `<div class="rec-season-notes">
-        ${fuerzaTxt ? `<div class="rec-note"><span class="rec-note-dot" style="background:var(--lime)"></span>${fuerzaTxt}</div>` : ''}
-        ${edadTxt   ? `<div class="rec-note"><span class="rec-note-dot" style="background:#7B8FCA"></span>${edadTxt}</div>`   : ''}
-      </div>` : ''}
-    `;
-
-    return `
-        <div class="rec-fuerza-wrapper">
-          ${styledBlocks}
-          ${(alimText || activText) ? seasonCard : ''}
-        </div>
-    `;
+function numedSafeStrengthRecommendations(levelData, strength){
+ const cat=String(levelData?.level||'sin clasificación');
+ const measured=Number.isFinite(strength)?strength.toFixed(1)+' kg':'Sin medición';
+ return `<p><strong>Fuerza de agarre:</strong> ${measured}.</p>
+ <p><strong>Clasificación del sistema:</strong> ${numedEscape(cat)}. La referencia debe revisarse según edad, sexo, instrumento y protocolo de medición.</p>
+ <p>Si el resultado es bajo para la referencia correspondiente, consultar con un profesional antes de iniciar un programa de entrenamiento. La fuerza observada por sí sola no determina una edad biológica.</p>`;
 }
+// Las recomendaciones heredadas por diferencia de edad se eliminaron en V0.7.
 
         function changeLogo(event) {
             const file = event.target.files[0];
@@ -2300,7 +2041,7 @@ function downloadPDF(){
  const ratio=(Number(waist)>0&&Number(height)>0)?Number(waist)/Number(height):null;
  doc.setFillColor(20,85,120);doc.rect(0,0,210,38,'F');
  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(19);doc.text('NUMED | Perfil funcional',16,20);
- doc.setFontSize(9);doc.setFont('helvetica','normal');doc.text('Reporte demostrativo - Edad biologica no validada',16,29);
+ doc.setFontSize(9);doc.setFont('helvetica','normal');doc.text('V0.7 - Perfil funcional sin edad biologica estimada',16,29);
  doc.setTextColor(23,56,76);doc.setFontSize(12);doc.setFont('helvetica','bold');doc.text('Datos de la evaluacion',16,53);
  doc.setFontSize(10);doc.setFont('helvetica','normal');
  const rows=[['Nombre',name],['Edad cronologica',String(age||'—')+' anos'],['Peso',String(weight||'—')+' kg'],['Talla',String(height||'—')+' cm'],['Fuerza de agarre',String(force||'—')+' kg'],['Perimetro abdominal',String(waist||'—')+' cm'],['IMC',imc!==null?imc.toFixed(1):'—'],['Relacion cintura/talla',ratio!==null?ratio.toFixed(2):'—']];
@@ -2313,466 +2054,11 @@ function downloadPDF(){
  doc.splitTextToSize(cleaned,175).forEach(line=>{if(y>267){doc.addPage();y=20;}doc.text(line,16,y);y+=5;});
  if(y>255){doc.addPage();y=20;}else y+=10;
  doc.setFont('helvetica','bold');doc.text('Aviso de uso',16,y);y+=7;doc.setFont('helvetica','normal');
- doc.splitTextToSize('Este documento muestra indicadores funcionales y no una edad biologica cientificamente validada. Prototipo local V0.5; no utilizar con datos clinicos reales.',175).forEach(l=>{doc.text(l,16,y);y+=5;});
- doc.save('NUMED_Perfil_Funcional_Demo.pdf');
+ doc.splitTextToSize('Este documento muestra indicadores funcionales y no una edad biologica cientificamente validada. NUMED V0.7: interpretacion funcional orientativa, no un diagnostico. Revisar el reporte con un profesional. No usar con datos reales hasta completar la validacion institucional.',175).forEach(l=>{doc.text(l,16,y);y+=5;});
+ doc.save('NUMED_Perfil_Funcional_V07.pdf');
 }
 
-        function downloadPDFLegacy_NoUsar() {
-            const { jsPDF } = window.jspdf;
-
-            // ── Helpers básicos ────────────────────────────────────────────
-            const getText = id => (document.getElementById(id)?.textContent || '').trim();
-            const getVal  = id => (document.getElementById(id)?.value       || '').trim();
-            const safeNum = (v, d=0) => { const n = parseFloat(String(v??'').replace(',','.')); return isFinite(n) ? n : d; };
-
-            // ── Fuente de datos: historial vs evaluación activa ────────────
-            const H = window._historyMode ? (window._historyData || {}) : null;
-            const name        = H ? (H.nombre      || '')  : (getText('result-name')   || getVal('patient-name'));
-            const ageNum      = H ? safeNum(H.edad)        : (parseInt(getText('result-age') || getVal('patient-age') || '0') || 0);
-            const genderTx    = H ? (H.genero       || '')  : (getText('result-gender') || getVal('patient-gender') || '');
-            const phoneTx     = H ? (H.telefono     || '')  : (getText('result-phone')  || getVal('patient-phone'));
-            const strengthNum = H ? safeNum(H.fuerzaOriginal) : safeNum(getText('result-strength') || getVal('strength-value'));
-            const abdomenNum  = H ? safeNum(H.abdomen)        : safeNum(getVal('abdominal-perimeter'));
-            const pesoVal     = H ? (H.peso    || '--') : (window._evalPeso   || getVal('patient-weight') || '--');
-            const tallaVal    = H ? (H.talla   || '--') : (window._evalTalla  || getVal('patient-height') || '--');
-            const imcVal      = H ? (H.imc     || '--') : (window.imcCalculado ? window.imcCalculado.value    : '--');
-            const imcCat      = H ? (H.imcCategoria || '') : (window.imcCalculado ? window.imcCalculado.category : '');
-            const edadBio     = H ? safeNum(H.edadBiologica, ageNum) : (typeof window._edadBiologicaFinal === 'number' ? window._edadBiologicaFinal : ageNum);
-            const evScore     = H ? (H.estiloVidaScore ?? '') : (typeof lifestyleScore !== 'undefined' ? lifestyleScore : '');
-            const rawDate     = H ? (H.fecha || '') : (getText('evaluation-date') || new Date().toLocaleDateString('es-ES'));
-            const dateTx      = rawDate.includes('T')
-              ? new Date(rawDate).toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'})
-              : rawDate;
-
-            const lifestyle   = window.lifestyleDisplay || { label:'No evaluado', normalized:50 };
-            const abdomenEval = classifyAbdominalPerimeter(genderTx, abdomenNum);
-            const bio         = window.biologicalResultGlobal || (H ? H.estadoEdadBiologica : '') || '';
-
-            // ── Diferencia de edades ───────────────────────────────────────
-            const diff      = edadBio - ageNum;
-            const diffAbs   = Math.abs(diff);
-            const diffTxt   = diff > 0 ? `+${diffAbs} años por encima de la edad real`
-                            : diff < 0 ? `-${diffAbs} años por debajo de la edad real`
-                            : 'Igual a la edad cronológica';
-            const diffColor = diff > 0 ? [197,48,48] : diff < 0 ? [47,133,90] : [74,85,104];
-
-            // ── Estilo de vida ─────────────────────────────────────────────
-            const scoreForLabel = H ? safeNum(H.estiloVidaScore, 99)
-                                : (typeof lifestyleScore !== 'undefined' ? lifestyleScore : 99);
-            let lsLabel = (lifestyle.label || '').replace(/[\u{1F600}-\u{1F9FF}]|[🟢🟡🔴]/gu,'').trim();
-            if (!lsLabel || lsLabel === 'No calculado' || lsLabel === 'No evaluado') {
-                if (scoreForLabel !== 99)
-                    lsLabel = scoreForLabel <= 0 ? 'Saludable' : scoreForLabel <= 4 ? 'Moderado' : 'De riesgo';
-                else lsLabel = 'No evaluado';
-            }
-            const lsVal = scoreForLabel !== 99
-                ? Math.max(5, Math.min(100, (1 - ((scoreForLabel + 5) / 16)) * 100))
-                : safeNum(lifestyle.normalized, 50);
-            const lsBarColor = lsLabel.includes('Saludable') ? [34,113,5]
-                             : lsLabel.includes('Moderado')  ? [255,159,67] : [220,53,69];
-            const lsColor2   = lsLabel.includes('Saludable') ? [47,133,90]
-                             : lsLabel.includes('Moderado')  ? [192,86,33]  : [197,48,48];
-
-            // ── Recomendaciones estilo de vida ─────────────────────────────
-            const lsRecs = lsLabel.includes('Saludable')
-              ? ['Mantener actividad física regular (≥150 min/semana).',
-                 'Continuar con alimentación balanceada y variada.',
-                 'Conservar hábitos de sueño adecuados (7–9 h por noche).',
-                 'Control médico general una vez al año.']
-              : lsLabel.includes('Moderado')
-              ? ['Aumentar la actividad física de forma progresiva.',
-                 'Mejorar la calidad del sueño con una rutina estable.',
-                 'Reducir consumo de alcohol y alimentos procesados.',
-                 'Reevaluar hábitos en 8–12 semanas.']
-              : ['Iniciar plan de actividad física con supervisión médica.',
-                 'Eliminar tabaco y reducir el alcohol completamente.',
-                 'Buscar asesoramiento nutricional profesional.',
-                 'Evaluar apoyo médico para el manejo del estrés.'];
-
-            // ── Recomendaciones fuerza ─────────────────────────────────────
-            const fuerzaRecs = bio.includes('mayor')
-              ? ['La fuerza de agarre está por debajo del rango esperado para su edad y sexo.',
-                 'Se recomienda entrenamiento de fuerza 2–3 veces por semana.',
-                 'Revisar aporte proteico (1.0–1.2 g/kg/día).',
-                 'Repetir la medición en 4–8 semanas tras intervención.']
-              : bio.includes('menor')
-              ? ['La fuerza de agarre supera el rango esperado para su edad y sexo.',
-                 'Mantener entrenamiento de fuerza al menos 2 veces por semana.',
-                 'Continuar con dieta rica en proteínas y nutrientes.',
-                 'Realizar controles cada 3–6 meses.']
-              : ['La fuerza de agarre se encuentra dentro del rango normal.',
-                 'Mantener entrenamiento de fuerza de forma regular.',
-                 'Optimizar nutrición para sostener el nivel muscular.',
-                 'Realizar controles periódicos cada 3–6 meses.'];
-
-            // ── Logo ───────────────────────────────────────────────────────
-            const logoImg = document.getElementById('fixed-logo');
-
-            // ══════════════════════════════════════════════════════════════
-            // FUENTE MONTSERRAT
-            // ══════════════════════════════════════════════════════════════
-            // Load Montserrat from window if pre-loaded, otherwise use helvetica
-            const hasMontserrat = (typeof window._montserratBase64Normal !== 'undefined');
-            let FONT = 'Helvetica';
-            if (hasMontserrat) {
-                try {
-                    doc.addFileToVFS('Montserrat-Normal.ttf', window._montserratBase64Normal);
-                    doc.addFont('Montserrat-Normal.ttf', 'Montserrat', 'normal');
-                    if (window._montserratBase64Bold) {
-                        doc.addFileToVFS('Montserrat-Bold.ttf', window._montserratBase64Bold);
-                        doc.addFont('Montserrat-Bold.ttf', 'Montserrat', 'bold');
-                    }
-                    FONT = 'Montserrat';
-                } catch(e) {
-                    console.warn('No se pudo cargar Montserrat, usando Helvetica:', e);
-                }
-            }
-
-            // ══════════════════════════════════════════════════════════════
-            // COLORES
-            // ══════════════════════════════════════════════════════════════
-            const NAVY  = [27, 61, 110];
-            const LIME  = [90, 154, 0];
-            const SLATE = [74, 85, 104];
-            const WHITE = [255, 255, 255];
-            const OFFWH = [247, 249, 252];
-            const LIGHT = [232, 239, 247];
-
-            // ══════════════════════════════════════════════════════════════
-            // HELPERS PDF
-            // ══════════════════════════════════════════════════════════════
-            const addPageHeader = (doc, subtitle) => {
-                doc.setFillColor(255,255,255);
-                doc.rect(0, 0, 210, 26, 'F');
-                doc.setDrawColor(...LIME);
-                doc.setLineWidth(1.2);
-                doc.line(0, 26, 210, 26);
-                doc.setLineWidth(0.3);
-                if (logoImg?.src) {
-                    try { doc.addImage(logoImg.src, 'PNG', 8, 3, 20, 20); } catch(e) {}
-                }
-                doc.setFont(FONT,'bold');
-                doc.setFontSize(14);
-                doc.setTextColor(...NAVY);
-                doc.text('NUMED', 32, 13);
-                doc.setFont(FONT,'normal');
-                doc.setFontSize(9);
-                doc.setTextColor(...LIME);
-                doc.text(subtitle, 32, 21);
-                doc.setFontSize(8);
-                doc.setTextColor(...SLATE);
-                doc.text(dateTx, 198, 13, { align:'right' });
-            };
-
-            const addFooter = (doc, p, total) => {
-                doc.setDrawColor(...LIME);
-                doc.setLineWidth(0.6);
-                doc.line(15, 281, 195, 281);
-                doc.setLineWidth(0.3);
-                doc.setFont(FONT,'normal');
-                doc.setFontSize(7.5);
-                doc.setTextColor(...SLATE);
-                doc.text('© 2026 NUMED · Informe orientativo. No sustituye la valoración clínica integral.', 105, 287, { align:'center' });
-                doc.setFont(FONT,'bold');
-                doc.setTextColor(...NAVY);
-                doc.text(`Pag. ${p} / ${total}`, 198, 287, { align:'right' });
-            };
-
-            const sectionBar = (doc, txt, y) => {
-                doc.setFillColor(...LIME);
-                doc.rect(15, y, 4, 8, 'F');
-                doc.setFont(FONT,'bold');
-                doc.setFontSize(10);
-                doc.setTextColor(...NAVY);
-                doc.text(txt, 22, y + 6);
-                doc.setDrawColor(...LIGHT);
-                doc.setLineWidth(0.3);
-                doc.line(15, y + 10, 195, y + 10);
-                return y + 15;
-            };
-
-            const infoRow = (doc, label, value, x, y, lw=32) => {
-                doc.setFont(FONT,'bold');
-                doc.setFontSize(9);
-                doc.setTextColor(...SLATE);
-                doc.text(label, x, y);
-                doc.setFont(FONT,'normal');
-                doc.setTextColor(30,30,30);
-                doc.text(String(value ?? '--'), x + lw, y);
-            };
-
-            const addPill = (doc, text, y) => {
-                if (y > 268) return y;
-                const lines = doc.splitTextToSize('• ' + text, 162);
-                const h = lines.length * 5 + 5;
-                doc.setFillColor(240, 248, 232);
-                doc.roundedRect(15, y, 180, h, 2, 2, 'F');
-                doc.setFont(FONT,'normal');
-                doc.setFontSize(9.5);
-                doc.setTextColor(...NAVY);
-                doc.text(lines, 22, y + 4.5);
-                return y + h + 4;
-            };
-
-            // ══════════════════════════════════════════════════════════════
-            // PÁGINA 1 — Datos del paciente + Resultado
-            // ══════════════════════════════════════════════════════════════
-            const doc = new jsPDF();
-            addPageHeader(doc, 'Evaluación de Edad Biológica');
-            let y = 30;
-
-            // ── Cuadro de datos ───────────────────────────────────────────
-            y = sectionBar(doc, 'Datos del paciente', y);
-            doc.setFillColor(...OFFWH);
-            doc.roundedRect(15, y, 180, 44, 2, 2, 'F');
-
-            infoRow(doc, 'Nombre:',    name,                             18, y+8,  24);
-            infoRow(doc, 'Edad:',      ageNum + ' años',                 18, y+17, 24);
-            infoRow(doc, 'Género:',    genderTx,                         18, y+26, 24);
-            infoRow(doc, 'Teléfono:',  phoneTx,                          18, y+35, 24);
-
-            infoRow(doc, 'Peso:',      pesoVal   + ' kg',               110, y+8,  18);
-            infoRow(doc, 'Talla:',     tallaVal  + ' cm',               110, y+17, 18);
-            infoRow(doc, 'IMC:',       imcVal + (imcCat ? ' - ' + imcCat : ''), 110, y+26, 18);
-            infoRow(doc, 'Fuerza:',    strengthNum.toFixed(1) + ' kg',  110, y+35, 18);
-            y += 51;
-
-            // ── Hero edades ───────────────────────────────────────────────
-            doc.setFillColor(...NAVY);
-            doc.roundedRect(15, y, 180, 34, 3, 3, 'F');
-
-            doc.setFont(FONT,'bold');
-            doc.setFontSize(7.5);
-            doc.setTextColor(163,200,240);
-            doc.text('EDAD CRONOLÓGICA', 55, y+8, { align:'center' });
-            doc.setFontSize(28);
-            doc.setTextColor(...WHITE);
-            doc.text(String(ageNum), 55, y+24, { align:'center' });
-
-            doc.setFontSize(16);
-            doc.setTextColor(163,209,126);
-            doc.text('->', 105, y+21, { align:'center' });
-
-            doc.setFont(FONT,'bold');
-            doc.setFontSize(7.5);
-            doc.setTextColor(163,209,126);
-            doc.text('EDAD BIOLÓGICA', 155, y+8, { align:'center' });
-            doc.setFontSize(34);
-            doc.setTextColor(163,209,126);
-            doc.text(String(edadBio), 155, y+26, { align:'center' });
-            y += 40;
-
-            // Badge diferencia
-            doc.setFillColor(...diffColor);
-            doc.roundedRect(40, y, 130, 9, 4, 4, 'F');
-            doc.setFont(FONT,'bold');
-            doc.setFontSize(9);
-            doc.setTextColor(...WHITE);
-            doc.text(diffTxt, 105, y+6.2, { align:'center' });
-            y += 16;
-
-            // ── Fuerza ────────────────────────────────────────────────────
-            y = sectionBar(doc, 'Evaluación de fuerza muscular', y);
-
-            const fuerzaHColor = bio.includes('mayor') ? [192,86,33]
-                               : bio.includes('menor') ? [47,133,90] : [27,61,110];
-            const fuerzaHTxt   = bio.includes('mayor') ? 'EDAD BIOLÓGICA MAYOR QUE LA CRONOLÓGICA'
-                               : bio.includes('menor') ? 'EDAD BIOLÓGICA MENOR QUE LA CRONOLÓGICA'
-                               : 'EDAD BIOLÓGICA ACORDE A LA CRONOLÓGICA';
-            doc.setFillColor(...fuerzaHColor);
-            doc.roundedRect(15, y, 180, 10, 2, 2, 'F');
-            doc.setFont(FONT,'bold');
-            doc.setFontSize(8.5);
-            doc.setTextColor(...WHITE);
-            doc.text(fuerzaHTxt, 105, y+7, { align:'center' });
-            y += 14;
-
-            doc.setFont(FONT,'bold');
-            doc.setFontSize(9);
-            doc.setTextColor(...NAVY);
-            doc.text('Observaciones y recomendaciones:', 18, y);
-            y += 7;
-
-            fuerzaRecs.forEach(tip => {
-                if (y > 265) { doc.addPage(); addPageHeader(doc,'Evaluación de Edad Biológica (cont.)'); y = 30; }
-                y = addPill(doc, tip, y);
-            });
-
-            // Recomendaciones estacionales de la pantalla
-            const seasonCards = document.querySelectorAll('.rec-season-card');
-            if (seasonCards.length > 0) {
-                y += 4;
-                // Si no hay espacio suficiente, nueva página
-                if (y > 230) { doc.addPage(); addPageHeader(doc,'Evaluación de Edad Biológica (cont.)'); y = 30; }
-                doc.setFont(FONT,'bold');
-                doc.setFontSize(8);
-                doc.setTextColor(...LIME);
-                doc.text('RECOMENDACIONES INTEGRADAS', 18, y);
-                y += 7;
-                const gW = 84;
-                let maxH = 0;
-                seasonCards.forEach((card, ci) => {
-                    const gx   = 15 + ci * (gW + 12);
-                    const lbl  = card.querySelector('.rec-season-label')?.textContent || '';
-                    const txt  = card.querySelector('.rec-season-text')?.textContent?.trim() || '';
-                    const bgC  = ci === 0 ? [240,248,232] : [232,240,254];
-                    const brdC = ci === 0 ? LIME : NAVY;
-                    const lines = doc.splitTextToSize(txt, gW - 12);
-                    const cardH = lines.length * 4.2 + 16;
-                    if (cardH > maxH) maxH = cardH;
-                    doc.setFillColor(...bgC);
-                    doc.roundedRect(gx, y, gW, cardH, 2, 2, 'F');
-                    doc.setFillColor(...brdC);
-                    doc.rect(gx, y, 3, cardH, 'F');
-                    doc.setFont(FONT,'bold');
-                    doc.setFontSize(8);
-                    doc.setTextColor(...NAVY);
-                    doc.text(lbl, gx+6, y+7);
-                    doc.setFont(FONT,'normal');
-                    doc.setFontSize(7.5);
-                    doc.setTextColor(...SLATE);
-                    doc.text(lines, gx+6, y+13);
-                });
-                y += maxH + 4;
-
-                const noteEls = document.querySelectorAll('.rec-note');
-                if (noteEls.length > 0) {
-                    const notesArr  = [...noteEls].map(n => '• ' + n.textContent.trim());
-                    const noteLines = doc.splitTextToSize(notesArr.join('  '), 172);
-                    const noteH     = noteLines.length * 4.5 + 8;
-                    if (y + noteH > 268) { doc.addPage(); addPageHeader(doc,'Evaluación de Edad Biológica (cont.)'); y = 30; }
-                    doc.setFillColor(...OFFWH);
-                    doc.roundedRect(15, y, 180, noteH, 2, 2, 'F');
-                    doc.setFont(FONT,'normal');
-                    doc.setFontSize(8);
-                    doc.setTextColor(...SLATE);
-                    doc.text(noteLines, 20, y+6);
-                    y += noteH + 4;
-                }
-            }
-
-            // ══════════════════════════════════════════════════════════════
-            // PÁGINA 2 — Estilo de vida y Abdomen
-            // ══════════════════════════════════════════════════════════════
-            // Continuar en la misma página cuando haya espacio suficiente.
-            // Evita una página con un gran bloque blanco al final.
-            const nuevaPaginaEstilo = y > 164;
-            if (nuevaPaginaEstilo) {
-                doc.addPage();
-                addPageHeader(doc, 'Evaluación del Estilo de Vida');
-                y = 30;
-            } else {
-                y += 5;
-            }
-
-            // El resumen se repite solo al abrir una página nueva.
-            if (nuevaPaginaEstilo) {
-            y = sectionBar(doc, 'Resumen del paciente', y);
-            doc.setFillColor(...OFFWH);
-            doc.roundedRect(15, y, 180, 18, 2, 2, 'F');
-            infoRow(doc, 'Paciente:',         name,              18, y+7,  26);
-            infoRow(doc, 'Edad cronológica:', ageNum+' años',    18, y+14, 38);
-            infoRow(doc, 'Edad biológica:',   edadBio+' años',  110, y+7,  34);
-            infoRow(doc, 'Abdomen:',          abdomenNum+' cm', 110, y+14, 22);
-            y += 25;
-            }
-
-            // ── Barra estilo de vida ──────────────────────────────────────
-            y = sectionBar(doc, 'Estilo de vida', y);
-            doc.setFillColor(...LIGHT);
-            doc.roundedRect(15, y, 180, 10, 4, 4, 'F');
-            const fillW = Math.max(8, (Math.min(lsVal,100)/100)*180);
-            doc.setFillColor(...lsBarColor);
-            doc.roundedRect(15, y, fillW, 10, 4, 4, 'F');
-            y += 14;
-
-            doc.setFillColor(...lsColor2);
-            doc.roundedRect(15, y, 50, 8, 3, 3, 'F');
-            doc.setFont(FONT,'bold');
-            doc.setFontSize(8.5);
-            doc.setTextColor(...WHITE);
-            doc.text(lsLabel, 40, y+5.5, { align:'center' });
-            doc.setFont(FONT,'normal');
-            doc.setFontSize(9);
-            doc.setTextColor(...SLATE);
-            doc.text('Puntaje EV: ' + String(evScore), 72, y+5.5);
-            y += 17;
-
-            // ── Abdomen + EV side by side ─────────────────────────────────
-            y = sectionBar(doc, 'Evaluación clínica', y);
-            const colW = 85;
-            const abdC = abdomenEval.level === 'Normal' ? [47,133,90]
-                       : abdomenEval.level === 'Elevado' ? [197,120,48] : [197,48,48];
-
-            // Abdomen header
-            doc.setFillColor(...abdC);
-            doc.roundedRect(15, y, colW, 10, 2, 2, 'F');
-            doc.setFont(FONT,'bold');
-            doc.setFontSize(8);
-            doc.setTextColor(...WHITE);
-            doc.text('PERÍMETRO ABDOMINAL', 57, y+7, { align:'center' });
-
-            // Lifestyle header
-            doc.setFillColor(...lsColor2);
-            doc.roundedRect(110, y, colW, 10, 2, 2, 'F');
-            doc.setFont(FONT,'bold');
-            doc.setFontSize(8);
-            doc.setTextColor(...WHITE);
-            doc.text('ESTILO DE VIDA', 152, y+7, { align:'center' });
-            y += 14;
-
-            // Abdomen body
-            doc.setFillColor(...OFFWH);
-            doc.roundedRect(15, y, colW, 30, 2, 2, 'F');
-            doc.setFillColor(...abdC);
-            doc.rect(15, y, 3, 30, 'F');
-            doc.setFont(FONT,'bold');
-            doc.setFontSize(8.5);
-            doc.setTextColor(...abdC);
-            doc.text(abdomenNum + ' cm - ' + abdomenEval.level, 20, y+8);
-            doc.setFont(FONT,'normal');
-            doc.setFontSize(7.5);
-            doc.setTextColor(...SLATE);
-            const abdShort = doc.splitTextToSize(abdomenEval.interpretation, colW-8);
-            doc.text(abdShort, 20, y+16);
-
-            // Lifestyle body
-            doc.setFillColor(...OFFWH);
-            doc.roundedRect(110, y, colW, 30, 2, 2, 'F');
-            doc.setFillColor(...lsColor2);
-            doc.rect(110, y, 3, 30, 'F');
-            doc.setFillColor(...lsColor2);
-            doc.roundedRect(114, y+4, 30, 7, 3, 3, 'F');
-            doc.setFont(FONT,'bold');
-            doc.setFontSize(8);
-            doc.setTextColor(...WHITE);
-            doc.text(lsLabel, 129, y+9, { align:'center' });
-            doc.setFont(FONT,'normal');
-            doc.setFontSize(8);
-            doc.setTextColor(...SLATE);
-            doc.text('Puntaje EV: ' + String(evScore), 114, y+22);
-            y += 37;
-
-            // ── Recomendaciones personalizadas ────────────────────────────
-            y = sectionBar(doc, 'Recomendaciones personalizadas', y);
-            lsRecs.forEach(tip => {
-                if (y > 265) { doc.addPage(); addPageHeader(doc,'Estilo de Vida (cont.)'); y = 30; }
-                y = addPill(doc, tip, y);
-            });
-
-            // ── Footers ───────────────────────────────────────────────────
-            const total = doc.internal.getNumberOfPages();
-            for (let p = 1; p <= total; p++) {
-                doc.setPage(p);
-                addFooter(doc, p, total);
-            }
-
-            // ── Guardar ───────────────────────────────────────────────────
-            const cleanName = (name || 'Paciente').replace(/[^a-zA-Z0-9\s]/g,'').replace(/\s+/g,'_');
-            const cleanDate = dateTx.replace(/\//g,'-');
-            doc.save('Evaluacion_' + cleanName + '_' + cleanDate + '.pdf');
-        }
-
+// El PDF heredado se eliminó: podía presentar una edad numérica no validada.
 
 function openQuestionnaire() {
   const questionnaire = document.getElementById('questionnaire-modal');
@@ -2837,9 +2123,7 @@ function saveQuestionnaire() {
   // Clasificación por score directo (más precisa)
   // Score ≤ 0 → Saludable | 1–4 → Moderado | ≥ 5 → De riesgo
   let lifestyleLabel = '';
-  if      (lifestyleScore <= 0) lifestyleLabel = 'Saludable 🟢';
-  else if (lifestyleScore <= 4) lifestyleLabel = 'Moderado 🟡';
-  else                          lifestyleLabel = 'De riesgo 🔴';
+  lifestyleLabel = 'Respuestas registradas · sin escala clínica validada';
 
   // Guardar valores globales para usar luego (en PDF y resultados)
   const barPctForDisplay = Math.max(5, Math.min(100, (1 - ((lifestyleScore + 5) / 16)) * 100));
@@ -2856,13 +2140,11 @@ if (lifestyleResults) {
 
   // Mostrar clasificación textual únicamente
   document.getElementById('lifestyle-summary').innerHTML =
-    `Estilo de vida: <strong>${lifestyleLabel}</strong>`;
+    `Hábitos: <strong>${lifestyleLabel}</strong>`;
 
   // Color y ancho de barra por score
   const bar = document.getElementById('lifestyle-bar');
-  if      (lifestyleScore <= 0) { bar.style.background = '#227105'; }
-  else if (lifestyleScore <= 4) { bar.style.background = '#ff9f43'; }
-  else                          { bar.style.background = '#f21e1e'; }
+  bar.style.background = '#145578';
   // Ancho: invertir score → más saludable = barra más llena
   // Range: -5 (mejor) a 11 (peor), invertido para que lleno = bueno
   const barPct = Math.max(5, Math.min(100, (1 - ((lifestyleScore + 5) / 16)) * 100));
@@ -2906,9 +2188,6 @@ function renderHistoryTable() {
   const rows = [...window.evaluations].reverse();
   rows.forEach((ev, i) => {
     const realIndex = window.evaluations.length - 1 - i;
-    const diff = (ev.edadBiologica && ev.edad) ? (ev.edadBiologica - ev.edad) : null;
-    const badge = diff === null ? '' :
-      `<span style="margin-left:5px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:50px;background:${diff>0?'#FED7D7':diff<0?'#C6F6D5':'#E2E8F0'};color:${diff>0?'#C53030':diff<0?'#276749':'#4A5568'}">${diff>0?'▲':diff<0?'▼':'='} ${Math.abs(diff)}a</span>`;
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td style="font-size:11px;white-space:nowrap">${numedEscape(ev.fecha || '—')}</td>
@@ -2957,7 +2236,7 @@ function exportEvaluationsCSV() {
     'Talla (cm)',
     'IMC',
     'Categoría IMC',
-    'Edad biológica (años)',
+    'Edad biológica validada (años)',
     'Puntaje estilo de vida'
   ];
 
@@ -2973,7 +2252,7 @@ function exportEvaluationsCSV() {
     (ev.talla ?? '').toString().replace('.', ','),
     (ev.imc ?? '').toString().replace('.', ','),
     ev.imcCategoria || '',
-    ev.edadBiologica ?? '',
+    '', // No age is available without a validated clinical model
     ev.estiloVidaScore ?? ''
   ]);
 
