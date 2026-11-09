@@ -946,7 +946,7 @@ body.numed-touch .numed-functional-metric{min-height:195px}
     <!-- FORMULARIO -->
     <div class="card">
         <div class="card-title">Datos del paciente</div>
-        <div class="clinical-notice"><strong>NUMED Experience 360° — V0.9 (revisión técnica).</strong> Evaluación funcional sin laboratorio. Solo personal autorizado. El perfil funcional no equivale a una edad biológica medida en años. Usar datos ficticios hasta completar las pruebas y revisión institucional.</div>
+        <div class="clinical-notice"><strong>NUMED Experience 360° — V0.10 (revisión técnica).</strong> Evaluación funcional sin laboratorio. Solo personal autorizado. El perfil funcional no equivale a una edad biológica medida en años. Usar datos ficticios hasta completar las pruebas y revisión institucional.</div>
         <div class="form-grid">
             <div class="field">
                 <label for="patient-name">Nombre completo</label>
@@ -1458,6 +1458,26 @@ window.evaluations = [];
 window.questionnaireCompleted = false;
 window.lifestyleScore = 0;
 window.lifestyleDisplay = { normalized: 0, label: 'No calculado' };
+function numedInvalidateQuestionnaire(){
+  if(!window.questionnaireCompleted)return;
+  window.questionnaireCompleted=false;
+  window._questionnaireAnswers=null;
+  window.lifestyleScore=0;
+  window.lifestyleDisplay={ normalized:0, label:'No calculado' };
+  const btn=document.getElementById('evaluate-btn');if(btn)btn.style.display='none';
+  const result=document.getElementById('results');if(result)result.style.display='none';
+  const lifestyle=document.getElementById('lifestyle-results');if(lifestyle)lifestyle.style.display='none';
+  numedMessage('Se modificaron datos de la evaluación. Revisa y guarda el cuestionario otra vez.');
+}
+function numedAttachInputGuards(){
+  const clinical=['patient-age','patient-gender','strength-value','abdominal-perimeter','patient-weight','patient-height'];
+  clinical.forEach(id=>document.getElementById(id)?.addEventListener('input',numedInvalidateQuestionnaire));
+  document.getElementById('questionnaire-form')?.addEventListener('change',numedInvalidateQuestionnaire);
+  // Nunca presentar resultados obsoletos si se editan datos de identidad.
+  ['patient-name','patient-phone'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{
+    const result=document.getElementById('results');if(result)result.style.display='none';
+  }));
+}
 function numedMessage(message, isError=false) {
   const el = document.getElementById('numed-save-status');
   if (el) { el.textContent = message; el.style.color = isError ? '#b52d36' : '#145578'; }
@@ -1495,11 +1515,12 @@ async function numedBoot(){
       document.getElementById('numed-password').value='';
       await loadFromSupabase();
       numedMessage('Conectado a Supabase. Puedes registrar evaluaciones.');
-    }catch(e){numedAuthError(e.message||'No se pudo iniciar sesión.');}
+    }catch(e){numedUser=null;document.getElementById('numed-auth-gate').hidden=false;document.getElementById('numed-session-bar').hidden=true;numedAuthError(e.message||'No se pudo iniciar sesión.');}
     finally{button.disabled=false;button.textContent='Entrar a NUMED';}
   });
 }
 async function numedLogout(){
+  if(numedSaving){numedMessage('Finaliza el guardado antes de cerrar sesión.',true);return;}
   if(numedClient)await numedClient.auth.signOut();
   numedUser=null;window.evaluations=[];renderHistoryTable();
   numedCloseResearch();numedClearActualExperimentalCalculation();document.getElementById('numed-research-button').hidden=true;
@@ -1533,6 +1554,8 @@ async function saveEvaluation(evaluation){
   if(!numedRequireAuth())return false;
   numedSaving=true;numedMessage('Guardando la evaluación en Supabase…');
   const button=document.getElementById('evaluate-btn');if(button)button.disabled=true;
+  const controlled=[...document.querySelectorAll('#questionnaire-form input, #patient-name, #patient-phone, #patient-age, #patient-gender, #strength-value, #abdominal-perimeter, #patient-weight, #patient-height')];
+  controlled.forEach(el=>el.disabled=true);
   try{
     // Reuse patient ONLY on an exact normalized phone AND matching full name.
     const phone=evaluation.telefono.trim().replace(/[^0-9+]/g,'');
@@ -1547,7 +1570,7 @@ async function saveEvaluation(evaluation){
       if(error)throw error;patient=data;
     }
     const payload={
-      patient_id:patient.id,evaluated_by:numedUser.id,assessment_version:'numed-functional-v0.8',
+      patient_id:patient.id,evaluated_by:numedUser.id,assessment_version:'numed-functional-v0.10',
       age_years:evaluation.edad,gender:evaluation.genero,
       weight_kg:evaluation.peso,height_cm:evaluation.talla,waist_cm:evaluation.abdomen,
       grip_kg:evaluation.fuerzaOriginal,lifestyle_score:Number.isFinite(evaluation.estiloVidaScore)?evaluation.estiloVidaScore:null,
@@ -1557,12 +1580,15 @@ async function saveEvaluation(evaluation){
     };
     const {error}=await numedClient.from('numed_evaluations').insert(payload);
     if(error)throw error;
-    await loadFromSupabase();numedMessage('✓ Evaluación guardada correctamente en Supabase.');return true;
+    // El INSERT y la recarga son pasos distintos: no pedir duplicar el registro si falla la lectura.
+    try { await loadFromSupabase(); }
+    catch(refreshError){console.warn('NUMED: historial no disponible tras guardar',refreshError);}
+    numedMessage('✓ Evaluación guardada en Supabase.');return true;
   }catch(e){numedMessage('No se guardó la evaluación: '+(e.message||e),true);alert('No se guardó la evaluación. Comprueba los datos y la conexión.\n'+(e.message||e));return false;}
-  finally{numedSaving=false;if(button)button.disabled=false;}
+  finally{numedSaving=false;if(button)button.disabled=false;controlled.forEach(el=>el.disabled=false);}
 }
 function clearEvaluations(){ alert('El historial clínico no se elimina desde esta pantalla.'); }
-window.addEventListener('load',numedBoot);
+window.addEventListener('load',()=>{numedAttachInputGuards();numedBoot();});
 
 // ============================================================
 //  CÁLCULO DE IMC
@@ -1655,7 +1681,7 @@ async function evaluateStrength() {
     console.log("Ejecutando evaluateStrength()");
     const name = document.getElementById('patient-name').value.trim();
     const phone = document.getElementById('patient-phone').value.trim();
-    const age = parseInt(document.getElementById('patient-age').value);
+    const age = Number(document.getElementById('patient-age').value);
     const gender = document.getElementById('patient-gender').value;
     const strength = parseFloat(document.getElementById('strength-value').value);
 
@@ -1668,7 +1694,7 @@ async function evaluateStrength() {
     alert('Por favor, ingrese el número de teléfono del paciente.');
     return;
   }
-  if (isNaN(age) || age < 18 || age > 110) {
+  if (!Number.isInteger(age) || age < 18 || age > 110) {
     alert('Por favor, ingrese una edad válida (18-110 años).');
     return;
   }
@@ -1762,14 +1788,16 @@ const evaluationData = {
   fuerzaAjustada: strength,
   abdomen: abdomenValue,
   edadBiologica: null,
-  estiloVidaScore: lifestyleScore,
+  estiloVidaScore: Number(window.lifestyleScore),
   nivelFuerza: level.level || '',
   estadoEdadBiologica: 'Pendiente de validación',
   nivelAbdomen: abdomenResult.level || '',
   peso: parseFloat(document.getElementById('patient-weight').value) || null,
   talla: parseFloat(document.getElementById('patient-height').value) || null,
-  imc: window.imcCalculado ? parseFloat(window.imcCalculado.value) : null,
-  imcCategoria: window.imcCalculado ? window.imcCalculado.category : null,
+  imc: weightVal / ((heightVal / 100) ** 2),
+  imcCategoria: weightVal / ((heightVal / 100) ** 2) < 18.5 ? 'Bajo peso' :
+    weightVal / ((heightVal / 100) ** 2) < 25 ? 'Peso normal' :
+    weightVal / ((heightVal / 100) ** 2) < 30 ? 'Sobrepeso' : 'Obesidad',
   // Respuestas individuales del cuestionario
   q_fuma:       window._questionnaireAnswers ? window._questionnaireAnswers.fuma_actual : null,
   q_ex_fumador: window._questionnaireAnswers ? window._questionnaireAnswers.ex_fumador  : null,
@@ -1858,10 +1886,10 @@ if(savedOK) {
             else if (age >= 55 && age <= 59) ageRange = '55-59';
             else if (age >= 60 && age <= 64) ageRange = '60-64';
             else if (age >= 65 && age <= 69) ageRange = '65-69';
-            else if (age >= 70) ageRange = '70-99';
+            else if (age >= 70 && age <= 99) ageRange = '70-99';
             else {
-                // Para edades menores a 10, usar el rango más bajo
-                ageRange = '10-11';
+                // No se extrapolan referencias fuera de su intervalo.
+                return {level:'Sin referencia',percentage:0,ageRange:'No disponible',thresholds:null,classification:'SIN REFERENCIA'};
             }
 
             // Seleccionar la tabla de referencia según el género
@@ -2068,12 +2096,14 @@ function numedSafeStrengthRecommendations(levelData, strength){
         }
 
 function downloadPDF(){
+ if(!numedRequireAuth())return;
  if(!window.jspdf?.jsPDF){alert('No se pudo cargar la herramienta PDF. Verifica tu conexión.');return;}
  const H=window._historyMode?(window._historyData||{}):null;
  const tx=id=>(document.getElementById(id)?.textContent||'').trim();
  const input=id=>(document.getElementById(id)?.value||'').trim();
  const doc=new window.jspdf.jsPDF({unit:'mm',format:'a4'});
  const name=H?.nombre||tx('result-name')||input('patient-name')||'Participante';
+ const assessmentDate=H?.fecha||tx('evaluation-date')||new Date().toISOString();
  const age=H?.edad??tx('result-age');
  const weight=H?.peso??input('patient-weight');const height=H?.talla??input('patient-height');
  const force=H?.fuerzaOriginal??input('strength-value');const waist=H?.abdomen??input('abdominal-perimeter');
@@ -2081,10 +2111,10 @@ function downloadPDF(){
  const ratio=(Number(waist)>0&&Number(height)>0)?Number(waist)/Number(height):null;
  doc.setFillColor(20,85,120);doc.rect(0,0,210,38,'F');
  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(19);doc.text('NUMED | Perfil funcional',16,20);
- doc.setFontSize(9);doc.setFont('helvetica','normal');doc.text('V0.9 - Perfil funcional sin edad biologica estimada',16,29);
+ doc.setFontSize(9);doc.setFont('helvetica','normal');doc.text('V0.10 - Perfil funcional sin edad biologica estimada',16,29);
  doc.setTextColor(23,56,76);doc.setFontSize(12);doc.setFont('helvetica','bold');doc.text('Datos de la evaluacion',16,53);
  doc.setFontSize(10);doc.setFont('helvetica','normal');
- const rows=[['Nombre',name],['Edad cronologica',String(age||'—')+' anos'],['Peso',String(weight||'—')+' kg'],['Talla',String(height||'—')+' cm'],['Fuerza de agarre',String(force||'—')+' kg'],['Perimetro abdominal',String(waist||'—')+' cm'],['IMC',imc!==null?imc.toFixed(1):'—'],['Relacion cintura/talla',ratio!==null?ratio.toFixed(2):'—']];
+ const rows=[['Nombre',name],['Fecha',String(assessmentDate).slice(0,10)],['Edad cronologica',String(age||'—')+' anos'],['Peso',String(weight||'—')+' kg'],['Talla',String(height||'—')+' cm'],['Fuerza de agarre',String(force||'—')+' kg'],['Perimetro abdominal',String(waist||'—')+' cm'],['IMC',imc!==null?imc.toFixed(1):'—'],['Relacion cintura/talla',ratio!==null?ratio.toFixed(2):'—']];
  let y=63;rows.forEach(([key,val])=>{doc.setFont('helvetica','bold');doc.text(key+':',16,y);doc.setFont('helvetica','normal');doc.text(String(val).slice(0,78),72,y);y+=10;});
  doc.setDrawColor(168,204,59);doc.line(16,y+3,193,y+3);y+=16;
  doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text('Interpretacion y recomendaciones',16,y);y+=8;
@@ -2094,8 +2124,8 @@ function downloadPDF(){
  doc.splitTextToSize(cleaned,175).forEach(line=>{if(y>267){doc.addPage();y=20;}doc.text(line,16,y);y+=5;});
  if(y>255){doc.addPage();y=20;}else y+=10;
  doc.setFont('helvetica','bold');doc.text('Aviso de uso',16,y);y+=7;doc.setFont('helvetica','normal');
- doc.splitTextToSize('Este documento muestra indicadores funcionales y no una edad biologica cientificamente validada. NUMED V0.9: interpretacion funcional orientativa, no un diagnostico. Revisar el reporte con un profesional. No usar con datos reales hasta completar la validacion institucional.',175).forEach(l=>{doc.text(l,16,y);y+=5;});
- doc.save('NUMED_Perfil_Funcional_V09.pdf');
+ doc.splitTextToSize('Este documento muestra indicadores funcionales y no una edad biologica cientificamente validada. NUMED V0.10: interpretacion funcional orientativa, no un diagnostico. Revisar el reporte con un profesional. No usar con datos reales hasta completar la validacion institucional.',175).forEach(l=>{doc.text(l,16,y);y+=5;});
+ doc.save('NUMED_Perfil_Funcional_V10.pdf');
 }
 
 // El PDF heredado se eliminó: podía presentar una edad numérica no validada.
@@ -2249,6 +2279,7 @@ function renderHistoryTable() {
 
 
 function downloadPDFFromHistory(index) {
+  if(!numedRequireAuth())return;
   const e = (window.evaluations || [])[index];
   if (!e) return;
   window._historyMode = true;
@@ -2259,6 +2290,7 @@ function downloadPDFFromHistory(index) {
 
 
 function exportEvaluationsCSV() {
+  if(!numedRequireAuth())return;
   if (!window.evaluations || window.evaluations.length === 0) {
     alert('No hay evaluaciones guardadas para exportar.');
     return;
@@ -2320,6 +2352,7 @@ function exportEvaluationsCSV() {
 //  NUEVA EVALUACIÓN — limpia todo el formulario
 // ============================================================
 function resetForm() {
+  if(numedSaving){alert('Hay una evaluación guardándose. No puedes reiniciar todavía.');return;}
   if (!confirm('¿Desea iniciar una nueva evaluación? Se limpiarán todos los campos.')) return;
 
   // Limpiar inputs
