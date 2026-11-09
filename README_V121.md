@@ -1,16 +1,20 @@
-# NUMED Experience 360 - V0.12.2 (correccion de pruebas)
+# NUMED Experience 360° — V0.13
 
-## Problema corregido
-La funcion `numedRunResearchTests()` llenaba las diez preguntas con cero, pero `sueno` solo acepta -1 o +1. Por tanto, el caso ficticio era rechazado por el motor y la comprobacion de `validatedBiologicalAge === null` tambien fallaba al no existir resultado experimental.
+## Qué cambió
+- Se sustituyeron los largos textos de revisión técnica por textos breves y más claros.
+- **En sesión de administrador**, tras guardar con éxito una evaluación, el resultado principal puede mostrar la estimación aritmética **experimental** (si la edad, referencias y diez respuestas son compatibles con el motor). Se muestra junto con la indicación visible de que el modelo no tiene validación clínica.
+- La pantalla destinada a participantes sigue mostrando únicamente indicadores. Nunca comparte la cifra experimental mediante QR, PDF, CSV ni Supabase.
+- Si falta una referencia o una respuesta válida, no se inventa un número; aparece el motivo en el panel de revisión médica.
 
-## Cambio
-Ahora la prueba construye respuestas permitidas directamente desde `NUMED_EXP.RULES.questionnaire`, sin modificar reglas, puntajes, rangos ni comportamiento del motor.
+## Importante
+La fórmula NUMED (edad cronológica + puntuación) NO está científicamente validada como reloj biológico. Mostrarla en pantalla es únicamente una prueba de investigación para personal autorizado; su cifra **no debe usarse como resultado clínico**. `biological_age_years` permanece NULL. No compartir resultados experimentales con participantes del evento.
 
-## Pruebas ejecutadas
-- `node test_research_ui.js`: 5/5 correctas
-- `node test_engine.js`: 7 correctas
-- `node test_v09.js`: 11 correctas
-- `node test_v12.js`: 8 correctas
-- `node test_audit_v121.js`: 9 correctas
+## Instalación
+1. Descomprimir el ZIP completo.
+2. Copiar la configuración existente como `supabase-config.js` según el archivo de ejemplo; no poner claves secretas/service_role en cliente.
+3. Servir la carpeta por HTTPS o servidor local. Iniciar sesión con usuario `admin` de NUMED.
+4. Para probar el número: completar datos de investigación compatibles (edades 20–64 con rangos disponibles), responder los diez campos, guardar la evaluación, revisar el panel principal y el panel de revisión médica.
+5. Si las mediciones son ficticias, que el entorno de Supabase sea de pruebas; no ensuciar historiales clínicos con datos inventados.
 
-NOTA: estas pruebas no validan el modelo como reloj biologico ni comprueban Supabase en produccion. Simulador solo con datos ficticios.
+## Pruebas
+Se verificó sintaxis de JavaScript y pruebas del motor y de UI de investigación. **No** se ejecutaron pruebas E2E conectadas a Supabase ni se validó el modelo clínicamente.
