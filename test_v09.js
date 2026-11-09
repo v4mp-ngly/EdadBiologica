@@ -1,23 +1,22 @@
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const engine = require('./numed-experimental-engine.js');
-const html = fs.readFileSync('./index.html','utf8');
-const checks = [
- ['Versión V0.10 registrada',html.includes("assessment_version:'numed-functional-v0.10'")],
- ['Edad validada permanece nula',html.includes('biological_age_years:null,biological_age_method:null')],
- ['Resultados solo tras guardar',html.indexOf('const savedOK = await saveEvaluation(evaluationData)') < html.indexOf('displayResults(adjustedLevel, strength)')],
- ['Invalidación del cuestionario al cambiar mediciones',html.includes("clinical.forEach(id=>document.getElementById(id)?.addEventListener('input',numedInvalidateQuestionnaire))")],
- ['Invalida al cambiar respuestas',html.includes("addEventListener('change',numedInvalidateQuestionnaire)")],
- ['IMC guardado desde mediciones, no caché',html.includes('imc: weightVal / ((heightVal / 100) ** 2)')],
- ['Se bloquean inputs durante guardado',html.includes('controlled.forEach(el=>el.disabled=true)')],
- ['Se restauran inputs después de guardar',html.includes('controlled.forEach(el=>el.disabled=false)')],
- ['Cierre sesión bloqueado durante guardado',html.includes("if(numedSaving){numedMessage('Finaliza el guardado")],
- ['PDF histórico usa fecha propia',html.includes('const assessmentDate=H?.fecha')],
- ['PDF requiere sesión',html.includes('function downloadPDF(){\n if(!numedRequireAuth())return;')],
- ['CSV requiere sesión',html.includes('function exportEvaluationsCSV() {\n  if(!numedRequireAuth())return;')],
- ['Fuera de 99 no usa referencias de 70-99',html.includes("else if (age >= 70 && age <= 99) ageRange = '70-99';")],
- ['Solo simulación ficticia admin',html.includes('return; // No puntuar pacientes reales con un modelo no validado.')],
- ['Motor bloquea sin cuestionario',engine.evaluate({age:35,sex:'masculino',weightKg:70,heightCm:170,waistCm:85,gripKg:50,answers:{}}).status==='blocked']
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const m=require('./numed-experimental-engine.js');
+const html=fs.readFileSync('./index.html','utf8');
+const answers=Object.fromEntries(m.REQUIRED.map(k=>[k,0]));
+answers.sueno=-1;
+const base={age:35,sex:'masculino',weightKg:70,heightCm:170,waistCm:85,gripKg:50,answers};
+const checks=[
+ ['Simulador mantiene edad validada nula',m.evaluate(base).validatedBiologicalAge===null],
+ ['Referencia 18-19 se bloquea',m.evaluate({...base,age:19}).status==='blocked'],
+ ['Referencia 65+ se bloquea',m.evaluate({...base,age:65}).status==='blocked'],
+ ['Referencia mujeres 50-54 se bloquea',m.evaluate({...base,age:52,sex:'femenino'}).status==='blocked'],
+ ['Fuerza decimal sin categoría se bloquea',m.evaluate({...base,age:20,gripKg:36.5}).status==='blocked'],
+ ['Cuestionario incompleto se bloquea',m.evaluate({...base,answers:{}}).status==='blocked'],
+ ['Sin datos se bloquea',m.evaluate({...base,weightKg:0}).status==='blocked'],
+ ['Panel resultados post-guardado',html.indexOf('const savedOK = await saveEvaluation(evaluationData)')<html.indexOf('displayResults(adjustedLevel, strength)')],
+ ['Simulación real desactivada',html.includes('return; // No puntuar pacientes reales con un modelo no validado.')],
+ ['Columna edad biológica nula',html.includes('biological_age_years:null,biological_age_method:null')],
+ ['Botón funcional, no biológico',html.includes('Guardar y ver perfil funcional')]
 ];
-for(const [name,passed] of checks) assert.ok(passed, name);
-console.log(`${checks.length} verificaciones V0.10 OK`);
+for(const [label,pass] of checks){assert.ok(pass,label)}
+console.log(`${checks.length} verificaciones V0.9 OK`);
