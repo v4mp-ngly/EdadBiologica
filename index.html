@@ -2473,7 +2473,7 @@ function showWelcomeScreen() {
  <div class="nr-warning"><strong>NO VALIDADO:</strong> 1 punto = 1 año es una hipótesis de diseño. El valor en años que se muestra aquí no es una edad biológica clínica.</div>
  <div class="nr-grid"><label>Edad ficticia<input id="nr-age" type="number" min="18" max="110" value="35"></label><label>Sexo de referencia<select id="nr-sex"><option value="masculino">Masculino</option><option value="femenino">Femenino</option></select></label><label>Peso (kg)<input id="nr-weight" type="number" step="0.1" value="70"></label><label>Talla (cm)<input id="nr-height" type="number" step="0.1" value="170"></label><label>Cintura (cm)<input id="nr-waist" type="number" step="0.1" value="85"></label><label>Handgrip (kg)<input id="nr-grip" type="number" step="0.1" value="50"></label></div>
  <h3 style="margin:18px 0 8px">Cuestionario actual (10 campos)</h3><div id="nr-answers" class="nr-grid"></div>
- <div class="nr-actions"><button type="button" onclick="numedRunResearch()">Calcular escenario ficticio</button><button type="button" onclick="numedRunResearchTests()">Ejecutar pruebas automáticas</button></div>
+ <div class="nr-actions"><button type="button" onclick="numedRunResearch()">Calcular escenario ficticio</button><button type="button" onclick="numedRunResearchTests()">Ejecutar pruebas automáticas</button><button type="button" onclick="numedShowHypotheticalAge()">🎬 Ver edad hipotética en pantalla</button></div>
  <div id="nr-output" class="nr-out" aria-live="polite">Completa o ajusta los campos ficticios y calcula.</div>
  <p style="font-size:12px;color:#566f7d">Las tablas de origen contienen intervalos solapados o duplicados; se bloquean 18–19 años y 65+ y cualquier valor que no esté cubierto de forma inequívoca. No se modifican historiales, PDFs ni la columna biological_age_years.</p></div>
 </div>
@@ -2589,6 +2589,49 @@ async function numedCopyParticipantSummary(){
  try{if(!navigator.clipboard?.writeText)throw new Error('no clipboard');await navigator.clipboard.writeText(summary);status.textContent='Resumen copiado.';}
  catch(e){status.textContent='No se pudo copiar. Selecciona tus valores manualmente o solicita el PDF al personal.';}
 }
+</script>
+
+
+<!-- V0.12: standalone fictitious scenario display, never uses patient measurements. -->
+<style id="numed-v12-css">
+#numed-hypothetical[hidden]{display:none!important}
+#numed-hypothetical{position:fixed;inset:0;z-index:32000;background:radial-gradient(circle at 55% 40%,#235f83,#071c30 72%);display:flex;justify-content:center;align-items:center;padding:25px;color:#fff;font-family:Montserrat,Arial,sans-serif;overflow-y:auto}
+#numed-hypothetical .nh-shell{max-width:790px;width:100%;text-align:center;padding:24px}
+#numed-hypothetical .nh-tag{font-size:clamp(13px,2vw,19px);font-weight:800;letter-spacing:2px;background:#e6a748;color:#241b09;display:inline-block;padding:12px 20px;border-radius:12px}
+#numed-hypothetical h2{font-size:clamp(24px,5vw,43px);margin:22px auto 12px;line-height:1.15}
+#numed-hypothetical .nh-age{font-size:clamp(82px,18vw,168px);color:#c3e16e;font-weight:800;line-height:1.05;margin:16px 0}
+#numed-hypothetical .nh-caption{color:#d6e8ef;font-size:16px;line-height:1.75}
+#numed-hypothetical .nh-math{background:#ffffff17;border:1px solid #ffffff45;border-radius:18px;padding:17px;margin:22px auto;line-height:1.7;font-size:14px}
+#numed-hypothetical button{background:#a8cc3b;color:#0b304a;border:0;border-radius:12px;padding:17px 29px;font:800 15px Montserrat,Arial;cursor:pointer;margin:12px}
+#numed-hypothetical .nh-warning{color:#f7dfaa;font-size:13px;font-weight:700;line-height:1.7}
+</style>
+<section id="numed-hypothetical" role="dialog" aria-modal="true" aria-label="Simulación matemática no validada" hidden>
+<div class="nh-shell"><span class="nh-tag">SOLO DEMOSTRACIÓN · DATOS FICTICIOS</span>
+<h2>Resultado hipotético de la escala NUMED</h2>
+<div class="nh-age"><span id="nh-years">—</span></div>
+<p class="nh-caption">años matemáticos hipotéticos · no es una edad biológica clínica</p>
+<div class="nh-math" id="nh-explanation"></div>
+<p class="nh-warning">MODELO EXPERIMENTAL NO VALIDADO. La equivalencia de 1 punto a 1 año es arbitraria. No usar con pacientes reales, ni en reportes, ni como estimación de salud.</p>
+<button type="button" onclick="numedCloseHypotheticalAge()">Volver a revisión médica</button></div></section>
+<script>
+function numedShowHypotheticalAge(){
+ const adminBtn=document.getElementById('numed-research-button');
+ const research=document.getElementById('numed-research');
+ if(!numedUser||!adminBtn||adminBtn.hidden||research?.hidden||!window.NUMED_EXP)return;
+ const n=id=>Number(document.getElementById(id)?.value);
+ const answers={};
+ for(const sel of document.querySelectorAll('#nr-answers select'))if(sel.value!=='')answers[sel.dataset.field]=Number(sel.value);
+ const inputs={age:n('nr-age'),sex:document.getElementById('nr-sex').value,weightKg:n('nr-weight'),heightCm:n('nr-height'),waistCm:n('nr-waist'),gripKg:n('nr-grip'),answers};
+ const result=NUMED_EXP.evaluate(inputs);
+ if(result.status!=='experimental'){
+  document.getElementById('nr-output').textContent='No se puede mostrar la simulación:\n'+(result.errors||[]).join('\n');
+  return;
+ }
+ document.getElementById('nh-years').textContent=String(result.hypotheticalAge);
+ document.getElementById('nh-explanation').textContent=`Edad ficticia ${inputs.age} + ${result.points} puntos de la escala experimental = ${result.hypotheticalAge}. Desglose: fuerza ${result.components.fuerza}, IMC ${result.components.imc}, cintura/talla ${result.components.cintura}, hábitos ${result.components.habitos}.`;
+ document.getElementById('numed-hypothetical').hidden=false;
+}
+function numedCloseHypotheticalAge(){document.getElementById('numed-hypothetical').hidden=true;}
 </script>
 
 </body>
