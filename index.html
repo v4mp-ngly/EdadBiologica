@@ -1447,7 +1447,7 @@ function closeNumedReveal(){
  document.getElementById('numed-reveal').hidden=true;document.body.classList.remove('numed-modal-open');
  document.getElementById('results').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
 }
-function nextNumedReveal(){if(numedRevealStep>=2)closeNumedReveal();else setNumedRevealStep(numedRevealStep+1);}
+function nextNumedReveal(){if(numedRevealStep>=2){closeNumedReveal();numedOpenParticipantResult();}else setNumedRevealStep(numedRevealStep+1);}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('numed-reveal')?.hidden)closeNumedReveal();});
 
 // NUMED V0.6: Supabase-only clinical persistence. No local patient cache.
@@ -1459,6 +1459,7 @@ window.questionnaireCompleted = false;
 window.lifestyleScore = 0;
 window.lifestyleDisplay = { normalized: 0, label: 'No calculado' };
 function numedInvalidateQuestionnaire(){
+  window.numedLastSaved=false;
   if(!window.questionnaireCompleted)return;
   window.questionnaireCompleted=false;
   window._questionnaireAnswers=null;
@@ -1520,10 +1521,11 @@ async function numedBoot(){
   });
 }
 async function numedLogout(){
+  window.numedLastSaved=false;
   if(numedSaving){numedMessage('Finaliza el guardado antes de cerrar sesión.',true);return;}
   if(numedClient)await numedClient.auth.signOut();
   numedUser=null;window.evaluations=[];renderHistoryTable();
-  numedCloseResearch();numedClearActualExperimentalCalculation();document.getElementById('numed-research-button').hidden=true;
+  numedCloseParticipantResult();numedCloseResearch();numedClearActualExperimentalCalculation();document.getElementById('numed-research-button').hidden=true;
   document.getElementById('results').style.display='none';
   ['patient-name','patient-age','patient-phone','strength-value','abdominal-perimeter','patient-weight','patient-height'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('patient-gender').value='';document.getElementById('questionnaire-form').reset();window._questionnaireAnswers=null;window.questionnaireCompleted=false;numedClearActualExperimentalCalculation();
@@ -1570,7 +1572,7 @@ async function saveEvaluation(evaluation){
       if(error)throw error;patient=data;
     }
     const payload={
-      patient_id:patient.id,evaluated_by:numedUser.id,assessment_version:'numed-functional-v0.10',
+      patient_id:patient.id,evaluated_by:numedUser.id,assessment_version:'numed-functional-v0.11',
       age_years:evaluation.edad,gender:evaluation.genero,
       weight_kg:evaluation.peso,height_cm:evaluation.talla,waist_cm:evaluation.abdomen,
       grip_kg:evaluation.fuerzaOriginal,lifestyle_score:Number.isFinite(evaluation.estiloVidaScore)?evaluation.estiloVidaScore:null,
@@ -1814,6 +1816,7 @@ const evaluationData = {
 
 const savedOK = await saveEvaluation(evaluationData);
 if(savedOK) {
+  window.numedLastSaved=true;
   displayResults(adjustedLevel, strength);
   updateNewUI(age, edadBiologicaFinal, window._deltaDetalle, comparacionTexto, biologicalAgeStatus);
   document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
@@ -1821,6 +1824,7 @@ if(savedOK) {
   numedClearActualExperimentalCalculation();
   openNumedReveal();
 } else {
+  window.numedLastSaved=false;
   document.getElementById('results').style.display='none';
   numedClearActualExperimentalCalculation();
   numedMessage('La evaluación no fue guardada. Revisa la conexión y vuelve a intentar.', true);
@@ -2352,6 +2356,8 @@ function exportEvaluationsCSV() {
 //  NUEVA EVALUACIÓN — limpia todo el formulario
 // ============================================================
 function resetForm() {
+  numedCloseParticipantResult();
+  window.numedLastSaved=false;
   if(numedSaving){alert('Hay una evaluación guardándose. No puedes reiniciar todavía.');return;}
   if (!confirm('¿Desea iniciar una nueva evaluación? Se limpiarán todos los campos.')) return;
 
@@ -2472,6 +2478,7 @@ function showWelcomeScreen() {
  <p style="font-size:12px;color:#566f7d">Las tablas de origen contienen intervalos solapados o duplicados; se bloquean 18–19 años y 65+ y cualquier valor que no esté cubierto de forma inequívoca. No se modifican historiales, PDFs ni la columna biological_age_years.</p></div>
 </div>
 <script src="numed-experimental-engine.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 function numedClearActualExperimentalCalculation(){
   const panel=document.getElementById('numed-experimental-result');if(panel)panel.hidden=true;
@@ -2522,5 +2529,67 @@ function numedCloseResearch(){const m=document.getElementById('numed-research');
 function numedRunResearch(){const n=id=>Number(document.getElementById(id).value);const answers={};for(const s of document.querySelectorAll('#nr-answers select'))if(s.value!=='')answers[s.dataset.field]=Number(s.value);const result=NUMED_EXP.evaluate({age:n('nr-age'),sex:document.getElementById('nr-sex').value,weightKg:n('nr-weight'),heightCm:n('nr-height'),waistCm:n('nr-waist'),gripKg:n('nr-grip'),answers});const out=document.getElementById('nr-output');if(result.status==='blocked'){out.textContent='CÁLCULO BLOQUEADO\n'+result.errors.join('\n');return;}out.textContent=`SIMULACIÓN HIPOTÉTICA — NO ES UNA EDAD BIOLÓGICA VALIDADA\n\nIMC: ${result.metrics.bmi.toFixed(2)} (${result.metrics.bmiCategory})\nCintura/talla: ${result.metrics.ratio.toFixed(3)} (${result.metrics.waistCategory})\nHandgrip: ${result.metrics.gripKg} kg (${result.metrics.gripCategory})\nPuntos: Fuerza ${result.components.fuerza}, IMC ${result.components.imc}, Cintura ${result.components.cintura}, Hábitos ${result.components.habitos} (suma preguntas ${result.metrics.rawHabits})\nTotal: ${result.points>0?'+':''}${result.points} puntos\nHipótesis matemática (NO CLÍNICA): ${n('nr-age')} + (${result.points}) = ${result.hypotheticalAge}\nEdad biológica validada: NO DISPONIBLE`;}
 function numedRunResearchTests(){const base={age:35,sex:'masculino',weightKg:70,heightCm:170,waistCm:85,gripKg:50,answers:Object.fromEntries(NUMED_EXP.REQUIRED.map(k=>[k,0]))};const a=NUMED_EXP.evaluate(base);const b=NUMED_EXP.evaluate({...base,age:82});const c=NUMED_EXP.evaluate({...base,answers:{}});const d=NUMED_EXP.evaluate({...base,weightKg:0});const checks=[['Caso ficticio completo',a.status==='experimental'],['Edad 82 bloqueada por referencia',b.status==='blocked'],['Cuestionario incompleto bloqueado',c.status==='blocked'],['Peso inválido bloqueado',d.status==='blocked'],['Nunca devuelve edad biológica validada',a.validatedBiologicalAge===null]];document.getElementById('nr-output').textContent=checks.map(([k,v])=>(v?'✓ ':'✗ ')+k).join('\n');}
 </script>
+<!-- NUMED V0.11: staff-supervised participant view; no identity or private history. -->
+<style id="numed-v11-css">
+#numed-participant[hidden]{display:none!important}
+#numed-participant{position:fixed;inset:0;z-index:23000;overflow-y:auto;background:radial-gradient(circle at 85% 10%,#226d8b,transparent 42%),linear-gradient(145deg,#082b45,#134d6d);font-family:Montserrat,Arial,sans-serif;color:white;padding:clamp(16px,4vw,44px);overscroll-behavior:contain}
+.np-shell{max-width:1100px;margin:auto;min-height:calc(100vh - 88px);display:flex;flex-direction:column;gap:23px}
+.np-head{display:flex;align-items:center;justify-content:space-between;gap:16px}.np-head img{width:75px;height:75px;object-fit:contain;border-radius:16px;background:white;padding:7px}.np-head small{font-size:11px;letter-spacing:2px;color:#d0e8a3;font-weight:700}.np-head button,.np-actions button{border:1px solid #ffffff50;background:#ffffff12;color:#fff;border-radius:14px;padding:15px 21px;font:700 13px Montserrat,Arial;cursor:pointer;min-height:50px}
+.np-title{font-weight:800;font-size:clamp(34px,5vw,58px);letter-spacing:-1.7px;line-height:1.1}.np-lede{font-size:clamp(13px,2vw,17px);line-height:1.7;color:#dceaf0;max-width:750px}.np-highlight{color:#c5e56c}
+.np-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.np-metric{background:#ffffff12;border:1px solid #ffffff33;border-radius:23px;padding:clamp(18px,2vw,28px);display:flex;flex-direction:column;gap:15px;min-height:180px}.np-metric .np-icon{font-size:28px}.np-metric small{color:#c6dce4;font-size:12px}.np-metric strong{font-size:clamp(25px,3.3vw,41px);letter-spacing:-1px;overflow-wrap:anywhere}.np-disclaimer{border-left:4px solid #c5e56c;background:#ffffff12;padding:18px 23px;border-radius:12px;font-size:12px;line-height:1.7;color:#d9e5ec}
+.np-share{border:1px solid #ffffff35;background:#ffffff0b;border-radius:23px;padding:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}.np-share p{font-size:13px;color:#d9e5ec;max-width:530px;line-height:1.6}.np-actions{display:flex;gap:10px;flex-wrap:wrap}.np-actions .np-primary{background:#a8cc3b;border-color:#a8cc3b;color:#092e42}.np-qr-zone{display:none;align-items:center;gap:18px;flex-wrap:wrap}.np-qr-zone.visible{display:flex}.np-qr-code{background:white;padding:12px;border-radius:12px;min-width:188px;min-height:188px}.np-qr-code canvas,.np-qr-code img{display:block}.np-qr-note{font-size:12px;color:#dbe9ee;max-width:300px;line-height:1.6}.np-status{font-size:12px;min-height:20px;color:#d1e6b3}
+@media(max-width:800px){.np-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:470px){.np-grid{grid-template-columns:1fr 1fr;gap:9px}.np-metric{min-height:150px;padding:15px}.np-metric strong{font-size:24px}.np-head button{font-size:11px;padding:9px}.np-head img{width:52px;height:52px}}
+@media(prefers-reduced-motion:reduce){#numed-participant *{animation:none!important}}
+</style>
+<section id="numed-participant" role="dialog" aria-modal="true" aria-label="Resultados para participante" hidden>
+ <div class="np-shell">
+  <header class="np-head"><div style="display:flex;align-items:center;gap:13px"><img src="logo-numed-original.jpg" alt="NUMED"><small>NUMED EXPERIENCE 360°</small></div><button type="button" onclick="numedCloseParticipantResult()">Volver al personal ✕</button></header>
+  <div><div style="font-size:11px;letter-spacing:2px;font-weight:800;color:#c5e56c;margin-bottom:12px">TU EVALUACIÓN FUNCIONAL</div><h2 class="np-title">Conoce tus <span class="np-highlight">indicadores.</span></h2><p class="np-lede">Estas mediciones describen aspectos de tu condición física. No representan una edad biológica calculada ni constituyen un diagnóstico.</p></div>
+  <div class="np-grid"><article class="np-metric"><span class="np-icon">⚖️</span><small>Índice de masa corporal</small><strong id="np-imc">—</strong><small>kg/m²</small></article><article class="np-metric"><span class="np-icon">📏</span><small>Relación cintura / talla</small><strong id="np-ratio">—</strong><small>cintura ÷ talla</small></article><article class="np-metric"><span class="np-icon">💪</span><small>Fuerza de agarre</small><strong id="np-grip">—</strong><small>kilogramos</small></article><article class="np-metric"><span class="np-icon">🌿</span><small>Cintura</small><strong id="np-waist">—</strong><small>centímetros</small></article></div>
+  <div class="np-disclaimer"><strong>Edad biológica en años: no disponible.</strong> NUMED presenta aquí mediciones funcionales. Para interpretarlas según tu historia clínica, consulta con el personal de salud.</div>
+  <div class="np-share"><div><h3 style="font-size:20px;margin-bottom:8px">Llévate tus indicadores</h3><p>Genera voluntariamente un QR con estos cuatro valores, sin nombre, teléfono ni identificador. Cualquier persona que escanee el QR podrá leer los valores.</p></div><div class="np-actions"><button class="np-primary" type="button" onclick="numedShowShareQR()">Generar QR de mis valores</button><button type="button" onclick="numedCopyParticipantSummary()">Copiar resumen</button></div><div id="np-qr-zone" class="np-qr-zone"><div class="np-qr-code" id="np-qr-code"></div><p class="np-qr-note">Escanea el código con tu teléfono. El QR contiene texto con tus indicadores y no abre un expediente clínico.</p><button type="button" onclick="numedHideShareQR()">Ocultar QR</button></div><div class="np-status" id="np-status" role="status" aria-live="polite"></div></div>
+  <p style="text-align:center;font-size:10px;letter-spacing:1px;color:#aac6d5;margin-top:auto">EXPERIENCIA SUPERVISADA POR PERSONAL NUMED · PROTOTIPO EN REVISIÓN</p>
+ </div>
+</section>
+<script>
+// No participant identifiers are read, copied, exported or QR-encoded here.
+function numedParticipantData(){
+ const n=id=>Number(document.getElementById(id)?.value);
+ const weight=n('patient-weight'),height=n('patient-height'),waist=n('abdominal-perimeter'),grip=n('strength-value');
+ if(![weight,height,waist,grip].every(v=>Number.isFinite(v)&&v>0))return null;
+ return {imc:weight/((height/100)**2),ratio:waist/height,grip,waist};
+}
+function numedParticipantSummary(){
+ const d=numedParticipantData();if(!d)return '';
+ return `NUMED Experience 360 - Perfil funcional (no es edad biologica)\nIMC: ${d.imc.toFixed(1)} kg/m2\nCintura/talla: ${d.ratio.toFixed(2)}\nFuerza de agarre: ${d.grip.toFixed(1)} kg\nCintura: ${d.waist.toFixed(1)} cm\nEdad biologica en anos: no disponible\nInterpretar con un profesional.`;
+}
+function numedOpenParticipantResult(){
+ if(!numedUser || !window.numedLastSaved)return;
+ const d=numedParticipantData();if(!d)return;
+ for(const [id,value] of [['np-imc',d.imc.toFixed(1)],['np-ratio',d.ratio.toFixed(2)],['np-grip',d.grip.toFixed(1)+' kg'],['np-waist',d.waist.toFixed(1)+' cm']]) document.getElementById(id).textContent=value;
+ numedHideShareQR();document.getElementById('np-status').textContent='';
+ document.getElementById('numed-participant').hidden=false;document.body.classList.add('numed-modal-open');
+}
+function numedHideShareQR(){document.getElementById('np-qr-zone')?.classList.remove('visible');document.getElementById('np-qr-code')?.replaceChildren();}
+function numedCloseParticipantResult(){
+ numedHideShareQR();const panel=document.getElementById('numed-participant');if(panel)panel.hidden=true;
+ document.body.classList.remove('numed-modal-open');
+}
+function numedShowShareQR(){
+ const summary=numedParticipantSummary();const status=document.getElementById('np-status');
+ if(!summary){status.textContent='No hay mediciones completas.';return;}
+ if(typeof window.QRCode!=='function'){status.textContent='El generador QR no está disponible. Utiliza Copiar resumen.';return;}
+ const box=document.getElementById('np-qr-code');box.replaceChildren();
+ try{new window.QRCode(box,{text:summary,width:164,height:164,colorDark:'#0d344b',colorLight:'#ffffff',correctLevel:window.QRCode.CorrectLevel.M});document.getElementById('np-qr-zone').classList.add('visible');status.textContent='QR generado localmente, sin nombre ni teléfono.';}
+ catch(e){status.textContent='No se pudo crear el QR. Utiliza Copiar resumen.';}
+}
+async function numedCopyParticipantSummary(){
+ const summary=numedParticipantSummary();const status=document.getElementById('np-status');
+ if(!summary){status.textContent='No hay mediciones completas.';return;}
+ try{if(!navigator.clipboard?.writeText)throw new Error('no clipboard');await navigator.clipboard.writeText(summary);status.textContent='Resumen copiado.';}
+ catch(e){status.textContent='No se pudo copiar. Selecciona tus valores manualmente o solicita el PDF al personal.';}
+}
+</script>
+
 </body>
 </html>
