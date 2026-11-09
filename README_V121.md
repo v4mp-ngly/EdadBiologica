@@ -1,13 +1,16 @@
-# NUMED Experience 360° V0.12.1 — revisión de auditoría
-Este paquete actualiza V0.12 con correcciones de consistencia del formulario y el guardado. No cambia el modelo científico ni crea edad biológica clínica.
+# NUMED Experience 360 - V0.12.2 (correccion de pruebas)
 
-## Instalación
-Use el `supabase-config.js` de la instalación existente (solo clave pública). No viene en este ZIP. Servir desde HTTPS. No exponer ninguna service_role/secret key en frontend.
+## Problema corregido
+La funcion `numedRunResearchTests()` llenaba las diez preguntas con cero, pero `sueno` solo acepta -1 o +1. Por tanto, el caso ficticio era rechazado por el motor y la comprobacion de `validatedBiologicalAge === null` tambien fallaba al no existir resultado experimental.
 
-## Pruebas offline
-`node test_engine.js`
-`node test_v09.js`
-`node test_v12.js`
-`node test_audit_v121.js`
+## Cambio
+Ahora la prueba construye respuestas permitidas directamente desde `NUMED_EXP.RULES.questionnaire`, sin modificar reglas, puntajes, rangos ni comportamiento del motor.
 
-Consulte `AUDITORIA_V0121.md` antes de usar la aplicación. Los scripts históricos `test_v10.js` y `test_v11.js` conservan aserciones de versión obsoletas. Uso exclusivamente experimental y con datos ficticios hasta completar revisión clínica y seguridad.
+## Pruebas ejecutadas
+- `node test_research_ui.js`: 5/5 correctas
+- `node test_engine.js`: 7 correctas
+- `node test_v09.js`: 11 correctas
+- `node test_v12.js`: 8 correctas
+- `node test_audit_v121.js`: 9 correctas
+
+NOTA: estas pruebas no validan el modelo como reloj biologico ni comprueban Supabase en produccion. Simulador solo con datos ficticios.
