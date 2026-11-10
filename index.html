@@ -892,6 +892,60 @@ body.numed-touch .numed-functional-metric{min-height:195px}
 @media(prefers-reduced-motion:reduce){.numed-insight{transition:none!important}}
 </style>
 <style id="numed-v13-css">.numed-section-intro{font-size:13px;color:#527183;line-height:1.7;margin:-8px 0 22px}.numed-model-status{font-size:11px;line-height:1.6;opacity:.83;margin-top:8px}.numed-v13-note{font-size:12px;line-height:1.55;color:#60778b;padding:8px 0}</style>
+
+<style id="numed-v16-recommendation-styles">
+.numed-recs-v16{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.nr-v16-card{border:1px solid #e0eaf0;background:linear-gradient(155deg,#fff,#f7fbfc);border-radius:20px;padding:23px;box-shadow:0 8px 25px #1455780b}
+.nr-v16-top{display:flex;align-items:center;gap:11px;margin-bottom:14px}.nr-v16-icon{width:40px;height:40px;display:grid;place-items:center;background:#edf5ed;border-radius:13px;font-size:21px}
+.nr-v16-kicker{font-size:10px;font-weight:800;letter-spacing:1.3px;color:#3c8254}
+.nr-v16-card h4{color:#153e59;font-size:17px;line-height:1.35;margin:0 0 9px}
+.nr-v16-card p{color:#536f80;font-size:13px;line-height:1.65;margin:0 0 12px}
+.nr-v16-card ul{padding:0;list-style:none;display:grid;gap:9px}
+.nr-v16-card li{position:relative;padding:10px 10px 10px 26px;background:#edf5f7;border-radius:10px;color:#244d60;font-size:12px;line-height:1.55}
+.nr-v16-card li:before{content:'•';color:#5c9f32;position:absolute;left:12px;font-weight:900}
+.nr-v16-disclaimer{margin-top:14px;color:#6b8190;font-size:11px;line-height:1.6}
+@media(max-width:720px){.numed-recs-v16{grid-template-columns:1fr}.nr-v16-card{padding:19px}}
+</style>
+
+<style id="numed-v17-result-style">
+/* NUMED V0.17: resultado legible; no cambia el motor de investigación. */
+.numed-old-delta{display:none!important}
+.bio-age-hero{padding:42px 38px 35px!important;text-align:center;border-radius:26px!important}
+.numed-hero-title{font-size:clamp(23px,3.7vw,38px);font-weight:800;line-height:1.15;letter-spacing:-.7px;margin:12px auto 7px;color:#fff}
+.numed-hero-lead{font-size:13px;line-height:1.6;color:#d8e8f0;margin:0 auto 28px;max-width:440px}
+.bio-age-hero .bah-ages-row{display:grid;grid-template-columns:1fr 42px 1fr;gap:14px;max-width:660px;margin:0 auto;align-items:stretch}
+.bio-age-hero .bah-age-block{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.17);padding:21px 10px;border-radius:19px;min-width:0}
+.bio-age-hero .bah-age-lbl{font-size:12px;opacity:.92}
+.bio-age-hero .bah-age-num{font-size:clamp(44px,5.8vw,66px)!important;line-height:1.12;color:#fff}
+.bio-age-hero .bah-bio .bah-age-num{color:#b9e078}
+.bio-age-hero .bah-age-unit{font-size:11px;line-height:1.5;color:#e4edf0}
+.bio-age-hero .bah-arrow{display:grid;place-items:center;color:#b9e078;font-size:28px}
+.numed-hero-comparison{max-width:460px;margin:16px auto 0;padding:12px 15px;border:1px solid rgba(183,224,120,.5);border-radius:999px;color:#dcf3ba;font-size:14px;font-weight:750}
+.numed-hero-comparison[hidden]{display:none!important}
+.bio-age-hero .bah-badge{margin-top:20px;max-width:100%;font-size:12px;line-height:1.45}
+.bio-age-hero .numed-results-caption{max-width:550px;font-size:11px;line-height:1.6;color:#d9e8ef}
+.numed-functional-card{padding:30px!important}
+.numed-functional-header h2{font-size:clamp(22px,3vw,29px);margin:5px 0 7px}
+.numed-functional-grid{gap:12px}
+.numed-functional-metric{min-height:166px;padding:18px;border-radius:18px}
+.numed-functional-metric>span:nth-child(2){font-size:12px;color:#234a60;font-weight:800}
+.numed-functional-metric strong{font-size:clamp(25px,3vw,35px)}
+.numed-functional-metric small{font-size:11px;line-height:1.45}
+.numed-insight-details{margin-top:20px;border:1px solid #dfe9ec;border-radius:14px;background:#f9fbfc;overflow:hidden}
+.numed-insight-details summary{cursor:pointer;list-style:none;padding:15px 18px;color:#145578;font-size:12px;font-weight:750}
+.numed-insight-details summary::after{content:'+';float:right;font-size:17px;line-height:12px}
+.numed-insight-details[open] summary::after{content:'−'}
+.numed-insight-details .numed-insights{margin:0;padding:4px 14px 14px}
+.numed-recs-title{font-size:clamp(21px,3vw,29px);color:#145578;line-height:1.2;margin:3px 0 9px}
+.numed-recs-intro{color:#61788a;font-size:13px;line-height:1.6;margin:0 0 23px}
+.numed-recs-v16{grid-template-columns:1fr 1fr;gap:14px}
+.nr-v16-card{padding:22px;background:#fff;box-shadow:none;border:1px solid #e0e9ed}
+.nr-v16-card h4{font-size:17px}
+.nr-v16-card li{background:#f6f9f9}
+@media(max-width:850px){.numed-functional-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.bio-age-hero{padding:30px 16px!important}.bio-age-hero .bah-ages-row{grid-template-columns:minmax(0,1fr) 23px minmax(0,1fr);gap:6px}.bio-age-hero .bah-age-block{padding:19px 6px}.bio-age-hero .bah-age-lbl{font-size:10px}.bio-age-hero .bah-age-num{font-size:41px!important}.bio-age-hero .bah-arrow{font-size:19px}.numed-functional-card{padding:20px!important}.numed-patient-chip{padding:12px}.numed-recs-v16{grid-template-columns:1fr}}
+@media(max-width:370px){.numed-functional-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <section id="numed-auth-gate" role="dialog" aria-modal="true" aria-labelledby="numed-auth-heading">
@@ -1195,7 +1249,9 @@ body.numed-touch .numed-functional-metric{min-height:195px}
 
         <!-- Bio age hero -->
         <div class="bio-age-hero">
-            <div class="bah-label">Resultado de la Evaluación</div>
+            <div class="bah-label">NUMED EXPERIENCE 360° · TU RESULTADO</div>
+            <h2 class="numed-hero-title">Descubre tu perfil de salud</h2>
+            <p class="numed-hero-lead">Tus mediciones y hábitos, en una sola experiencia.</p>
             <div class="bah-ages-row">
                 <div class="bah-age-block">
                     <div class="bah-age-lbl">Edad cronológica</div>
@@ -1204,29 +1260,31 @@ body.numed-touch .numed-functional-metric{min-height:195px}
                 </div>
                 <div class="bah-arrow" id="bio-age-arrow">→</div>
                 <div class="bah-age-block bah-bio">
-                    <div class="bah-age-lbl">Edad biológica</div>
+                    <div class="bah-age-lbl">Estimación del modelo</div>
                     <div class="bah-age-num bah-big" id="bio-age-display">—</div>
-                    <div class="bah-age-unit">Pendiente de validación del modelo</div>
+                    <div class="bah-age-unit">Disponible solo en revisión médica</div>
                 </div>
             </div>
-            <div class="bah-badge" id="bio-age-badge">—</div><p class="numed-results-caption" id="numed-results-caption">El modelo NUMED se encuentra en evaluación científica.</p>
+            <div class="numed-hero-comparison" id="numed-hero-comparison" hidden></div>
+            <div class="bah-badge" id="bio-age-badge">Perfil registrado</div>
+            <p class="numed-results-caption" id="numed-results-caption">Indicadores registrados. El cálculo en años está reservado para investigación interna.</p>
         </div>
 
 <div class="card numed-functional-card" id="numed-functional-card">
- <div class="card-title">Indicadores de tu evaluación</div>
- <div class="numed-functional-header"><div><span class="numed-eyebrow">EVALUACIÓN NUMED</span><h2>Conoce tus indicadores de salud</h2><p>Cuatro mediciones clave para comprender tu estado actual.</p></div><div class="numed-patient-chip"><span id="numed-metric-name">Participante</span><strong><span id="numed-metric-age">—</span> años</strong></div></div>
+ <div class="card-title">TUS INDICADORES</div>
+ <div class="numed-functional-header"><div><span class="numed-eyebrow">EVALUACIÓN NUMED</span><h2>Así está tu perfil hoy</h2><p>Cuatro mediciones, explicadas de forma sencilla.</p></div><div class="numed-patient-chip"><span id="numed-metric-name">Participante</span><strong><span id="numed-metric-age">—</span> años</strong></div></div>
  <div class="numed-functional-grid">
- <article class="numed-functional-metric"><span class="numed-metric-emoji">⚖️</span><span>Índice de masa corporal</span><strong id="numed-metric-imc">—</strong><small>kg/m² · indicador antropométrico</small></article>
- <article class="numed-functional-metric"><span class="numed-metric-emoji">📏</span><span>Cintura / talla</span><strong id="numed-metric-ratio">—</strong><small id="numed-ratio-note">Relación antropométrica</small></article>
- <article class="numed-functional-metric"><span class="numed-metric-emoji">💪</span><span>Fuerza muscular</span><strong id="numed-metric-force">—</strong><small>Fuerza de agarre medida</small></article>
- <article class="numed-functional-metric"><span class="numed-metric-emoji">🌿</span><span>Perímetro abdominal</span><strong id="numed-metric-waist">—</strong><small>Medición corporal</small></article>
+ <article class="numed-functional-metric"><span class="numed-metric-emoji">⚖️</span><span>IMC</span><strong id="numed-metric-imc">—</strong><small id="numed-metric-imc-note">Relación entre peso y estatura</small></article>
+ <article class="numed-functional-metric"><span class="numed-metric-emoji">📏</span><span>Cintura / talla</span><strong id="numed-metric-ratio">—</strong><small id="numed-ratio-note">Proporción de cintura y estatura</small></article>
+ <article class="numed-functional-metric"><span class="numed-metric-emoji">💪</span><span>Fuerza muscular</span><strong id="numed-metric-force">—</strong><small>Medida con dinamómetro</small></article>
+ <article class="numed-functional-metric"><span class="numed-metric-emoji">🌿</span><span>Perímetro abdominal</span><strong id="numed-metric-waist">—</strong><small>Medida de tu cintura</small></article>
  </div>
- <div id="numed-functional-insights" class="numed-insights" aria-live="polite"></div>
- <div class="numed-functional-foot"><span>Los resultados deben interpretarse según el modelo y el contexto clínico.</span><button type="button" class="btn btn-navy" onclick="openNumedReveal()">▶ Repetir revelación</button></div>
+ <details class="numed-insight-details"><summary>Ver interpretación detallada de cada indicador</summary><div id="numed-functional-insights" class="numed-insights" aria-live="polite"></div></details>
+ <div class="numed-functional-foot"><span>Los valores son orientativos y se interpretan junto con tu historia de salud.</span><button type="button" class="btn btn-navy" onclick="openNumedReveal()">▶ Repetir revelación</button></div>
 </div>
 
         <!-- Delta breakdown -->
-        <div class="card">
+        <div class="card numed-old-delta" aria-hidden="true">
             <div class="card-title">Indicadores de la evaluación</div>
             <div class="delta-grid">
                 <div class="delta-item">
@@ -1262,7 +1320,9 @@ body.numed-touch .numed-functional-metric{min-height:195px}
 
         <!-- Recomendaciones personalizadas -->
         <div class="card">
-            <div class="card-title">Tu plan de bienestar · recomendaciones</div>
+            <div class="card-title">TU PLAN DE BIENESTAR</div>
+            <h2 class="numed-recs-title">Recomendaciones para ti</h2>
+            <p class="numed-recs-intro">Consejos según tus mediciones y las respuestas de tu cuestionario.</p>
             <!-- Contenido fuerza (oculto, se activa en displayResults) -->
             <div id="level-badge" class="level-badge" style="display:none;"></div>
             <div class="progress-container" style="display:none;">
@@ -1377,10 +1437,11 @@ function updateNewUI(age, _legacyBiologicalAge, deltaDetalle, comparacionTexto, 
   if(bio) {bio.textContent='—';bio.classList.remove('pulse');}
   const bunit=bio?.closest('.bah-age-block')?.querySelector('.bah-age-unit');
   const blabel=bio?.closest('.bah-age-block')?.querySelector('.bah-age-lbl');
-  if(bunit)bunit.textContent='Pendiente de validación del modelo';
-  if(blabel)blabel.textContent='Edad biológica';
-  const caption=document.getElementById('numed-results-caption');if(caption)caption.textContent='Indicadores registrados. La estimación de investigación solo está disponible para revisión médica.';
-  if(badge) {badge.textContent='Modelo en investigación';badge.style.background='rgba(255,255,255,.12)';badge.style.color='#fff';badge.style.opacity='1';}
+  if(bunit)bunit.textContent='Solo en revisión médica';
+  if(blabel)blabel.textContent='Estimación del modelo';
+  const comparison=document.getElementById('numed-hero-comparison');if(comparison){comparison.hidden=true;comparison.textContent='';}
+  const caption=document.getElementById('numed-results-caption');if(caption)caption.textContent='Tus mediciones están listas. Las estimaciones en años son exclusivas de revisión médica.';
+  if(badge) {badge.textContent='Tu perfil ha sido registrado';badge.style.background='rgba(255,255,255,.12)';badge.style.color='#fff';badge.style.opacity='1';}
   const arrow=document.getElementById('bio-age-arrow');if(arrow)arrow.textContent='→';
   ['delta-fuerza','delta-imc','delta-abdomen','delta-estilo'].forEach(id=>{
     const el=document.getElementById(id);if(el){el.textContent='Ver indicador';el.className='delta-value zero';}
@@ -1404,7 +1465,9 @@ function populateFunctionalPanel(){
   v('numed-metric-age',document.getElementById('result-age')?.textContent||'—');
   const name=document.getElementById('result-name')?.textContent||'Participante';v('numed-metric-name',name);
   const note=document.getElementById('numed-ratio-note');
-  if(note)note.textContent=ratio===null?'Faltan medidas':`Relación cintura/talla observada: ${fmt(ratio,2)}.`;
+  if(note)note.textContent=ratio===null?'Faltan medidas':ratio<0.5?'Por debajo de 0.50':ratio<0.6?'A partir de 0.50':'A partir de 0.60';
+  const imcNote=document.getElementById('numed-metric-imc-note');
+  if(imcNote)imcNote.textContent=imc===null?'Faltan datos':imc<18.5?'Por debajo del intervalo habitual':imc<25?'Dentro del intervalo habitual':'Interpretar junto a otras medidas';
   numedRenderFunctionalInsights();
 }
 function numedFunctionalInterpretation({bmi,ratio,waist,grip,age,gender}){
@@ -2025,51 +2088,90 @@ progressFill.style.width = `${levelData.percentage}%`;
                     levelData.classification === 'NORMAL' ? '#feca57' : '#48cab2';
             }
 
-// ── Build beautiful recommendation cards ──────────────────────────────────
-const abdomenValue2 = parseFloat(document.getElementById('abdominal-perimeter').value);
-const genderValue   = document.getElementById('patient-gender').value;
-const abdomenEval   = classifyAbdominalPerimeter(genderValue, abdomenValue2);
-const lifestyle     = window.lifestyleDisplay || { label: "No evaluado" };
-// Age in years is deliberately unavailable: a fitness profile is not a biological clock.
-const bioColor='rc-blue';
-const bioIcon='🧬';
-const bioTitle='Análisis de indicadores NUMED';
-const bioDesc='Presentamos mediciones funcionales y hábitos registrados. No se estima edad biológica en años ni se calculan diferencias con la edad cronológica.';
-const recFuerzaHTML=numedSafeStrengthRecommendations(levelData, strength);
-const fuerzaColor='rc-blue';
-const abdColor='rc-blue';
-const abdIcon='📏';
-const lsColor='rc-blue';
-const lsIcon='🌿';
-
-const lsItems = [
- 'Mantener o incorporar actividad física acorde con tu condición y orientación profesional.',
- 'Priorizar horarios regulares de descanso y alimentación variada.',
- 'Conversar con el equipo NUMED sobre los hábitos registrados y objetivos personales.'
-];
-
-const pillList = (items) => items.map(i =>
-  `<div class="rec-pill"><span class="rp-dot"></span><span>${i}</span></div>`
-).join('');
-
-const strengthAdvice=levelData.level==='Bajo'
-  ? 'Consulta una evaluación individual y considera entrenamiento progresivo supervisado.'
-  : 'Mantén ejercicios de fuerza adaptados a tu condición, al menos dos días por semana si son apropiados para ti.';
-const waistAdvice=abdomenEval.level==='Normal'
-  ? 'Mantén hábitos de actividad física, descanso y alimentación que favorezcan tu salud cardiometabólica.'
-  : 'Revisa el resultado con el equipo clínico y define objetivos adecuados para tu situación.';
-const habitsAdvice='Prioriza sueño regular, movimiento frecuente y alimentación variada. Revisa las respuestas con el equipo NUMED.';
-const html=`<div class="numed-recs-compact">
-  <article><span class="nr-small">💪 FUERZA</span><h4>${strength.toFixed(1)} kg · ${numedEscape(levelData.level)}</h4><p>${strengthAdvice}</p></article>
-  <article><span class="nr-small">📏 CINTURA</span><h4>${abdomenValue2.toFixed(1)} cm · ${numedEscape(abdomenEval.level)}</h4><p>${waistAdvice}</p></article>
-  <article><span class="nr-small">🌿 HÁBITOS</span><h4>Tu siguiente paso</h4><p>${habitsAdvice}</p></article>
-</div>`;
-
+// V0.16: recomendaciones derivadas de mediciones y respuestas, no de edad hipotética.
+const ageNow = Number(document.getElementById('patient-age').value);
+const weightNow = Number(document.getElementById('patient-weight').value);
+const heightNow = Number(document.getElementById('patient-height').value);
+const waistNow = Number(document.getElementById('abdominal-perimeter').value);
+const sexNow = document.getElementById('patient-gender').value;
+const answersNow = window._questionnaireAnswers || {};
+const bmiNow = weightNow > 0 && heightNow > 0 ? weightNow / ((heightNow/100)**2) : NaN;
+const ratioNow = waistNow > 0 && heightNow > 0 ? waistNow / heightNow : NaN;
+const cards = numedBuildRecommendations({ age: ageNow, bmi: bmiNow, ratio: ratioNow,
+  waist: waistNow, grip: strength, strengthLevel: levelData.level,
+  strengthHasReference: !!levelData.thresholds && ageNow >= 10 && ageNow <= 99,
+  sex: sexNow, answers: answersNow });
 const recommendationsContent = document.getElementById('recommendations-content');
-recommendationsContent.innerHTML = html;
+recommendationsContent.innerHTML = `<div class="numed-recs-v16">${cards.map(card=>`
+ <article class="nr-v16-card">
+  <div class="nr-v16-top"><span class="nr-v16-icon">${card.icon}</span><span class="nr-v16-kicker">${numedEscape(card.tag)}</span></div>
+  <h4>${numedEscape(card.title)}</h4>
+  <p>${numedEscape(card.description)}</p>
+  ${card.actions.length ? `<ul>${card.actions.map(action=>`<li>${numedEscape(action)}</li>`).join('')}</ul>` : ''}
+ </article>`).join('')}</div>
+ <p class="nr-v16-disclaimer">Orientaciones educativas basadas en las mediciones y respuestas registradas. No sustituyen la evaluación clínica individual.</p>`;
 // hide old containers
 document.getElementById('abdominal-message').style.display = 'none';
 document.getElementById('resultado-integrado').style.display = 'none';
+}
+
+
+// Reglas independientes y comprobables: no interpretan una diferencia de edad biológica.
+function numedBuildRecommendations({age,bmi,ratio,waist,grip,strengthLevel,strengthHasReference,answers={}}){
+ const cards=[];
+ const validAdult=Number.isFinite(age)&&age>=18;
+ const mk=(icon,tag,title,description,actions)=>cards.push({icon,tag,title,description,actions});
+ const level=String(strengthLevel||'').trim();
+ if(Number.isFinite(grip)&&grip>0){
+   if(strengthHasReference && level==='Bajo') mk('💪','FUERZA','Fortalecer progresivamente',
+     `Fuerza de agarre registrada: ${grip.toFixed(1)} kg. La tabla interna la clasifica como baja para el grupo de referencia.`,
+     ['Consultar con el equipo NUMED para interpretar la medición según el dinamómetro y el protocolo.',
+      'Si es apropiado, iniciar o adaptar entrenamiento progresivo de fuerza con supervisión.']);
+   else if(strengthHasReference && level==='Alto') mk('💪','FUERZA','Conservar tu fortaleza',
+     `Fuerza de agarre registrada: ${grip.toFixed(1)} kg. La tabla interna la clasifica como alta para el grupo de referencia.`,
+     ['Mantener ejercicios de fuerza adaptados a tu condición.','Alternar grupos musculares y respetar la recuperación.']);
+   else mk('💪','FUERZA','Cuidar tu fuerza muscular',
+     `Fuerza de agarre registrada: ${grip.toFixed(1)} kg.${strengthHasReference&&level==='Medio'?' Clasificación media según la tabla interna.':' La clasificación requiere una referencia aplicable y revisión del protocolo.'}`,
+     ['Incluir, si es apropiado, trabajo de fuerza al menos dos días a la semana.', 'Consultar si necesitas una valoración personalizada de fuerza.']);
+ }
+ if(Number.isFinite(ratio)&&ratio>0){
+   const eligible=validAdult&&Number.isFinite(bmi)&&bmi<35&&ratio>=0.4;
+   let title='Conoce tu relación cintura/talla';
+   let description=`Relación cintura/talla: ${ratio.toFixed(2)}. Interpretación individual según el contexto clínico.`;
+   let actions=['Mantener hábitos de alimentación y movimiento adecuados a tu salud.'];
+   if(eligible&&ratio>=0.6){title='Priorizar salud cardiometabólica';description=`Relación cintura/talla: ${ratio.toFixed(2)}; categoría orientativa de adiposidad central elevada.`;
+     actions=['Comentar el resultado con el equipo clínico.','Definir objetivos de alimentación y actividad física individualizados.'];}
+   else if(eligible&&ratio>=0.5){title='Revisar la adiposidad central';description=`Relación cintura/talla: ${ratio.toFixed(2)}; por encima del objetivo orientativo de 0.50.`;
+     actions=['Revisar los hábitos y el resultado con un profesional.','Dar seguimiento a las mediciones con la misma técnica.'];}
+   else if(eligible){title='Mantener hábitos protectores';description=`Relación cintura/talla: ${ratio.toFixed(2)}; inferior a 0.50 en el rango aplicable.`;
+     actions=['Mantener actividad física regular y una alimentación variada.'];}
+   mk('📏','CINTURA / TALLA',title,description,actions);
+ }
+ if(Number.isFinite(bmi)&&bmi>0){
+   let title='Interpretación antropométrica individual';
+   let desc=`IMC: ${bmi.toFixed(1)} kg/m². No describe por sí solo la composición corporal.`;
+   let actions=['Revisar el resultado con el equipo NUMED en conjunto con las demás mediciones.'];
+   if(validAdult){
+     if(bmi<18.5){title='Revisar el estado nutricional';actions=['Consultar si existe pérdida de peso involuntaria o dificultad para mantener una alimentación suficiente.'];}
+     else if(bmi<25){title='Mantener una alimentación equilibrada';actions=['Priorizar variedad alimentaria, proteínas adecuadas y actividad física regular.'];}
+     else{title='Evaluar composición corporal y hábitos';actions=['No tomar decisiones únicamente por el IMC; revisar cintura, antecedentes y composición corporal.'];}
+   }else{desc+=' Para menores de 18 años se requieren percentiles por edad y sexo.';}
+   mk('⚖️','IMC',title,desc,actions);
+ }
+ const habitActions=[];
+ if(answers.actividad===0) habitActions.push('Progresar hacia actividad aeróbica regular según tu condición y orientación profesional.');
+ if(answers.fuerza_q===0) habitActions.push('Considerar entrenamiento de fuerza dos días por semana, si no existe contraindicación.');
+ if(answers.sueno===1) habitActions.push('Revisar tu horario de sueño y consultar si persisten dificultades para descansar.');
+ if(answers.dieta===0) habitActions.push('Incorporar gradualmente frutas, vegetales, legumbres y fuentes adecuadas de proteína.');
+ if(answers.estres===1) habitActions.push('Explorar estrategias de manejo de estrés y pedir apoyo si interfiere con tu bienestar.');
+ if(answers.fuma_actual===2) habitActions.push('Solicitar orientación profesional para dejar de fumar.');
+ else if(answers.ex_fumador===1) habitActions.push('Mantenerte sin fumar y comentar tus antecedentes con el profesional.');
+ if(answers.alcohol===2) habitActions.push('Hablar con un profesional sobre cómo reducir el consumo de alcohol.');
+ if(answers.cronicas===2) habitActions.push('Continuar el control y seguimiento de tus condiciones diagnosticadas.');
+ if(answers.familia===1) habitActions.push('Comentar tus antecedentes familiares con el equipo de salud.');
+ if(!habitActions.length) habitActions.push('Mantener rutinas de movimiento, descanso y alimentación que funcionen para ti.');
+ mk('🌿','HÁBITOS','Tu plan de hábitos', 'Sugerencias basadas en las respuestas que registraste en el cuestionario.',habitActions.slice(0,6));
+ return cards;
 }
 
 function numedSafeStrengthRecommendations(levelData, strength){
@@ -2524,10 +2626,12 @@ function numedRenderActualExperimentalCalculation(){
   const heroUnit=hero?.closest('.bah-age-block')?.querySelector('.bah-age-unit');
   const badge=document.getElementById('bio-age-badge');
   if(hero)hero.textContent=String(result.hypotheticalAge);
-  if(heroLabel)heroLabel.textContent='Estimación NUMED experimental';
-  if(heroUnit)heroUnit.textContent='Años de la hipótesis de cálculo';
+  if(heroLabel)heroLabel.textContent='Estimación del modelo';
+  if(heroUnit)heroUnit.textContent='años · modelo de investigación';
+  const comparison=document.getElementById('numed-hero-comparison');
+  if(comparison){const gap=result.hypotheticalAge-age;comparison.textContent=gap===0?'Sin diferencia en el modelo':`Diferencia del modelo: ${gap>0?'+':''}${gap} años`;comparison.hidden=false;}
   const caption=document.getElementById('numed-results-caption');if(caption)caption.textContent='Estimación experimental para revisión del equipo NUMED. No es una edad biológica clínicamente validada.';
-  if(badge)badge.textContent='Cálculo de investigación';
+  if(badge)badge.textContent='Vista interna de investigación';
   const rows=[['Fuerza',result.components.fuerza],['IMC',result.components.imc],['Cintura/talla',result.components.cintura],['Hábitos',result.components.habitos]];
   const detail=document.getElementById('numed-exp-breakdown');detail.replaceChildren();
   for(const [label,score] of rows){const div=document.createElement('div'),l=document.createElement('span'),b=document.createElement('b');
