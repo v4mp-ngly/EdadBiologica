@@ -1163,6 +1163,24 @@ body.numed-touch .numed-functional-metric{min-height:195px}
 .numed-exp-blocked{border:1px solid #e3cba1;border-radius:13px;padding:14px;background:#fff9ed;color:#704c1e;line-height:1.7;white-space:pre-wrap}
 @media(max-width:650px){.numed-exp-numbers{grid-template-columns:1fr}.numed-exp-breakdown{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
+<style id="numed-v15-overrides">
+/* Technical breakdown stays in Revisión médica, never as duplicated results card. */
+#numed-experimental-result{display:none!important}
+.numed-functional-metric{min-height:155px;padding:20px;background:#f7fbfc}
+.numed-functional-metric strong{font-size:clamp(24px,3vw,35px)}
+.numed-functional-header{margin-bottom:20px}
+.numed-insights{gap:12px}
+.numed-insight{padding:16px;background:#f8fbfc;border-color:#e2edf2}
+.numed-insight p{font-size:12px;line-height:1.55}
+.bio-age-hero{padding:42px 28px}
+.numed-results-caption{margin:13px auto 0;max-width:620px;font-size:12px;line-height:1.6;color:#daeaf2}
+.numed-recs-compact{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.numed-recs-compact article{border:1px solid #e2ebef;border-radius:17px;padding:20px;background:#f8fbfd}
+.numed-recs-compact .nr-small{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;color:#3b8757;margin-bottom:10px}
+.numed-recs-compact h4{font-size:15px;color:#153e59;margin:0 0 8px}
+.numed-recs-compact p{font-size:12px;color:#577083;line-height:1.65}
+@media(max-width:750px){.numed-recs-compact{grid-template-columns:1fr}}
+</style>
         <!-- Cálculo experimental visible al administrador, no exportable ni validado -->
         <section id="numed-experimental-result" class="numed-exp-result" hidden aria-live="polite" data-disabled-reason="Solo simulación ficticia en Revisión médica">
           <div class="numed-exp-top"><div><div class="numed-exp-kicker">INVESTIGACIÓN CLÍNICA · MODELO NUMED</div><h2>Modelo experimental NUMED</h2></div><span class="numed-exp-stamp">EN ESTUDIO</span></div>
@@ -1191,12 +1209,12 @@ body.numed-touch .numed-functional-metric{min-height:195px}
                     <div class="bah-age-unit">Pendiente de validación del modelo</div>
                 </div>
             </div>
-            <div class="bah-badge" id="bio-age-badge">—</div>
+            <div class="bah-badge" id="bio-age-badge">—</div><p class="numed-results-caption" id="numed-results-caption">El modelo NUMED se encuentra en evaluación científica.</p>
         </div>
 
 <div class="card numed-functional-card" id="numed-functional-card">
  <div class="card-title">Indicadores de tu evaluación</div>
- <div class="numed-functional-header"><div><span class="numed-eyebrow">EVALUACIÓN NUMED</span><h2>Indicadores para estimar la edad biológica</h2><p>Resultados objetivos de la evaluación. Las interpretaciones deben revisarse según contexto clínico.</p></div><div class="numed-patient-chip"><span id="numed-metric-name">Participante</span><strong><span id="numed-metric-age">—</span> años</strong></div></div>
+ <div class="numed-functional-header"><div><span class="numed-eyebrow">EVALUACIÓN NUMED</span><h2>Conoce tus indicadores de salud</h2><p>Cuatro mediciones clave para comprender tu estado actual.</p></div><div class="numed-patient-chip"><span id="numed-metric-name">Participante</span><strong><span id="numed-metric-age">—</span> años</strong></div></div>
  <div class="numed-functional-grid">
  <article class="numed-functional-metric"><span class="numed-metric-emoji">⚖️</span><span>Índice de masa corporal</span><strong id="numed-metric-imc">—</strong><small>kg/m² · indicador antropométrico</small></article>
  <article class="numed-functional-metric"><span class="numed-metric-emoji">📏</span><span>Cintura / talla</span><strong id="numed-metric-ratio">—</strong><small id="numed-ratio-note">Relación antropométrica</small></article>
@@ -1244,7 +1262,7 @@ body.numed-touch .numed-functional-metric{min-height:195px}
 
         <!-- Recomendaciones personalizadas -->
         <div class="card">
-            <div class="card-title">Recomendaciones personalizadas</div>
+            <div class="card-title">Tu plan de bienestar · recomendaciones</div>
             <!-- Contenido fuerza (oculto, se activa en displayResults) -->
             <div id="level-badge" class="level-badge" style="display:none;"></div>
             <div class="progress-container" style="display:none;">
@@ -1297,7 +1315,7 @@ body.numed-touch .numed-functional-metric{min-height:195px}
                     </div>
                     <div class="hist-leg-item">
                         <span class="hist-leg-icon">🧬</span>
-                        <div><strong>Edad biológica</strong><p>Pendiente de una metodología de cálculo validada; actualmente se presentan indicadores funcionales.</p></div>
+                        <div><strong>Modelo NUMED</strong><p>Estimación aritmética experimental visible solo en revisión administrativa. No equivale a edad biológica validada.</p></div>
                     </div>
                     <div class="hist-leg-item">
                         <span class="hist-leg-icon">🌱</span>
@@ -1323,7 +1341,7 @@ body.numed-touch .numed-functional-metric{min-height:195px}
                             <th>Peso (kg)</th>
                             <th>Talla (cm)</th>
                             <th>IMC</th>
-                            <th>Edad biológica</th>
+                            <th>Modelo NUMED (investigación)</th>
                             <th>Puntaje EV</th>
                             <th></th>
                         </tr>
@@ -1361,6 +1379,7 @@ function updateNewUI(age, _legacyBiologicalAge, deltaDetalle, comparacionTexto, 
   const blabel=bio?.closest('.bah-age-block')?.querySelector('.bah-age-lbl');
   if(bunit)bunit.textContent='Pendiente de validación del modelo';
   if(blabel)blabel.textContent='Edad biológica';
+  const caption=document.getElementById('numed-results-caption');if(caption)caption.textContent='Indicadores registrados. La estimación de investigación solo está disponible para revisión médica.';
   if(badge) {badge.textContent='Modelo en investigación';badge.style.background='rgba(255,255,255,.12)';badge.style.color='#fff';badge.style.opacity='1';}
   const arrow=document.getElementById('bio-age-arrow');if(arrow)arrow.textContent='→';
   ['delta-fuerza','delta-imc','delta-abdomen','delta-estilo'].forEach(id=>{
@@ -1529,6 +1548,22 @@ async function numedLogout(){
   document.getElementById('numed-auth-gate').hidden=false;
   numedMessage('');numedAuthError('Sesión cerrada.');
 }
+function numedResearchEstimate(ev){
+  if(!window.NUMED_EXP || !ev)return null;
+  const answers=ev.questionnaireAnswers||ev.questionnaire||{};
+  try{
+    const data=window.NUMED_EXP.evaluate({
+      age:Number(ev.edad),sex:ev.genero,weightKg:Number(ev.peso),heightCm:Number(ev.talla),
+      waistCm:Number(ev.abdomen),gripKg:Number(ev.fuerzaOriginal),
+      answers:Object.fromEntries(window.NUMED_EXP.REQUIRED.map(k=>[k,Number(answers[k])]))
+    });
+    if(data.status!=='experimental'||!Number.isFinite(data.hypotheticalAge))return null;
+    return {years:data.hypotheticalAge,points:data.points,modelVersion:data.modelVersion};
+  }catch(e){return null;}
+}
+function numedResearchIsAdmin(){
+  return Boolean(numedUser && !document.getElementById('numed-research-button')?.hidden);
+}
 async function loadFromSupabase(){
   if(!numedClient||!numedUser)return [];
   const {data,error}=await numedClient.from('numed_evaluations')
@@ -1543,7 +1578,8 @@ async function loadFromSupabase(){
     fuerzaOriginal:row.grip_kg,abdomen:row.waist_cm,peso:row.weight_kg,talla:row.height_cm,
     imc:row.bmi,estiloVidaScore:row.lifestyle_score,
     nivelFuerza:row.grip_category,nivelAbdomen:row.waist_category,imcCategoria:row.bmi_category,
-    edadBiologica:null
+    edadBiologica:null,
+    questionnaireAnswers:row.questionnaire||row.history_payload?.questionnaireAnswers||{}
   }));
   renderHistoryTable();return window.evaluations;
 }
@@ -1568,7 +1604,7 @@ async function saveEvaluation(evaluation){
       if(error)throw error;patient=data;
     }
     const payload={
-      patient_id:patient.id,evaluated_by:numedUser.id,assessment_version:'numed-research-v0.13',
+      patient_id:patient.id,evaluated_by:numedUser.id,assessment_version:'numed-research-v0.15',
       age_years:evaluation.edad,gender:evaluation.genero,
       weight_kg:evaluation.peso,height_cm:evaluation.talla,waist_cm:evaluation.abdomen,
       grip_kg:evaluation.fuerzaOriginal,lifestyle_score:Number.isFinite(evaluation.estiloVidaScore)?evaluation.estiloVidaScore:null,
@@ -2016,53 +2052,18 @@ const pillList = (items) => items.map(i =>
   `<div class="rec-pill"><span class="rp-dot"></span><span>${i}</span></div>`
 ).join('');
 
-const html = `
-  <!-- Card resultado -->
-  <div class="rec-card">
-    <div class="rec-card-header ${bioColor}">
-      <div class="rc-icon">${bioIcon}</div>
-      <span>${bioTitle}</span>
-    </div>
-    <div class="rec-card-body">
-      <p>${bioDesc}</p>
-    </div>
-  </div>
-
-  <!-- Card fuerza -->
-  <div class="rec-card">
-    <div class="rec-card-header ${fuerzaColor}">
-      <div class="rc-icon">💪</div>
-      <span>Evaluación de Fuerza Muscular</span>
-    </div>
-    <div class="rec-card-body">
-      ${recFuerzaHTML}
-    </div>
-  </div>
-
-  <!-- Grid: abdomen + estilo de vida -->
-  <div class="rec-2col">
-    <div class="rec-card" style="margin-bottom:0">
-      <div class="rec-card-header ${abdColor}">
-        <div class="rc-icon">${abdIcon}</div>
-        <span>Perímetro Abdominal</span>
-      </div>
-      <div class="rec-card-body">
-        <div class="rec-stat">📏 ${abdomenValue2} cm — ${abdomenEval.level}</div>
-        <p>${abdomenEval.interpretation}</p>
-      </div>
-    </div>
-    <div class="rec-card" style="margin-bottom:0">
-      <div class="rec-card-header ${lsColor}">
-        <div class="rc-icon">${lsIcon}</div>
-        <span>Estilo de Vida</span>
-      </div>
-      <div class="rec-card-body">
-        <div class="rec-stat">${lifestyle.label}</div>
-        <div class="rec-pill-list">${pillList(lsItems)}</div>
-      </div>
-    </div>
-  </div>
-`;
+const strengthAdvice=levelData.level==='Bajo'
+  ? 'Consulta una evaluación individual y considera entrenamiento progresivo supervisado.'
+  : 'Mantén ejercicios de fuerza adaptados a tu condición, al menos dos días por semana si son apropiados para ti.';
+const waistAdvice=abdomenEval.level==='Normal'
+  ? 'Mantén hábitos de actividad física, descanso y alimentación que favorezcan tu salud cardiometabólica.'
+  : 'Revisa el resultado con el equipo clínico y define objetivos adecuados para tu situación.';
+const habitsAdvice='Prioriza sueño regular, movimiento frecuente y alimentación variada. Revisa las respuestas con el equipo NUMED.';
+const html=`<div class="numed-recs-compact">
+  <article><span class="nr-small">💪 FUERZA</span><h4>${strength.toFixed(1)} kg · ${numedEscape(levelData.level)}</h4><p>${strengthAdvice}</p></article>
+  <article><span class="nr-small">📏 CINTURA</span><h4>${abdomenValue2.toFixed(1)} cm · ${numedEscape(abdomenEval.level)}</h4><p>${waistAdvice}</p></article>
+  <article><span class="nr-small">🌿 HÁBITOS</span><h4>Tu siguiente paso</h4><p>${habitsAdvice}</p></article>
+</div>`;
 
 const recommendationsContent = document.getElementById('recommendations-content');
 recommendationsContent.innerHTML = html;
@@ -2258,9 +2259,11 @@ function renderHistoryTable() {
   section.style.display = 'block';
 
   const rows = [...window.evaluations].reverse();
+  const canResearch=numedResearchIsAdmin();
   rows.forEach((ev, i) => {
     const realIndex = window.evaluations.length - 1 - i;
     const tr = document.createElement('tr');
+    const exp=canResearch?numedResearchEstimate(ev):null;
     tr.innerHTML = `
       <td style="font-size:11px;white-space:nowrap">${numedEscape(ev.fecha || '—')}</td>
       <td style="font-weight:600">${numedEscape(ev.nombre || '—')}</td>
@@ -2271,7 +2274,7 @@ function renderHistoryTable() {
       <td style="text-align:center">${numedEscape(ev.peso ?? '—')}</td>
       <td style="text-align:center">${numedEscape(ev.talla ?? '—')}</td>
       <td style="text-align:center">${numedEscape(ev.imc ?? '—')}</td>
-      <td style="text-align:center;font-weight:700;color:var(--navy)">No validada</td>
+      <td style="text-align:center;font-weight:700;color:var(--navy)">${exp ? numedEscape(exp.years)+' años · experimental' : '—'}</td>
       <td style="text-align:center">${numedEscape(ev.estiloVidaScore ?? '—')}</td>
       <td style="text-align:center"><button class="btn-hist-pdf" onclick="downloadPDFFromHistory(${realIndex})">⬇ PDF</button></td>
     `;
@@ -2522,8 +2525,9 @@ function numedRenderActualExperimentalCalculation(){
   const badge=document.getElementById('bio-age-badge');
   if(hero)hero.textContent=String(result.hypotheticalAge);
   if(heroLabel)heroLabel.textContent='Estimación NUMED experimental';
-  if(heroUnit)heroUnit.textContent='Años hipotéticos · solo revisión médica';
-  if(badge)badge.textContent='Modelo sin validación clínica';
+  if(heroUnit)heroUnit.textContent='Años de la hipótesis de cálculo';
+  const caption=document.getElementById('numed-results-caption');if(caption)caption.textContent='Estimación experimental para revisión del equipo NUMED. No es una edad biológica clínicamente validada.';
+  if(badge)badge.textContent='Cálculo de investigación';
   const rows=[['Fuerza',result.components.fuerza],['IMC',result.components.imc],['Cintura/talla',result.components.cintura],['Hábitos',result.components.habitos]];
   const detail=document.getElementById('numed-exp-breakdown');detail.replaceChildren();
   for(const [label,score] of rows){const div=document.createElement('div'),l=document.createElement('span'),b=document.createElement('b');
