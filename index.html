@@ -1375,7 +1375,7 @@ body.numed-touch .numed-functional-metric{min-height:195px}
                     </div>
                     <div class="hist-leg-item">
                         <span class="hist-leg-icon">🧬</span>
-                        <div><strong>Modelo NUMED</strong><p>Estimación aritmética experimental visible solo en revisión administrativa. No equivale a edad biológica validada.</p></div>
+                        <div><strong>Estimación NUMED</strong><p>Cálculo preliminar del modelo interno, disponible para revisión administrativa. No corresponde a una edad biológica clínicamente validada.</p></div>
                     </div>
                     <div class="hist-leg-item">
                         <span class="hist-leg-icon">🌱</span>
@@ -1401,7 +1401,7 @@ body.numed-touch .numed-functional-metric{min-height:195px}
                             <th>Peso (kg)</th>
                             <th>Talla (cm)</th>
                             <th>IMC</th>
-                            <th>Modelo NUMED (investigación)</th>
+                            <th>Estimación NUMED</th>
                             <th>Puntaje EV</th>
                             <th></th>
                         </tr>
@@ -2376,7 +2376,7 @@ function renderHistoryTable() {
       <td style="text-align:center">${numedEscape(ev.peso ?? '—')}</td>
       <td style="text-align:center">${numedEscape(ev.talla ?? '—')}</td>
       <td style="text-align:center">${numedEscape(ev.imc ?? '—')}</td>
-      <td style="text-align:center;font-weight:700;color:var(--navy)">${exp ? numedEscape(exp.years)+' años · experimental' : '—'}</td>
+      <td style="text-align:center;font-weight:700;color:var(--navy)">${exp ? numedEscape(exp.years)+' años · estimación' : '—'}</td>
       <td style="text-align:center">${numedEscape(ev.estiloVidaScore ?? '—')}</td>
       <td style="text-align:center"><button class="btn-hist-pdf" onclick="downloadPDFFromHistory(${realIndex})">⬇ PDF</button></td>
     `;
