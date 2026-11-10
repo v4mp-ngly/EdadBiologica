@@ -1388,26 +1388,16 @@ function populateFunctionalPanel(){
   if(note)note.textContent=ratio===null?'Faltan medidas':`Relación cintura/talla observada: ${fmt(ratio,2)}.`;
   numedRenderFunctionalInsights();
 }
-function numedFunctionalInterpretation({bmi, ratio, waist, grip, age, gender}) {
- const insights=[];
- if(Number.isFinite(bmi)){
-   let category='Fuera del rango habitual de IMC para adultos';
-   if(age>=18){category=bmi<18.5?'IMC inferior a 18.5':bmi<25?'IMC de 18.5 a 24.9':bmi<30?'IMC de 25 a 29.9':'IMC de 30 o más';}
-   else category='Interpretación de IMC en menores: requiere percentiles por edad y sexo';
-   insights.push({tag:'IMC',title:category,detail:age>=18?'Clasificación orientativa en adultos; no determina la composición corporal.':'No utilizar puntos de corte de adultos para menores.'});
- }
- if(Number.isFinite(ratio)){
-   let detail='Relación cintura/talla observada: '+ratio.toFixed(2)+'.';
-   if(age>=18 && Number.isFinite(bmi) && bmi<35 && ratio>=.4){
-     const label=ratio<.5?'Menor de 0.50':ratio<.6?'Entre 0.50 y 0.59':'0.60 o más';
-     detail+=' '+label+'; interpretación orientativa de adiposidad central basada en NICE para adultos con IMC menor de 35. No equivale a diagnóstico.';
-   }else detail+=' Sin clasificación automática; requiere contexto clínico.';
-   insights.push({tag:'CINTURA / TALLA',title:'Indicador de adiposidad central',detail});
- }
- if(Number.isFinite(grip)) insights.push({tag:'FUERZA',title:grip.toFixed(1)+' kg de fuerza de agarre',detail:'Medición observada. Para clasificar por edad y sexo es necesario comprobar referencias y protocolo del dinamómetro utilizado.'});
- if(Number.isFinite(waist)) insights.push({tag:'CINTURA',title:waist.toFixed(1)+' cm de perímetro',detail:'Interpretar junto con talla, edad y contexto clínico.'});
- insights.push({tag:'HÁBITOS',title:'Cuestionario completado',detail:'Las respuestas orientan recomendaciones individuales; la puntuación interna no es una escala clínica validada ni representa años de vida.'});
- return insights;
+function numedFunctionalInterpretation({bmi,ratio,waist,grip,age,gender}){
+  const weight=numedValue('patient-weight'),height=numedValue('patient-height');
+  const clinical=window.NUMED_SCIENCE?.assess({age,sex:gender,weightKg:weight,heightCm:height,waistCm:waist,gripKg:grip});
+  if(!clinical||clinical.status!=='ok')return [{tag:'MEDICIONES',title:'Revisar datos',detail:'Verifica las mediciones antes de interpretar los indicadores.'}];
+  return [
+   {tag:'IMC',title:clinical.bmiCategory+' · '+clinical.bmi.toFixed(1),detail:clinical.notes.bmi},
+   {tag:'CINTURA / TALLA',title:clinical.ratio.toFixed(2)+' · '+clinical.ratioCategory,detail:clinical.notes.ratio},
+   {tag:'FUERZA',title:clinical.gripKg.toFixed(1)+' kg · '+clinical.gripCategory,detail:clinical.notes.grip},
+   {tag:'HÁBITOS',title:'Cuestionario registrado',detail:'Las respuestas orientan intervenciones individuales; por si solas no estiman la edad biologica.'}
+  ];
 }
 function numedRenderFunctionalInsights(){
  const el=document.getElementById('numed-functional-insights');if(!el)return;
@@ -2485,6 +2475,7 @@ function showWelcomeScreen() {
  <div id="nr-output" class="nr-out" aria-live="polite">Completa o ajusta los campos ficticios y calcula.</div>
  <p style="font-size:12px;color:#566f7d">Las tablas de origen contienen intervalos solapados o duplicados; se bloquean 18–19 años y 65+ y cualquier valor que no esté cubierto de forma inequívoca. No se modifican historiales, PDFs ni la columna biological_age_years.</p></div>
 </div>
+<script src="numed-scientific-indicators.js"></script>
 <script src="numed-experimental-engine.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
