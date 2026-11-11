@@ -4011,7 +4011,12 @@ window.fxTakeRefresh=async function(force){
   setState('loading');
   running=(async()=>{
     try{const url=await create();cache={key,url};drawQR(url);setState('ready',`Código personal · vence en ${SESSION_HOURS} horas`);}
-    catch(e){console.warn('NUMED QR',e);setState('error','No pudimos preparar el código: '+(e.message||e));}
+    catch(e){console.warn('NUMED QR',e);const m=String(e?.message||e);
+      const hint=/bucket not found/i.test(m)?'Falta configurar Supabase: no existe el almacenamiento "numed-experience". Ejecuta photobooth_supabase_setup.sql.'
+        :/numed_booth_sessions|relation .* does not exist|schema cache/i.test(m)?'Falta configurar Supabase: no existe la tabla de sesiones. Ejecuta photobooth_supabase_setup.sql.'
+        :/row-level security|unauthorized|403/i.test(m)?'Supabase rechazó el permiso. Verifica que tu usuario esté activo en numed_staff y que el SQL se ejecutó completo.'
+        :'No pudimos preparar el código: '+m;
+      setState('error',hint);}
     finally{running=null;}
   })();
   return running;
