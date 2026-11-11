@@ -861,6 +861,28 @@ body.numed-touch .q-opt{min-height:124px}
 .np-bio-arrow{display:grid;place-items:center;font-size:34px;color:var(--lime);animation:arrow-nudge 1.8s ease-in-out infinite}
 @media(max-width:800px){.np-bio{grid-template-columns:1fr}.np-bio-arrow{display:none}}
 
+/* Preguntas de seguimiento */
+.q-fu{margin-top:clamp(16px,2.4vh,26px);padding:clamp(16px,1.6vw,24px);border-radius:24px;background:#f4f8e7;border:1.5px solid #dfe8b8;display:grid;gap:16px}
+.q-fu[hidden]{display:none}
+.q-fu.in{animation:fu-in .55s var(--spring) both}
+@keyframes fu-in{from{opacity:0;transform:translateY(-10px) scale(.98)}}
+.q-fu-head{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent);display:flex;gap:8px;align-items:center}
+.q-fu-group{border:0;padding:0;margin:0;display:grid;gap:10px}
+.q-fu-group legend{font-size:clamp(17px,1.4vw,24px);font-weight:800;letter-spacing:-.4px;color:var(--text);margin-bottom:10px}
+.q-fu-group.done legend::after{content:' ✓';color:var(--accent)}
+.q-fu-opts{display:flex;flex-wrap:wrap;gap:10px}
+.q-fu-opt{position:relative;display:inline-flex;align-items:center;gap:10px;min-height:clamp(52px,5vh,64px);padding:12px 20px;border-radius:999px;border:2px solid var(--line);background:#fff;font-size:clamp(14px,1.1vw,18px);font-weight:700;color:var(--text);cursor:pointer;transition:all .3s var(--spring);user-select:none;touch-action:manipulation}
+.q-fu-opt input{position:absolute;opacity:0;pointer-events:none}
+.q-fu-opt:has(input:checked){border-color:var(--lime);background:#fff;box-shadow:var(--glow)}
+.q-fu-opt:has(input[type=checkbox])::before{content:'';width:20px;height:20px;border-radius:6px;border:2px solid var(--line-2);transition:all .25s}
+.q-fu-opt:has(input[type=checkbox]:checked)::before{background:var(--lime);border-color:var(--lime);box-shadow:inset 0 0 0 3px #fff}
+.q-fu-opt:active{transform:scale(.96)}
+.q-fu-actions{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.q-fu-skip{border:0;background:none;color:var(--muted);font:700 14px Montserrat,sans-serif;text-decoration:underline;cursor:pointer;padding:10px 4px}
+.q-fu-go{min-height:56px!important;font-size:16px!important}
+.q-fu-go:disabled{opacity:.4}
+@media(orientation:portrait) and (min-height:1400px){.q-fu-opt{min-height:72px;font-size:20px}.q-fu-group legend{font-size:28px}body .q-opt{font-size:24px;min-height:110px}body .q-opt>span small{font-size:16px}}
+
 </style>
 </head>
 <body data-k-stage="1" data-dir="fwd">
@@ -3066,7 +3088,7 @@ document.addEventListener('input',refreshLive);
 const QUIZ_FIELDS=['fuma_actual','ex_fumador','alcohol','actividad','fuerza_q','sueno','estres','dieta','cronicas','familia'];
 const QUIZ_ICONS=['🚭','🕰️','🍷','🏃','🏋️','😴','🧘','🥗','🩺','👪'];
 let qi=0,qTimer=0,items=[];
-function answered(i){const it=items[i];return Boolean(it&&it.querySelector('input:checked'));}
+function answered(i){const it=items[i];return Boolean(it&&it.querySelector('input:not([data-fu]):checked'));}
 function quizGo(i){
   clearTimeout(qTimer);
   qi=clamp(i,0,items.length);
@@ -3112,8 +3134,11 @@ function initQuiz(){
   const prog=$('qz-progress');
   for(let j=0;j<=items.length;j++){const s=document.createElement('i');s.title=j<items.length?'Pregunta '+(j+1):'Resumen';s.addEventListener('click',()=>{if(j<=items.length&&(j===0||answered(j-1)||answered(j)||j===items.length))quizGo(j);});prog.append(s);}
   form.addEventListener('change',e=>{
+    if(e.target.dataset.fu!==undefined){window.fxFollowupChange?.(e.target);return;}
     const it=e.target.closest('.q-item');if(!it)return;
+    const hasFu=window.fxFollowupToggle?.(e.target.name);
     const j=items.indexOf(it);quizGo(j);
+    if(hasFu){clearTimeout(qTimer);setTimeout(()=>it.querySelector('.q-fu:not([hidden])')?.scrollIntoView({behavior:'smooth',block:'nearest'}),250);return;}
     if(j===qi&&!REDUCE.matches){qTimer=setTimeout(()=>quizGo(j+1),480);}else if(j===qi)quizGo(j+1);
   });
   $('qz-prev').addEventListener('click',()=>quizGo(qi-1));
@@ -3263,7 +3288,7 @@ function wrap(){
   window.saveQuestionnaire=function(...a){
     const r=save.apply(this,a);
     // Guarda también el rango exacto de alcohol (el puntaje del modelo no cambia).
-    if(window.questionnaireCompleted&&window._questionnaireAnswers){document.querySelectorAll('#questionnaire-form input[data-detalle]:checked').forEach(i=>{window._questionnaireAnswers[i.name+'_semana']=i.dataset.detalle;});if(typeof window.fxQuizExtras==='function')Object.assign(window._questionnaireAnswers,window.fxQuizExtras());}
+    if(window.questionnaireCompleted&&window._questionnaireAnswers){document.querySelectorAll('#questionnaire-form input[data-detalle]:checked').forEach(i=>{window._questionnaireAnswers[i.name+'_semana']=i.dataset.detalle;});if(typeof window.fxQuizExtras==='function')Object.assign(window._questionnaireAnswers,window.fxQuizExtras());if(typeof window.fxFollowupAnswers==='function')Object.assign(window._questionnaireAnswers,window.fxFollowupAnswers());}
     if(window.questionnaireCompleted){refreshLive();window.numedRefreshFlow?.();setTimeout(()=>$('evaluate-btn')?.scrollIntoView({behavior:REDUCE.matches?'auto':'smooth',block:'center'}),350);}
     return r;
   };
@@ -3286,6 +3311,95 @@ function boot(){
   $('fx-habit-prompt')?.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();window.openQuestionnaire();}});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+</script>
+
+<script id="numed-followups">
+/* ═══════════════════════════════════════════════════════════════
+   NUMED · Preguntas que se adaptan a las respuestas
+   Aparecen dentro de la misma pregunta solo cuando aplican.
+   No cambian el puntaje del modelo: se guardan como detalle en
+   el cuestionario (p. ej. fuma_cantidad, cronicas_cuales).
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+const FU={
+  fuma_actual:{when:'2',subs:[
+    {key:'fuma_cantidad',q:'¿Cuántos cigarrillos fuma al día, aproximadamente?',type:'one',opts:[['1-5','1 a 5'],['6-10','6 a 10'],['11-20','11 a 20'],['20+','Más de 20']]},
+    {key:'fuma_tipo',q:'¿Usa también vapeador o hookah?',type:'one',opts:[['no','No'],['vape','Vapeador'],['hookah','Hookah'],['ambos','Ambos']]}
+  ]},
+  ex_fumador:{when:'1',cond:()=>value('fuma_actual')!=='2',subs:[
+    {key:'ex_fumador_tiempo',q:'¿Hace cuánto dejó de fumar?',type:'one',opts:[['<1','Menos de 1 año'],['1-2','1 a 2 años'],['3-5','3 a 5 años']]}
+  ]},
+  cronicas:{when:'2',subs:[
+    {key:'cronicas_cuales',q:'¿Cuál o cuáles? Puede elegir varias.',type:'many',opts:[['hipertension','Hipertensión'],['diabetes','Diabetes'],['colesterol','Colesterol o triglicéridos altos'],['corazon','Enfermedad del corazón'],['respiratoria','Asma o EPOC'],['tiroides','Tiroides'],['renal','Enfermedad de los riñones'],['otra','Otra']]},
+    {key:'cronicas_control',q:'¿Lleva control con su médico?',type:'one',opts:[['si','Sí, al día'],['a_veces','A veces'],['no','No por ahora']]}
+  ]},
+  familia:{when:'1',subs:[
+    {key:'familia_cuales',q:'¿Qué condiciones? Puede elegir varias.',type:'many',opts:[['diabetes','Diabetes'],['hipertension','Hipertensión'],['corazon','Infarto o enfermedad del corazón'],['acv','Derrame cerebral (ACV)'],['cancer','Cáncer'],['otra','Otra']]}
+  ]}
+};
+const form=()=>document.getElementById('questionnaire-form');
+function value(name){return form()?.querySelector(`input[name="${name}"]:not([data-fu]):checked`)?.value??null;}
+const panels={};
+
+function build(name,cfg){
+  const item=form().querySelector(`input[name="${name}"]`)?.closest('.q-item');if(!item)return;
+  const box=document.createElement('div');box.className='q-fu';box.hidden=true;box.dataset.for=name;
+  const head=document.createElement('div');head.className='q-fu-head';head.innerHTML='<span>✦</span> Cuéntanos un poco más';box.append(head);
+  cfg.subs.forEach(s=>{
+    const g=document.createElement('fieldset');g.className='q-fu-group';g.dataset.key=s.key;g.dataset.type=s.type;
+    const lg=document.createElement('legend');lg.textContent=s.q;g.append(lg);
+    const wrap=document.createElement('div');wrap.className='q-fu-opts';
+    s.opts.forEach(([v,l])=>{const lab=document.createElement('label');lab.className='q-fu-opt';
+      const i=document.createElement('input');i.type=s.type==='many'?'checkbox':'radio';i.name='fu_'+s.key;i.value=v;i.dataset.fu=s.key;
+      lab.append(i,document.createTextNode(l));wrap.append(lab);});
+    g.append(wrap);box.append(g);
+  });
+  const act=document.createElement('div');act.className='q-fu-actions';
+  const skip=document.createElement('button');skip.type='button';skip.className='q-fu-skip';skip.textContent='Prefiero no decir';
+  const go=document.createElement('button');go.type='button';go.className='btn btn-primary q-fu-go';go.textContent='Continuar →';
+  skip.onclick=()=>{clear(box);next();};go.onclick=()=>next();
+  act.append(skip,go);box.append(act);
+  item.querySelector('.q-options').after(box);
+  panels[name]={box,cfg};
+}
+function clear(box){box.querySelectorAll('input').forEach(i=>i.checked=false);update(box);}
+function applies(name){const p=panels[name];return p&&value(name)===p.cfg.when&&(!p.cfg.cond||p.cfg.cond());}
+function complete(box){return [...box.querySelectorAll('.q-fu-group')].every(g=>g.querySelector('input:checked'));}
+function update(box){
+  const go=box.querySelector('.q-fu-go');const done=complete(box);
+  go.disabled=![...box.querySelectorAll('input')].some(i=>i.checked);
+  box.querySelectorAll('.q-fu-group').forEach(g=>g.classList.toggle('done',Boolean(g.querySelector('input:checked'))));
+  return done;
+}
+function next(){const cur=document.querySelector('#questionnaire-form .q-item.active');const items=[...form().querySelectorAll('.q-item')];const j=items.indexOf(cur);if(j>=0)window.fxQuizGo(j+1);}
+
+/* Llamado por el asistente cuando cambia una respuesta principal.
+   Devuelve true si la pregunta tiene un seguimiento visible (no avanzar solo). */
+window.fxFollowupToggle=function(name){
+  Object.keys(panels).forEach(n=>{const p=panels[n],show=applies(n);
+    if(p.box.hidden===show){p.box.hidden=!show;if(!show)p.box.querySelectorAll('input').forEach(i=>i.checked=false);else{p.box.classList.remove('in');void p.box.offsetWidth;p.box.classList.add('in');update(p.box);}}});
+  return Boolean(name&&applies(name));
+};
+/* Cambio dentro de un seguimiento: avanzar solo si todo es de una opción y está completo. */
+window.fxFollowupChange=function(input){
+  const box=input.closest('.q-fu');if(!box)return;const done=update(box);
+  const onlyOne=[...box.querySelectorAll('.q-fu-group')].every(g=>g.dataset.type==='one');
+  if(done&&onlyOne&&!matchMedia('(prefers-reduced-motion: reduce)').matches)setTimeout(next,520);
+};
+window.fxFollowupAnswers=function(){
+  const out={};
+  Object.keys(panels).forEach(n=>{if(!applies(n))return;
+    panels[n].box.querySelectorAll('.q-fu-group').forEach(g=>{const k=g.dataset.key,ch=[...g.querySelectorAll('input:checked')].map(i=>i.value);
+      if(ch.length)out[k]=g.dataset.type==='many'?ch:ch[0];});});
+  return out;
+};
+function init(){
+  if(!form())return;
+  Object.entries(FU).forEach(([n,c])=>build(n,c));
+  form().addEventListener('reset',()=>setTimeout(()=>window.fxFollowupToggle(null),0));
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
 
@@ -3346,7 +3460,7 @@ function planData(h){
   d.strength=lv;d.strengthRef=Boolean(lv&&lv.thresholds&&d.age>=10&&d.age<=99);
   d.first=(d.name||'').split(/\s+/)[0]||'';
   d.bio=bioAge(d);
-  const a={};for(const[k,x]of Object.entries(d.answers||{}))a[k]=(k.endsWith('_semana')||['sueno_dormir','sueno_despertar','sueno_descanso'].includes(k))?(x==null?null:String(x)):Number(x);d.answers=a;
+  const a={};for(const[k,x]of Object.entries(d.answers||{}))a[k]=Array.isArray(x)?x.map(String):x==null?null:(typeof x==='number'||/^-?\d+(\.\d+)?$/.test(String(x))&&!k.endsWith('_semana'))?Number(x):String(x);d.answers=a;
   return d;
 }
 
@@ -3441,8 +3555,17 @@ function buildPlan(d){
 
   /* Hábitos */
   const H=(icon,title,text)=>habits.push({icon,title,text});
-  if(A.fuma_actual===2)H('🚭','Dejar de fumar es el cambio con mayor impacto','Pide orientación al equipo NUMED: con acompañamiento profesional y tratamiento aumentan mucho las probabilidades de lograrlo.');
-  else if(A.ex_fumador===1)H('🚭','Sigue sin fumar','Mantenerte sin tabaco es un gran logro. Comenta tus antecedentes de consumo con tu médico.');
+  const CIG={'1-5':'1 a 5','6-10':'6 a 10','11-20':'11 a 20','20+':'más de 20'};
+  if(A.fuma_actual===2){
+    const c=CIG[A.fuma_cantidad],vape=A.fuma_tipo&&A.fuma_tipo!=='no';
+    H('🚭','Dejar de fumar es el cambio con mayor impacto',(c?`Nos contaste que fumas ${c} cigarrillos al día${vape?' y que también usas '+({vape:'vapeador',hookah:'hookah',ambos:'vapeador y hookah'}[A.fuma_tipo]):''}. `:'')+
+      (A.fuma_cantidad==='11-20'||A.fuma_cantidad==='20+'?'Con esa cantidad, el acompañamiento profesional marca una gran diferencia: existen tratamientos que reducen las ganas de fumar. ':'Cada cigarrillo menos cuenta, pero dejarlo por completo es lo que más protege tu corazón y tus pulmones. ')+
+      'Pide orientación al equipo NUMED para armar un plan y dejarlo'+(vape?`; ${({vape:'el vapeador también afecta',hookah:'la hookah también afecta',ambos:'el vapeador y la hookah también afectan'})[A.fuma_tipo]} tu salud.`:'.'));
+  }else if(A.ex_fumador===1){
+    if(A.ex_fumador_tiempo==='<1')H('🚭','Sigue sin fumar: ¡vas muy bien!','Llevas menos de un año sin fumar. Los primeros meses son los más retadores: identifica los momentos en que te dan ganas y pide apoyo si lo necesitas.');
+    else if(A.ex_fumador_tiempo)H('🚭','Sigue sin fumar',`Llevas ${A.ex_fumador_tiempo==='1-2'?'de 1 a 2':'de 3 a 5'} años sin fumar: tu cuerpo ya se está recuperando. Mantente así y comenta tus antecedentes con tu médico.`);
+    else H('🚭','Sigue sin fumar','Mantenerte sin tabaco es un gran logro. Comenta tus antecedentes de consumo con tu médico.');
+  }
   if(A.actividad===0){
     if(A.actividad_semana==='60-149')H('🏃','Ya vas a mitad de camino','Nos contaste que haces de 60 a 149 minutos por semana. Te faltan pocos minutos para la meta de 150: suma una o dos caminatas de 30 minutos.');
     else H('🏃','Muévete un poco más cada día','Meta: 150 minutos a la semana de actividad moderada. Puedes empezar con caminatas de 10 minutos después de cada comida e ir sumando.');
@@ -3465,8 +3588,20 @@ function buildPlan(d){
     else H('🍷','Reduce el alcohol','Busca tener varios días a la semana sin alcohol y alterna cada trago con un vaso de agua. Si te resulta difícil reducirlo, coméntalo con un profesional.');
   }
   if(A.alcohol===1&&A.alcohol_semana==='1-2')strengths.push('Tu consumo de alcohol es ocasional');
-  if(A.cronicas===2)H('🩺','Mantén el control de tus condiciones','Sigue tus citas y tratamientos al día y consulta antes de iniciar ejercicio intenso.');
-  if(A.familia===1)H('👪','Tus antecedentes familiares cuentan','Tener familiares con enfermedades crónicas hace aún más valioso el chequeo periódico. Coméntalos con tu médico.');
+  if(A.cronicas===2){
+    const TIP={hipertension:'mide tu presión con regularidad y reduce la sal',diabetes:'controla tu glucosa y mantén horarios regulares de comida',colesterol:'prefiere grasas saludables (aguacate, aceite de oliva, pescado) y limita frituras',corazon:'consulta con tu cardiólogo antes de iniciar ejercicio intenso',respiratoria:'ten tu inhalador a mano al hacer ejercicio',tiroides:'sigue tus controles de tiroides y toma tu tratamiento a la misma hora',renal:'pregunta a tu médico cuánta proteína y sal te conviene',otra:'sigue las indicaciones de tu médico'};
+    const NAME={hipertension:'hipertensión',diabetes:'diabetes',colesterol:'colesterol o triglicéridos altos',corazon:'enfermedad del corazón',respiratoria:'asma o EPOC',tiroides:'tiroides',renal:'enfermedad renal',otra:'otra condición'};
+    const list=Array.isArray(A.cronicas_cuales)?A.cronicas_cuales.filter(k=>TIP[k]):[];
+    let txt=list.length?`Para tu ${list.map(k=>NAME[k]).join(', ').replace(/, ([^,]*)$/,' y $1')}: ${list.map(k=>TIP[k]).join('; ')}.`:'Sigue tus citas y tratamientos al día y consulta antes de iniciar ejercicio intenso.';
+    if(A.cronicas_control==='no')txt+=' Nos contaste que ahora no llevas control médico: te recomendamos retomarlo pronto; el equipo NUMED puede orientarte.';
+    else if(A.cronicas_control==='a_veces')txt+=' Intenta no saltarte tus controles: la constancia es lo que más protege tu salud.';
+    H('🩺','Mantén el control de tus condiciones',txt);
+  }
+  if(A.familia===1){
+    const F={diabetes:'revisar tu glucosa periódicamente',hipertension:'tomarte la presión con regularidad',corazon:'revisar tu presión y tu colesterol',acv:'revisar tu presión y tu colesterol',cancer:'preguntar a tu médico qué chequeos preventivos te corresponden'};
+    const fl=Array.isArray(A.familia_cuales)?[...new Set(A.familia_cuales.map(k=>F[k]).filter(Boolean))]:[];
+    H('👪','Tus antecedentes familiares cuentan',fl.length?`Por tus antecedentes familiares, te conviene ${fl.join(', ').replace(/, ([^,]*)$/,' y $1')}. Coméntalos con tu médico en tu próxima consulta.`:'Tener familiares con enfermedades crónicas hace aún más valioso el chequeo periódico. Coméntalos con tu médico.');
+  }
 
   if(A.fuma_actual===0&&A.ex_fumador===0)strengths.push('No fumas');
   if(A.alcohol===0)strengths.push('No consumes alcohol');
