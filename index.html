@@ -620,6 +620,13 @@ body.numed-touch .q-opt{min-height:124px}
   .measures-grid .field input{font-size:44px;height:76px}
   .field input,.fx-choice{height:84px}
   .live-rows{grid-template-columns:1fr 1fr}
+  body .sleep-ui{grid-template-columns:1fr}
+  body .sleep-dial{max-width:400px;justify-self:center}
+  body .sleep-total b{font-size:56px}
+  body .sleep-step b{font-size:36px}
+  body .sleep-step button{width:72px}
+  body .sleep-rest-opts button{min-height:90px;font-size:22px}
+  body .sleep-time small,body .sleep-rest small{font-size:14px}
   .np-title{font-size:clamp(60px,9vw,110px)}
   .np-lede{font-size:22px}
   .np-ring{width:min(100%,290px)}
@@ -696,6 +703,53 @@ body.numed-touch .q-opt{min-height:124px}
 .rx-next b{font-size:16px}
 .rx-next p{font-size:14px;color:var(--muted);margin-top:3px;line-height:1.55}
 .rx-note{font-size:12px;color:var(--faint);line-height:1.6}
+
+/* Ayuda visual dentro de una pregunta (p. ej. qué es un trago) */
+.q-help{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:-8px 0 clamp(20px,3vh,32px)}
+.q-help .q-help-title,.q-help .q-help-note{grid-column:1/-1}
+@media(max-width:700px){.q-help{grid-template-columns:1fr}}
+.q-help>span{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:16px;background:#f4f8e7;border:1px solid #dfe8b8;font-size:clamp(13px,1vw,16px);font-weight:700;color:var(--text);line-height:1.25}
+.q-help>span i{font-style:normal;font-size:1.5em}
+.q-help>span small{display:block;font-size:.8em;font-weight:600;color:var(--muted)}
+.q-help>span>small{margin-left:2px}
+.q-help .q-help-title{background:none;border:0;padding:0 4px 0 0;color:var(--accent);font-size:12px;letter-spacing:1.5px;text-transform:uppercase}
+.q-help .q-help-note{width:100%;background:none;border:0;padding:2px 0 0;font-size:clamp(12px,.9vw,14px);font-weight:600;color:var(--muted)}
+.q-opt>span small{display:block;font-size:.7em;font-weight:600;color:var(--muted);margin-top:4px}
+.q-help>span:not(.q-help-title):not(.q-help-note){display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;padding:12px 16px}
+.q-help>span:not(.q-help-title):not(.q-help-note) i{grid-row:span 2}
+.q-help>span>small{margin:2px 0 0}
+.q-help .q-help-title,.q-help .q-help-note{display:block}
+.q-options.q-grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:700px){.q-options.q-grid-2{grid-template-columns:1fr}}
+
+/* Pregunta de sueño con reloj */
+.sleep-hidden{display:none!important}
+.sleep-ui{display:grid;grid-template-columns:minmax(220px,300px) 1fr;gap:clamp(20px,3vw,48px);align-items:center}
+.sleep-dial{position:relative;width:100%;aspect-ratio:1}
+.sleep-dial svg{width:100%;height:100%;overflow:visible}
+#sleep-arc{transition:stroke-dasharray .35s var(--ease),transform .35s var(--ease)}
+.sleep-tick-l{font:700 9px Montserrat,sans-serif;fill:#8fa1b4}
+.sleep-total{position:absolute;inset:0;display:grid;place-content:center;text-align:center;pointer-events:none}
+.sleep-total b{font-size:clamp(26px,2.4vw,40px);font-weight:800;letter-spacing:-1px;line-height:1}
+.sleep-total span{font-size:12px;color:var(--muted);font-weight:700;margin-top:4px}
+.sleep-total em{font-style:normal;margin-top:8px;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800;justify-self:center}
+.sleep-total em.ok{background:#f4f8e7;color:#56701a}.sleep-total em.warn{background:#fcf1dc;color:#8a5a0b}
+.sleep-side{display:grid;gap:clamp(16px,2.4vh,26px)}
+.sleep-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sleep-time,.sleep-rest{padding:16px 18px;border-radius:22px;background:#fff;border:2px solid var(--line);box-shadow:0 8px 24px -16px rgba(28,61,94,.25)}
+.sleep-time small,.sleep-rest small{display:block;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.sleep-step{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sleep-step b{font-size:clamp(22px,2vw,32px);font-weight:800;letter-spacing:-.5px;white-space:nowrap}
+.sleep-step button{flex:none;width:clamp(48px,3.6vw,58px);aspect-ratio:1;border-radius:50%;border:2px solid var(--line-2);background:var(--fill);color:var(--text);font:800 26px Montserrat,sans-serif;cursor:pointer;touch-action:manipulation;user-select:none;transition:transform .2s var(--spring),border-color .2s}
+.sleep-step button:active{transform:scale(.9);border-color:var(--lime);background:#f4f8e7}
+.sleep-rest-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sleep-rest-opts button{min-height:clamp(60px,6vh,76px);border-radius:18px;border:2px solid var(--line);background:var(--fill);font:700 clamp(15px,1.15vw,19px) Montserrat,sans-serif;color:var(--text);cursor:pointer;transition:all .3s var(--spring)}
+.sleep-rest-opts button[aria-pressed="true"]{border-color:var(--lime);background:#f4f8e7;box-shadow:var(--glow)}
+.sleep-rest-opts button:active{transform:scale(.95)}
+@media(max-width:900px){.sleep-ui{grid-template-columns:1fr}.sleep-dial{max-width:260px;justify-self:center}}
+@media(max-width:560px){.sleep-row{grid-template-columns:1fr}}
+.sleep-tick-l{font-size:11px}
+.q-item{overflow-y:auto;justify-content:safe center;padding-bottom:8px}
 
 </style>
 </head>
@@ -871,20 +925,37 @@ body.numed-touch .q-opt{min-height:124px}
 
                 <div class="q-item">
                     <p class="q-num">03</p>
-                    <p class="q-text">¿Cuál es su consumo de alcohol?</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="alcohol" value="0"> Ninguno</label>
-                        <label class="q-opt"><input type="radio" name="alcohol" value="1"> Moderado (≤1 trago/día)</label>
-                        <label class="q-opt"><input type="radio" name="alcohol" value="2"> Alto (&gt;1 trago/día)</label>
+                    <p class="q-text">En una semana normal, ¿cuántos tragos de alcohol toma en total?</p>
+                    <div class="q-help" aria-label="Qué cuenta como un trago">
+                        <span class="q-help-title">1 trago equivale a:</span>
+                        <span><i>🍺</i>1 cerveza pequeña<small>12 oz · 355 ml</small></span>
+                        <span><i>🍷</i>1 copa de vino<small>5 oz · 150 ml</small></span>
+                        <span><i>🥃</i>1 trago de ron, whisky o vodka<small>1.5 oz · 45 ml</small></span>
+                        <span class="q-help-note">Una cerveza grande (650 ml) cuenta como 2 tragos.</span>
+                    </div>
+                    <div class="q-options q-grid-2">
+                        <label class="q-opt"><input type="radio" name="alcohol" value="0" data-detalle="0"> <span>No tomo alcohol<small>Ningún trago en la semana</small></span></label>
+                        <label class="q-opt"><input type="radio" name="alcohol" value="1" data-detalle="1-2"> <span>1 a 2 tragos por semana<small>Consumo ocasional</small></span></label>
+                        <label class="q-opt"><input type="radio" name="alcohol" value="2" data-detalle="3-6"> <span>3 a 6 tragos por semana<small>Menos de 1 al día en promedio</small></span></label>
+                        <label class="q-opt"><input type="radio" name="alcohol" value="2" data-detalle="7+"> <span>7 o más tragos por semana<small>1 o más al día en promedio</small></span></label>
                     </div>
                 </div>
 
                 <div class="q-item">
                     <p class="q-num">04</p>
-                    <p class="q-text">¿Realiza actividad física aeróbica de al menos 150 minutos por semana?</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="actividad" value="-2"> Sí, regularmente</label>
-                        <label class="q-opt"><input type="radio" name="actividad" value="0"> No</label>
+                    <p class="q-text">En una semana normal, ¿cuántos minutos en total hace actividad física moderada?</p>
+                    <div class="q-help" aria-label="Qué cuenta como actividad moderada">
+                        <span class="q-help-title">Cuente la actividad que acelera su respiración, pero le permite hablar:</span>
+                        <span><i>🚶</i>Caminar a paso rápido<small>Ir al trabajo, al colmado o pasear</small></span>
+                        <span><i>🚴</i>Bicicleta, nadar o bailar<small>Por diversión o como transporte</small></span>
+                        <span><i>⚽</i>Deportes, gimnasio o clases<small>Correr, pelota, aeróbicos</small></span>
+                        <span class="q-help-note">Como referencia: 30 minutos, 5 días a la semana = 150 minutos.</span>
+                    </div>
+                    <div class="q-options q-grid-2">
+                        <label class="q-opt"><input type="radio" name="actividad" value="0" data-detalle="0-59"> <span>Menos de 60 minutos<small>Casi no hago actividad física</small></span></label>
+                        <label class="q-opt"><input type="radio" name="actividad" value="0" data-detalle="60-149"> <span>De 60 a 149 minutos<small>Algunos días a la semana</small></span></label>
+                        <label class="q-opt"><input type="radio" name="actividad" value="-2" data-detalle="150-299"> <span>De 150 a 299 minutos<small>Cumplo la meta semanal</small></span></label>
+                        <label class="q-opt"><input type="radio" name="actividad" value="-2" data-detalle="300+"> <span>300 minutos o más<small>Muy activo/a casi todos los días</small></span></label>
                     </div>
                 </div>
 
@@ -899,11 +970,42 @@ body.numed-touch .q-opt{min-height:124px}
 
                 <div class="q-item">
                     <p class="q-num">06</p>
-                    <p class="q-text">¿Duerme entre 7 y 9 horas por noche de forma habitual?</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="sueno" value="-1"> Sí, duermo bien</label>
-                        <label class="q-opt"><input type="radio" name="sueno" value="1"> No, duermo menos o más</label>
+                    <p class="q-text">¿A qué hora se duerme y se levanta normalmente?</p>
+                    <div class="sleep-ui" id="sleep-ui">
+                      <div class="sleep-dial" aria-hidden="true">
+                        <svg viewBox="-34 -14 308 270">
+                          <circle cx="120" cy="120" r="96" fill="none" stroke="#e8eff4" stroke-width="20"/>
+                          <circle id="sleep-arc" cx="120" cy="120" r="96" fill="none" stroke="url(#fxGrad)" stroke-width="20" stroke-linecap="round" stroke-dasharray="0 603.2" transform="rotate(-90 120 120)"/>
+                          <g class="sleep-ticks"></g>
+                          <text x="120" y="2" text-anchor="middle" class="sleep-tick-l">12 a.m.</text>
+                          <text x="232" y="124" text-anchor="start" class="sleep-tick-l">6 a.m.</text>
+                          <text x="120" y="246" text-anchor="middle" class="sleep-tick-l">12 p.m.</text>
+                          <text x="8" y="124" text-anchor="end" class="sleep-tick-l">6 p.m.</text>
+                          <g id="sleep-moon"><circle r="17" fill="#244a6f"/><text y="6" text-anchor="middle" font-size="17">🌙</text></g>
+                          <g id="sleep-sun"><circle r="17" fill="#fff" stroke="#b1c959" stroke-width="3"/><text y="6" text-anchor="middle" font-size="17">☀️</text></g>
+                        </svg>
+                        <div class="sleep-total"><b id="sleep-hours">8 h</b><span>de sueño</span><em id="sleep-flag"></em></div>
+                      </div>
+                      <div class="sleep-side">
+                        <div class="sleep-row">
+                          <div class="sleep-time"><small>🌙 Me duermo a las</small><div class="sleep-step"><button type="button" data-t="bed" data-d="-15" aria-label="Más temprano">−</button><b id="sleep-bed">10:30 p. m.</b><button type="button" data-t="bed" data-d="15" aria-label="Más tarde">+</button></div></div>
+                          <div class="sleep-time"><small>☀️ Me levanto a las</small><div class="sleep-step"><button type="button" data-t="wake" data-d="-15" aria-label="Más temprano">−</button><b id="sleep-wake">6:30 a. m.</b><button type="button" data-t="wake" data-d="15" aria-label="Más tarde">+</button></div></div>
+                        </div>
+                        <div class="sleep-rest">
+                          <small>¿Se levanta descansado/a?</small>
+                          <div class="sleep-rest-opts" role="group" aria-label="Descanso">
+                            <button type="button" data-rest="si" aria-pressed="false">😊 Sí</button>
+                            <button type="button" data-rest="a_veces" aria-pressed="false">😐 A veces</button>
+                            <button type="button" data-rest="no" aria-pressed="false">😩 No</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                    <div class="q-options sleep-hidden" aria-hidden="true">
+                        <label class="q-opt"><input type="radio" name="sueno" value="-1" tabindex="-1"> Duerme 7 a 9 horas y descansa</label>
+                        <label class="q-opt"><input type="radio" name="sueno" value="1" tabindex="-1"> Duerme menos de 7, más de 9 o no descansa</label>
+                    </div>
+
                 </div>
 
                 <div class="q-item">
@@ -2988,6 +3090,8 @@ function wrap(){
   const save=window.saveQuestionnaire;
   window.saveQuestionnaire=function(...a){
     const r=save.apply(this,a);
+    // Guarda también el rango exacto de alcohol (el puntaje del modelo no cambia).
+    if(window.questionnaireCompleted&&window._questionnaireAnswers){document.querySelectorAll('#questionnaire-form input[data-detalle]:checked').forEach(i=>{window._questionnaireAnswers[i.name+'_semana']=i.dataset.detalle;});if(typeof window.fxQuizExtras==='function')Object.assign(window._questionnaireAnswers,window.fxQuizExtras());}
     if(window.questionnaireCompleted){refreshLive();window.numedRefreshFlow?.();setTimeout(()=>$('evaluate-btn')?.scrollIntoView({behavior:REDUCE.matches?'auto':'smooth',block:'center'}),350);}
     return r;
   };
@@ -3041,7 +3145,7 @@ function planData(h){
   let lv=null;try{lv=calculateStrengthLevel(d.age,d.sex,d.grip);}catch(e){}
   d.strength=lv;d.strengthRef=Boolean(lv&&lv.thresholds&&d.age>=10&&d.age<=99);
   d.first=(d.name||'').split(/\s+/)[0]||'';
-  const a={};for(const[k,x]of Object.entries(d.answers||{}))a[k]=Number(x);d.answers=a;
+  const a={};for(const[k,x]of Object.entries(d.answers||{}))a[k]=(k.endsWith('_semana')||['sueno_dormir','sueno_despertar','sueno_descanso'].includes(k))?(x==null?null:String(x)):Number(x);d.answers=a;
   return d;
 }
 
@@ -3138,20 +3242,36 @@ function buildPlan(d){
   const H=(icon,title,text)=>habits.push({icon,title,text});
   if(A.fuma_actual===2)H('🚭','Dejar de fumar es el cambio con mayor impacto','Pide orientación al equipo NUMED: con acompañamiento profesional y tratamiento aumentan mucho las probabilidades de lograrlo.');
   else if(A.ex_fumador===1)H('🚭','Sigue sin fumar','Mantenerte sin tabaco es un gran logro. Comenta tus antecedentes de consumo con tu médico.');
-  if(A.actividad===0)H('🏃','Muévete un poco más cada día','Meta: 150 minutos a la semana de actividad moderada. Puedes empezar con caminatas de 10 minutos después de cada comida.');
+  if(A.actividad===0){
+    if(A.actividad_semana==='60-149')H('🏃','Ya vas a mitad de camino','Nos contaste que haces de 60 a 149 minutos por semana. Te faltan pocos minutos para la meta de 150: suma una o dos caminatas de 30 minutos.');
+    else H('🏃','Muévete un poco más cada día','Meta: 150 minutos a la semana de actividad moderada. Puedes empezar con caminatas de 10 minutos después de cada comida e ir sumando.');
+  }
   if(A.fuerza_q===0&&!(d.strengthRef&&['Bajo','Medio'].includes(d.strength?.level)))H('🏋️','Suma 2 días de fuerza','Ejercicios con tu propio peso o bandas elásticas, dos veces por semana, ayudan a conservar tu músculo.');
   if(A.dieta===0)H('🥗','Llena medio plato de vegetales','Incluye frutas y vegetales en cada comida, legumbres varias veces por semana y prefiere agua en lugar de bebidas azucaradas.');
-  if(A.sueno===1)H('😴','Cuida tu descanso','Intenta dormir de 7 a 9 horas: acuéstate y levántate a la misma hora y deja las pantallas 30 minutos antes de dormir. Si te cuesta descansar con frecuencia, coméntalo con el equipo.');
+  const sh=Number.isFinite(A.sueno_horas)?A.sueno_horas:null,shTxt=sh!==null?(Math.floor(sh)+' h'+(Math.round(sh%1*60)?' '+Math.round(sh%1*60)+' min':'')):'';
+  const rest=A.sueno_descanso;
+  if(A.sueno===1){
+    if(sh!==null&&sh<7&&rest==='si')H('😴','Regálate un poco más de sueño',`Duermes alrededor de ${shTxt} y te levantas descansado/a, ¡bien! Aun así, dormir menos de 7 horas de forma habitual se asocia con más cansancio acumulado y menor recuperación. Intenta adelantar tu hora de dormir 15 a 30 minutos.`);
+    else if(sh!==null&&sh<7)H('😴','Tu cuerpo necesita más descanso',`Duermes alrededor de ${shTxt} y no siempre te levantas descansado/a. Apunta a 7 horas o más: acuéstate y levántate a la misma hora y deja las pantallas 30 minutos antes de dormir.`);
+    else if(sh!==null&&sh>9)H('😴','Revisa la calidad de tu sueño',`Duermes alrededor de ${shTxt}, más de lo habitual. Si aun así te sientes cansado/a durante el día, coméntalo con el equipo NUMED.`);
+    else if(sh!==null&&rest==='no')H('😴','Duermes suficiente, pero no descansas',`Duermes alrededor de ${shTxt}, pero te levantas cansado/a. La calidad del sueño importa tanto como las horas: si roncas, te despiertas varias veces o pasa con frecuencia, coméntalo con el equipo NUMED.`);
+    else H('😴','Cuida tu descanso','Intenta dormir de 7 a 9 horas: acuéstate y levántate a la misma hora y deja las pantallas 30 minutos antes de dormir. Si te cuesta descansar con frecuencia, coméntalo con el equipo.');
+  }else if(rest==='a_veces')H('😴','Afina la calidad de tu descanso',`Duermes alrededor de ${shTxt}, un buen tiempo. Como solo a veces te levantas descansado/a, cuida tu rutina: misma hora para dormir, cuarto oscuro y sin pantallas antes de acostarte.`);
   if(A.estres===1)H('🧘','Dale un respiro a tu mente','Prueba 5 minutos diarios de respiración lenta, una caminata al aire libre o una actividad que disfrutes. Si el estrés afecta tu día a día, pide apoyo.');
-  if(A.alcohol===2)H('🍷','Reduce el alcohol','Busca tener varios días a la semana sin alcohol y alterna cada trago con un vaso de agua. Si te resulta difícil reducirlo, coméntalo con un profesional.');
+  if(A.alcohol===2){
+    if(A.alcohol_semana==='3-6')H('🍷','Baja tu consumo de alcohol','Nos contaste que tomas de 3 a 6 tragos por semana. Bajar a 2 o menos reduce el riesgo para tu salud: elige días sin alcohol y alterna cada trago con un vaso de agua.');
+    else if(A.alcohol_semana==='7+')H('🍷','Reducir el alcohol es una prioridad','Nos contaste que tomas 7 o más tragos por semana, un nivel de riesgo alto. Redúcelo poco a poco, con días sin alcohol, y coméntalo con el equipo NUMED. Si te resulta difícil, pide apoyo: es un paso valiente.');
+    else H('🍷','Reduce el alcohol','Busca tener varios días a la semana sin alcohol y alterna cada trago con un vaso de agua. Si te resulta difícil reducirlo, coméntalo con un profesional.');
+  }
+  if(A.alcohol===1&&A.alcohol_semana==='1-2')strengths.push('Tu consumo de alcohol es ocasional');
   if(A.cronicas===2)H('🩺','Mantén el control de tus condiciones','Sigue tus citas y tratamientos al día y consulta antes de iniciar ejercicio intenso.');
   if(A.familia===1)H('👪','Tus antecedentes familiares cuentan','Tener familiares con enfermedades crónicas hace aún más valioso el chequeo periódico. Coméntalos con tu médico.');
 
   if(A.fuma_actual===0&&A.ex_fumador===0)strengths.push('No fumas');
   if(A.alcohol===0)strengths.push('No consumes alcohol');
-  if(A.actividad===-2)strengths.push('Haces actividad física regularmente');
+  if(A.actividad===-2)strengths.push(A.actividad_semana==='300+'?'Haces 300 minutos o más de actividad física por semana':'Cumples la meta de 150 minutos de actividad física');
   if(A.fuerza_q===-1)strengths.push('Entrenas fuerza cada semana');
-  if(A.sueno===-1)strengths.push('Duermes de 7 a 9 horas');
+  if(A.sueno===-1)strengths.push(rest==='si'&&sh!==null?`Duermes ${shTxt} y te levantas descansado/a`:'Duermes de 7 a 9 horas');
   if(A.dieta===-1)strengths.push('Tu alimentación incluye frutas, vegetales y proteína');
   if(A.estres===0)strengths.push('Manejas bien tu nivel de estrés');
 
@@ -3161,7 +3281,7 @@ function buildPlan(d){
   if(A.fuma_actual===2)first={icon:'🚭',title:'Dejar de fumar',text:'Es el cambio que más beneficios trae a tu salud. Pide hoy mismo orientación al equipo NUMED.'};
   else if(by('cintura')?.status==='revisar')first={icon:'📏',title:'Cuidar tu cintura',text:'Agenda una conversación con el equipo NUMED y empieza con caminatas diarias de 30 minutos.'};
   else if(by('fuerza')?.status==='mejora')first={icon:'💪',title:'Fortalecer tus músculos',text:'Empieza esta semana con 2 sesiones cortas de ejercicios de fuerza, como sentadillas desde una silla.'};
-  else if(A.actividad===0)first={icon:'🏃',title:'Moverte más',text:'Empieza con 10 minutos de caminata después de cada comida y ve aumentando poco a poco.'};
+  else if(A.actividad===0)first={icon:'🏃',title:'Moverte más',text:A.actividad_semana==='60-149'?'Ya tienes una base: suma una o dos caminatas de 30 minutos por semana para llegar a 150 minutos.':'Empieza con 10 minutos de caminata después de cada comida y ve aumentando poco a poco.'};
   else if(by('cintura')?.status==='mejora')first={icon:'📏',title:'Cuidar tu cintura',text:'Camina a paso rápido 30 minutos al día y cambia las bebidas azucaradas por agua.'};
   else if(by('imc')?.status==='revisar')first={icon:'⚖️',title:'Revisar tu peso en contexto',text:'Conversa con el equipo NUMED para definir un plan de alimentación a tu medida.'};
   else if(habits.length)first={icon:habits[0].icon,title:habits[0].title,text:habits[0].text};
@@ -3299,6 +3419,63 @@ window.downloadPDF=function(){
   const safe=(d.name||'participante').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_|_$/g,'');
   doc.save(`NUMED_Reporte_${safe}_${String(d.date||'').slice(0,10)||'evaluacion'}.pdf`);
 };
+})();
+</script>
+
+<script id="numed-sleep-clock">
+/* Pregunta de sueño con reloj. El puntaje del modelo sigue siendo el campo "sueno":
+   -1 si duerme de 7 a 9 horas y no se levanta cansado/a; 1 en cualquier otro caso.
+   Se guardan además la hora de dormir, la de levantarse, las horas y el descanso. */
+(function(){
+const $=id=>document.getElementById(id);
+const C=2*Math.PI*96;
+const st={bed:22*60+30,wake:6*60+30,rest:null};
+const fmtT=m=>{m=((m%1440)+1440)%1440;const h=Math.floor(m/60),mi=m%60,h12=((h+11)%12)+1;return `${h12}:${String(mi).padStart(2,'0')} ${h<12?'a. m.':'p. m.'}`;};
+const hhmm=m=>{m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');};
+const dur=()=>((st.wake-st.bed)%1440+1440)%1440;
+function pos(m){const a=(m/1440)*2*Math.PI-Math.PI/2;return [120+96*Math.cos(a),120+96*Math.sin(a)];}
+function score(){const h=dur()/60;return (h>=7&&h<=9&&st.rest!=='no')?'-1':'1';}
+function draw(){
+  const d=dur(),h=d/60;
+  $('sleep-bed').textContent=fmtT(st.bed);$('sleep-wake').textContent=fmtT(st.wake);
+  $('sleep-hours').textContent=`${Math.floor(d/60)} h${d%60?' '+(d%60)+' min':''}`;
+  const arc=$('sleep-arc');arc.setAttribute('stroke-dasharray',`${Math.max(.01,d/1440*C)} ${C}`);
+  arc.setAttribute('transform',`rotate(${st.bed/1440*360-90} 120 120)`);
+  arc.setAttribute('stroke',h>=7&&h<=9?'url(#fxGrad)':'#e3b25a');
+  const [bx,by]=pos(st.bed),[wx,wy]=pos(st.wake);
+  $('sleep-moon').setAttribute('transform',`translate(${bx} ${by})`);$('sleep-sun').setAttribute('transform',`translate(${wx} ${wy})`);
+  const f=$('sleep-flag');f.textContent=h<7?'Menos de 7 h':h>9?'Más de 9 h':'Entre 7 y 9 h';f.className=h>=7&&h<=9?'ok':'warn';
+  document.querySelectorAll('.sleep-rest-opts button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rest===st.rest)));
+}
+function commit(fromRest){
+  if(!st.rest)return;
+  const v=score(),r=document.querySelector(`#questionnaire-form input[name="sueno"][value="${v}"]`);
+  if(!r)return;
+  if(fromRest){r.checked=true;r.dispatchEvent(new Event('change',{bubbles:true}));}
+  else if(!r.checked){r.checked=true;if(window.questionnaireCompleted&&typeof numedInvalidateQuestionnaire==='function')numedInvalidateQuestionnaire();window.fxRefreshUI&&window.fxRefreshUI();}
+}
+window.fxQuizExtras=function(){
+  return {sueno_dormir:hhmm(st.bed),sueno_despertar:hhmm(st.wake),sueno_horas:Math.round(dur()/60*100)/100,sueno_descanso:st.rest||null};
+};
+function init(){
+  if(!$('sleep-ui'))return;
+  const ticks=document.querySelector('.sleep-ticks');
+  for(let i=0;i<24;i++){const a=i/24*2*Math.PI-Math.PI/2,r1=i%6?80:76,r2=84;const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',120+r1*Math.cos(a));l.setAttribute('y1',120+r1*Math.sin(a));l.setAttribute('x2',120+r2*Math.cos(a));l.setAttribute('y2',120+r2*Math.sin(a));
+    l.setAttribute('stroke',i%6?'#cdd8e2':'#8fa1b4');l.setAttribute('stroke-width',i%6?1.5:2.5);l.setAttribute('stroke-linecap','round');ticks.append(l);}
+  let timer=0,iv=0;
+  const step=b=>{st[b.dataset.t]=((st[b.dataset.t]+Number(b.dataset.d))%1440+1440)%1440;draw();commit(false);};
+  document.querySelectorAll('.sleep-step button').forEach(b=>{
+    b.addEventListener('pointerdown',e=>{e.preventDefault();step(b);timer=setTimeout(()=>{iv=setInterval(()=>step(b),110);},420);});
+    const stop=()=>{clearTimeout(timer);clearInterval(iv);};
+    ['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,stop));
+    b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();step(b);}});
+  });
+  document.querySelectorAll('.sleep-rest-opts button').forEach(b=>b.addEventListener('click',()=>{st.rest=b.dataset.rest;draw();commit(true);}));
+  $('questionnaire-form')?.addEventListener('reset',()=>{st.bed=22*60+30;st.wake=6*60+30;st.rest=null;setTimeout(draw,0);});
+  draw();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
 
