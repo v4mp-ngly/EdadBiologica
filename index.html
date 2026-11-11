@@ -845,6 +845,22 @@ body.numed-touch .q-opt{min-height:124px}
 .np-take-qr[data-state="ready"] .np-take-qrbox{animation:fx-pop .7s var(--spring)}
 @media(orientation:portrait) and (min-height:1400px){.np-take-qrbox{width:340px}}
 
+/* Edad biológica en la vista del participante */
+.np-bio{display:grid;grid-template-columns:minmax(0,.7fr) auto minmax(0,1.6fr);gap:16px;align-items:stretch}
+.np-bio-box{border-radius:var(--r-xl);padding:clamp(18px,1.8vw,28px);background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.np-bio-box small{font-size:12px;font-weight:800;letter-spacing:1.5px;color:var(--muted)}
+.np-bio-box b{font-size:clamp(48px,4.4vw,80px);font-weight:800;letter-spacing:-3px;line-height:1}
+.np-bio-box span{font-size:14px;font-weight:700;color:var(--muted)}
+.np-bio-main{background:var(--navy);border-color:var(--navy);color:#fff}
+.np-bio-main small{color:#d7e59a}.np-bio-main span{color:#cfe0ee}
+.np-bio-main b{color:#d7e59a}
+.np-bio-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.np-bio-main em{font-style:normal;align-self:center;padding:8px 14px;border-radius:999px;font-size:14px;font-weight:800;background:var(--lime);color:var(--text)}
+.np-bio-main em[data-tone="warn"]{background:#e3b25a}
+.np-bio-main p{font-size:clamp(14px,1.05vw,17px);line-height:1.55;color:#dbe5ef;margin-top:4px}
+.np-bio-arrow{display:grid;place-items:center;font-size:34px;color:var(--lime);animation:arrow-nudge 1.8s ease-in-out infinite}
+@media(max-width:800px){.np-bio{grid-template-columns:1fr}.np-bio-arrow{display:none}}
+
 </style>
 </head>
 <body data-k-stage="1" data-dir="fwd">
@@ -2606,7 +2622,11 @@ function numedRunResearchTests(){const base={age:35,sex:'masculino',weightKg:70,
    <article class="np-metric" data-k="grip"><span class="np-icon">💪</span><span class="np-label">Fuerza de agarre</span><div class="np-ring"></div><strong id="np-grip">—</strong><small>kilogramos</small><span class="np-chip"></span></article>
    <article class="np-metric" data-k="waist"><span class="np-icon">🌿</span><span class="np-label">Cintura</span><div class="np-ring"></div><strong id="np-waist">—</strong><small>centímetros</small><span class="np-chip"></span></article>
   </div>
-  <div class="np-disclaimer"><strong>Edad biológica:</strong> pendiente de validación del modelo. Consulta tus resultados con el personal NUMED.</div>
+  <div class="np-bio" aria-live="polite">
+   <div class="np-bio-box"><small>EDAD CRONOLÓGICA</small><b id="np-bio-chrono">—</b><span>años</span></div>
+   <div class="np-bio-arrow" aria-hidden="true">→</div>
+   <div class="np-bio-box np-bio-main"><small>TU EDAD BIOLÓGICA · MODELO NUMED</small><div class="np-bio-row"><b id="np-bio-age">—</b><span>años</span><em id="np-bio-tag" hidden></em></div><p id="np-bio-text"></p></div>
+  </div>
   <div class="np-share np-take">
    <div class="np-take-intro"><span class="np-kicker">LLÉVATE TU EXPERIENCIA</span><h3>Todo en tu celular, con un solo código</h3>
     <ol class="np-take-steps">
@@ -2653,6 +2673,7 @@ function numedRunResearchTests(){const base={age:35,sex:'masculino',weightKg:70,
      <small>2 · ¿TE GUSTA?</small>
      <label class="bo-consent"><input type="checkbox" id="bo-insta"><span><b>Autorizo a NUMED a publicar esta foto en sus historias de Instagram.</b>Es opcional. Puedes llevarte tu foto aunque no marques esta casilla, y puedes retirar tu permiso cuando quieras escribiéndole a NUMED.</span></label>
      <button type="button" class="btn btn-primary" id="bo-keep">✓ Usar esta foto</button>
+     <button type="button" class="btn btn-outline" id="bo-flip">↔ Voltear foto</button>
      <button type="button" class="btn btn-outline" id="bo-retake">↺ Repetir</button>
     </div>
     <div class="bo-step" id="bo-step-done" hidden>
@@ -3273,12 +3294,40 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    NUMED · Plan personalizado y reporte PDF
    Mismos umbrales que la versión anterior (IMC 18.5/25/30, cintura/talla
    0.50/0.60, tabla interna de fuerza). Solo cambia el mensaje y la forma.
-   Nunca muestra ni exporta una edad biológica.
+   Incluye la edad biológica del modelo NUMED (confirmada) cuando el cálculo está disponible.
    ═══════════════════════════════════════════════════════════════ */
 (function(){
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=(n,d=1)=>Number(n).toFixed(d);
+
+/* ── Edad biológica (modelo NUMED) ── */
+function bioAge(d){
+  try{
+    if(!window.NUMED_EXP||!(d.age>0))return null;
+    const answers={};for(const k of NUMED_EXP.REQUIRED){const x=(d.answers||{})[k];if(x!=null&&x!=='')answers[k]=Number(x);}
+    const r=NUMED_EXP.evaluate({age:d.age,sex:d.sex,weightKg:d.weight,heightCm:d.height,waistCm:d.waist,gripKg:d.grip,answers});
+    return r.status==='experimental'&&Number.isFinite(r.hypotheticalAge)?Math.round(r.hypotheticalAge):null;
+  }catch(e){return null;}
+}
+function bioText(d){
+  if(d.bio==null)return 'La edad biológica no está disponible para esta evaluación. Consulta al equipo NUMED.';
+  const g=d.bio-d.age,n=Math.abs(g),y=n===1?'año':'años';
+  return g<0?`Tu edad biológica es ${n} ${y} menor que tu edad cronológica. ¡Tus hábitos te están cuidando!`
+    :g>0?`Tu edad biológica es ${n} ${y} mayor que tu edad cronológica. Los pasos de este plan pueden ayudarte a mejorarla.`
+    :'Tu edad biológica coincide con tu edad cronológica. Con este plan puedes seguir mejorándola.';
+}
+window.fxBioAge=()=>planData().bio;
+document.addEventListener('DOMContentLoaded',()=>{
+  const open=window.numedOpenParticipantResult;if(!open)return;
+  window.numedOpenParticipantResult=function(...a){const r=open.apply(this,a);try{const d=planData();
+    const set=(id,t)=>{const e=$(id);if(e)e.textContent=t;};
+    set('np-bio-chrono',d.age||'—');set('np-bio-age',d.bio!=null?d.bio:'—');set('np-bio-text',bioText(d));
+    const tag=$('np-bio-tag');if(tag){if(d.bio!=null&&d.age){const g=d.bio-d.age;tag.textContent=g<0?`${-g} ${g===-1?'año':'años'} menos`:g>0?`${g} ${g===1?'año':'años'} más`:'Igual a tu edad';tag.dataset.tone=g<=0?'good':'warn';tag.hidden=false;}else tag.hidden=true;}
+    const n=$('np-bio-age');if(n&&d.bio!=null&&window.fxCountTo)setTimeout(()=>window.fxCountTo(n,d.bio,{dur:2200,from:d.age||0}),700);
+  }catch(e){}return r;};
+});
+window.fxBioText=d=>bioText(d||planData());
 
 /* ── Datos: del formulario actual o de un registro del historial ── */
 function planData(h){
@@ -3296,6 +3345,7 @@ function planData(h){
   let lv=null;try{lv=calculateStrengthLevel(d.age,d.sex,d.grip);}catch(e){}
   d.strength=lv;d.strengthRef=Boolean(lv&&lv.thresholds&&d.age>=10&&d.age<=99);
   d.first=(d.name||'').split(/\s+/)[0]||'';
+  d.bio=bioAge(d);
   const a={};for(const[k,x]of Object.entries(d.answers||{}))a[k]=(k.endsWith('_semana')||['sueno_dormir','sueno_despertar','sueno_descanso'].includes(k))?(x==null?null:String(x)):Number(x);d.answers=a;
   return d;
 }
@@ -3461,7 +3511,7 @@ function renderPlan(p){
    <section class="rx-block"><h5>Lo que dicen tus mediciones</h5><div class="rx-grid">${p.areas.map(area).join('')}</div></section>
    ${p.habits.length?`<section class="rx-block"><h5>Tus hábitos, paso a paso</h5><div class="rx-habits">${p.habits.map(h=>`<article><span>${h.icon}</span><div><b>${esc(h.title)}</b><p>${esc(h.text)}</p></div></article>`).join('')}</div></section>`:''}
    <section class="rx-next"><span>🗓️</span><div><b>Tu próximo paso</b><p>Comenta estos resultados con el equipo NUMED y repite esta evaluación en 3 a 6 meses para ver tu progreso.</p></div></section>
-   <p class="rx-note">Recomendaciones educativas basadas en tus mediciones y respuestas. No sustituyen una consulta médica ni corresponden a una edad biológica.</p>
+   <p class="rx-note">Recomendaciones educativas basadas en tus mediciones y respuestas. No sustituyen una consulta médica.</p>
   </div>`;
 }
 window.fxBuildPlan=d=>buildPlan(planData(d));
@@ -3517,6 +3567,20 @@ function buildReport(hist){
   // contadores
   const cy0=y-9;[[p.strengths.length,'fortalezas',C.limeTint,C.limeDark],[p.opps,'pasos sugeridos',C.navyTint,C.navy]].forEach(([n,l,bg,fg],i)=>{const x=W-M-50+i*26;fill(bg);doc.roundedRect(x,cy0,24,20,3,3,'F');font(17,'bold',fg);doc.text(String(n),x+12,cy0+10,{align:'center'});font(6.8,'bold',C.muted);doc.text(l,x+12,cy0+16,{align:'center'});});
   y+=intro.length*lh(9.8)+8;
+
+  /* ── Edad biológica ── */
+  {need(44);const bh=38,bw2=58,x0=M;
+   fill(C.navyTint);doc.roundedRect(x0,y,bw2,bh,4,4,'F');
+   font(7.5,'bold',C.muted);doc.text('EDAD CRONOLÓGICA',x0+6,y+8,{charSpace:.3});
+   font(30,'bold',C.ink);doc.text(d.age?String(d.age):'—',x0+6,y+24);font(9,'normal',C.muted);doc.text('años',x0+6,y+31);
+   const x1=x0+bw2+5;fill(C.navy);doc.roundedRect(x1,y,CW-bw2-5,bh,4,4,'F');fill(C.lime);doc.roundedRect(x1,y,3,bh,1.5,1.5,'F');
+   font(7.5,'bold',C.lime);doc.text('TU EDAD BIOLÓGICA · MODELO NUMED',x1+9,y+8,{charSpace:.3});
+   font(34,'bold',C.white);const bv=d.bio!=null?String(d.bio):'—';doc.text(bv,x1+9,y+25);const bvw=doc.getTextWidth(bv);
+   font(10,'normal',[214,226,238]);doc.text('años',x1+11+bvw,y+25);
+   if(d.bio!=null&&d.age){const g=d.bio-d.age;const tag=g<0?`${Math.abs(g)} ${Math.abs(g)===1?'año':'años'} menos`:g>0?`${g} ${g===1?'año':'años'} más`:'Igual a tu edad';
+     font(8.5,'bold',C.navy);const tw=doc.getTextWidth(tag)+8;fill(g<=0?C.lime:C.amberBar);doc.roundedRect(x1+15+bvw+doc.getTextWidth('años')+4,y+19.5,tw,7,3.5,3.5,'F');doc.text(tag,x1+19+bvw+doc.getTextWidth('años')+4,y+24.4);}
+   const bt=lines(bioText(d),CW-bw2-23,8.6);font(8.6,'normal',[214,226,238]);doc.text(bt.slice(0,2),x1+9,y+31.5);
+   y+=bh+8;}
 
   /* ── Indicadores con escala ── */
   section('Tus indicadores');
@@ -3598,7 +3662,7 @@ function buildReport(hist){
   need(40);y+=1;fill(C.limeTint);doc.roundedRect(M,y,CW,20,4,4,'F');
   font(11,'bold',C.navy);doc.text('Tu próximo paso',M+7,y+8);font(9.4,'normal',C.ink);
   doc.text(lines('Comenta estos resultados con el equipo NUMED y repite esta evaluación en 3 a 6 meses para ver tu progreso.',CW-14,9.4),M+7,y+14);y+=27;
-  const aviso='Aviso de uso: este documento presenta indicadores funcionales y recomendaciones educativas. No es un diagnóstico ni una edad biológica científicamente validada. Revisa este reporte con un profesional de la salud. No usar con datos reales hasta completar la validación institucional.';
+  const aviso='Aviso: este reporte presenta indicadores de salud, la edad biológica estimada con el modelo NUMED y recomendaciones educativas. No es un diagnóstico. Revisa tus resultados con un profesional de la salud.';
   const avl=lines(aviso,CW,7.6);need(avl.length*3.3+2);font(7.6,'normal',C.faint);doc.text(avl,M,y);
 
   /* ── Pie de página ── */
@@ -3761,7 +3825,7 @@ function drawScene(ctx,src,key,d,o){
     ctx.fillStyle=C.ink;const nm=d.name||'Mi evaluación';fit(ctx,nm,cw-100,84);ctx.fillText(nm,100,cy+190);
     // bloques de edad
     const bw=(cw-130)/2,by=cy+240,bh=250;
-    [[100,'EDAD CRONOLÓGICA',d.age?String(d.age):'—','años',false],[100+bw+30,'EDAD BIOLÓGICA',d.bio!=null?String(d.bio):'Pronto',d.bio!=null?'años':'en validación',true]].forEach(([x,lab,val,unit,hi])=>{
+    [[100,'EDAD CRONOLÓGICA',d.age?String(d.age):'—','años',false],[100+bw+30,'EDAD BIOLÓGICA',d.bio!=null?String(d.bio):'—',d.bio!=null?'años':'no disponible',true]].forEach(([x,lab,val,unit,hi])=>{
       ctx.fillStyle=hi?'#f2f6e3':'#eef3f8';rr(ctx,x,by,bw,bh,32);ctx.fill();
       ctx.fillStyle=C.muted;ctx.font=F('800',26);spaced(ctx,lab,x+34,by+60,2);
       ctx.fillStyle=hi?C.limeDark:C.ink;const vs=fit(ctx,val,bw-68,val.length>3?92:130);ctx.fillText(val,x+34,by+(vs>100?190:175));
@@ -3789,12 +3853,12 @@ window.NumedFrames={W,H,FRAMES,setLogos,draw:drawScene,
 /* ── Configuración ── */
 const BUCKET='numed-experience';      // bucket de Supabase Storage
 const LINK_HOURS=24;                  // vigencia del enlace del QR
-const SHOW_BIO_AGE=false;             // ⚠ Mantener en false hasta que el modelo esté validado clínicamente.
+const SHOW_BIO_AGE=true;              // Edad biológica confirmada: se muestra en el marco "Mi edad".
 const W=1080,H=1920;
 
 const $=id=>document.getElementById(id);
 const FRAMES=NumedFrames.FRAMES;
-let frame='edad',stream=null,raf=0,mode='idle',shot=null,shotBlob=null,lastUrl=null,busy=false;
+let flip=false,frame='edad',stream=null,raf=0,mode='idle',shot=null,shotBlob=null,lastUrl=null,busy=false;
 const video=()=>$('bo-video');
 const img=src=>{const i=new Image();i.src=src;return i;};
 function logos(){NumedFrames.setLogos(document.querySelector('.header-logo img')?.src,document.querySelector('#numed-auth-gate img')?.src);}
@@ -3805,15 +3869,7 @@ function data(){
   const age=Number($('patient-age')?.value)||null;
   return {name,first:name.split(' ')[0]||'',age,bio:bioAge(),date:new Date().toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})};
 }
-function bioAge(){
-  if(!SHOW_BIO_AGE||!window.NUMED_EXP)return null;
-  try{
-    const v=id=>Number($(id)?.value),answers={};
-    for(const k of NUMED_EXP.REQUIRED){const x=window._questionnaireAnswers?.[k];if(x!=null&&x!=='')answers[k]=Number(x);}
-    const r=NUMED_EXP.evaluate({age:v('patient-age'),sex:$('patient-gender')?.value,weightKg:v('patient-weight'),heightCm:v('patient-height'),waistCm:v('abdominal-perimeter'),gripKg:v('strength-value'),answers});
-    return r.status==='experimental'&&Number.isFinite(r.hypotheticalAge)?r.hypotheticalAge:null;
-  }catch(e){return null;}
-}
+function bioAge(){if(!SHOW_BIO_AGE)return null;try{return window.fxBioAge?window.fxBioAge():null;}catch(e){return null;}}
 
 const drawScene=(ctx,src,key,d,mirror)=>NumedFrames.draw(ctx,src,key,d,{mirror});
 
@@ -3847,7 +3903,7 @@ function loop(){
   const tick=()=>{if(mode!=='live')return;drawScene(ctx,video(),frame,d,true);raf=requestAnimationFrame(tick);};
   cancelAnimationFrame(raf);raf=requestAnimationFrame(tick);
 }
-function redrawStill(){if(shot)drawScene($('bo-canvas').getContext('2d'),shot,frame,data(),false);else if(mode!=='live')drawScene($('bo-canvas').getContext('2d'),null,frame,data(),false);}
+function redrawStill(){if(shot)drawScene($('bo-canvas').getContext('2d'),shot,frame,data(),flip);else if(mode!=='live')drawScene($('bo-canvas').getContext('2d'),null,frame,data(),false);}
 function step(s){['frame','review','done'].forEach(k=>{$('bo-step-'+k).hidden=k!==s;});
   $('bo-title').textContent={frame:'Elige tu marco y sonríe',review:'¡Qué buena foto!',done:'¡Lista! Llévatela'}[s];}
 function loading(on,txt){$('bo-loading').hidden=!on;if(txt)$('bo-loading-txt').textContent=txt;}
@@ -3869,13 +3925,13 @@ async function shoot(){
   if(mode!=='live'||busy)return;busy=true;$('bo-shoot').disabled=true;
   await countdown();
   const v=video(),fr=document.createElement('canvas');fr.width=v.videoWidth;fr.height=v.videoHeight;
-  const fx=fr.getContext('2d');fx.translate(fr.width,0);fx.scale(-1,1);fx.drawImage(v,0,0); // selfie tal como se ve
-  shot=fr;mode='review';cancelAnimationFrame(raf);
+  const fx=fr.getContext('2d');fx.drawImage(v,0,0); // se guarda como te ven los demás (sin efecto espejo)
+  shot=fr;flip=false;mode='review';cancelAnimationFrame(raf);
   const fl=$('bo-flash');fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');
   redrawStill();$('bo-insta').checked=false;step('review');busy=false;$('bo-shoot').disabled=false;
 }
 function finalBlob(){
-  return new Promise(res=>{const c=document.createElement('canvas');c.width=W;c.height=H;drawScene(c.getContext('2d'),shot,frame,data(),false);c.toBlob(b=>res(b),'image/jpeg',.9);});
+  return new Promise(res=>{const c=document.createElement('canvas');c.width=W;c.height=H;drawScene(c.getContext('2d'),shot,frame,data(),flip);c.toBlob(b=>res(b),'image/jpeg',.92);});
 }
 async function upload(blob,consent){
   if(typeof numedClient==='undefined'||!numedClient||typeof numedUser==='undefined'||!numedUser)throw new Error('No hay una sesión del personal activa.');
@@ -3940,6 +3996,7 @@ function init(){
   logos();
   $('bo-shoot').addEventListener('click',shoot);
   $('bo-retake').addEventListener('click',goLive);
+  $('bo-flip').addEventListener('click',()=>{flip=!flip;redrawStill();});
   $('bo-again').addEventListener('click',goLive);
   $('bo-keep').addEventListener('click',keep);
   $('bo-download').addEventListener('click',download);
@@ -3996,7 +4053,7 @@ async function create(){
   if(sg.error)throw sg.error;
   const name=($('patient-name')?.value||'').trim().replace(/\s+/g,' ');
   const ins=await numedClient.from('numed_booth_sessions').insert({
-    display_name:name||null,age_years:Number($('patient-age')?.value)||null,
+    display_name:name||null,age_years:Number($('patient-age')?.value)||null,bio_age_years:(window.fxBioAge?window.fxBioAge():null),
     report_url:sg.data.signedUrl,report_filename:rep.filename,
     expires_at:new Date(Date.now()+SESSION_HOURS*3600e3).toISOString(),created_by:numedUser.id
   }).select('id').single();
@@ -4074,6 +4131,7 @@ h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text
 .hint.off{opacity:0}
 .zoom{display:flex;align-items:center;gap:12px;margin:14px 2px 4px;font-size:18px}
 .zoom input{flex:1;accent-color:#8ea83a;height:28px}
+.flip{flex:none;width:46px;height:46px;border-radius:50%;border:1.5px solid var(--line);background:#fff;font-size:20px;font-weight:800;color:var(--ink);cursor:pointer}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 2px;scrollbar-width:none}
 .chips button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--ink);cursor:pointer}
 .chips button[aria-pressed="true"]{border-color:var(--lime);background:var(--tint)}
@@ -4126,7 +4184,7 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events
   <div class="tag">Ajusta tu foto</div>
   <h1 style="font-size:26px">Mueve y acerca <span>a tu gusto</span></h1>
   <div class="stage" id="stage"><canvas id="pv" width="720" height="1280"></canvas><div class="hint" id="hint">Arrastra y pellizca para ajustar</div></div>
-  <div class="zoom"><span>−</span><input type="range" id="zoom" min="1" max="3" step="0.01" value="1" aria-label="Acercar"><span>+</span></div>
+  <div class="zoom"><span>−</span><input type="range" id="zoom" min="1" max="3" step="0.01" value="1" aria-label="Acercar"><span>+</span><button type="button" class="flip" id="flip" aria-label="Voltear foto">↔</button></div>
   <div class="chips" id="chips"></div>
   <label class="consent" id="consent-box"><input type="checkbox" id="consent"><span><b>Autorizo a NUMED a publicar esta foto en sus historias de Instagram.</b>Es opcional. Tu foto se guarda en tu teléfono aunque no marques esta casilla, y puedes retirar tu permiso cuando quieras escribiéndole a NUMED.</span></label>
   <div class="btns">
@@ -4164,13 +4222,13 @@ const BUCKET='numed-experience';
 const OUT_W=1440,OUT_H=2560;          // 2K vertical, formato historia
 const $=id=>R.getElementById(id);
 const sid=new URLSearchParams(location.search).get('s');
-const S={client:null,session:null,frame:'edad',img:null,zoom:1,ox:0,oy:0,blob:null,url:null,uploaded:false};
+const S={flip:false,client:null,session:null,frame:'edad',img:null,zoom:1,ox:0,oy:0,blob:null,url:null,uploaded:false};
 NumedFrames.setLogos(document.querySelector('.header-logo img')?.src,document.querySelector('#numed-auth-gate img')?.src);
 
 function show(id){R.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);}
 function toast(t){const e=document.createElement('div');e.className='toast';e.textContent=t;R.append(e);setTimeout(()=>e.remove(),3600);}
 function busy(on,t){$('busy').hidden=!on;if(t)$('busy-txt').textContent=t;}
-const data=()=>({name:S.session?.display_name||'',age:S.session?.age_years||null,bio:null});
+const data=()=>({name:S.session?.display_name||'',age:S.session?.age_years||null,bio:S.session?.bio_age_years??null});
 const fontsReady=()=>Promise.race([Promise.all(['800 60px Montserrat','700 30px Montserrat','600 30px Montserrat'].map(f=>document.fonts.load(f))),new Promise(r=>setTimeout(r,2500))]).catch(()=>{});
 
 /* ── Sesión ── */
@@ -4228,7 +4286,7 @@ async function load(file){
     let src;
     try{src=await createImageBitmap(file,{imageOrientation:'from-image'});}
     catch(e){src=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(file);});}
-    S.img=src;S.zoom=1;S.ox=0;S.oy=0;S.blob=null;S.uploaded=false;$('zoom').value=1;$('consent').checked=false;
+    S.img=src;S.flip=false;S.zoom=1;S.ox=0;S.oy=0;S.blob=null;S.uploaded=false;$('zoom').value=1;$('consent').checked=false;
     renderFrames();show('s-edit');draw();setTimeout(()=>$('hint').classList.add('off'),3500);
   }catch(e){toast('No pudimos abrir esa imagen. Intenta con otra.');}
   finally{busy(false);}
@@ -4238,7 +4296,7 @@ async function load(file){
 function draw(){
   const c=$('pv'),x=c.getContext('2d');x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,c.width,c.height);
   x.scale(c.width/NumedFrames.W,c.height/NumedFrames.H);
-  NumedFrames.draw(x,S.img,S.frame,data(),{zoom:S.zoom,ox:S.ox,oy:S.oy});
+  NumedFrames.draw(x,S.img,S.frame,data(),{zoom:S.zoom,ox:S.ox,oy:S.oy,mirror:S.flip});
 }
 // Gestos: arrastrar y pellizcar
 (function(){
@@ -4257,6 +4315,7 @@ function draw(){
   st.addEventListener('wheel',e=>{e.preventDefault();S.zoom=Math.max(1,Math.min(3,S.zoom*(e.deltaY<0?1.06:.94)));$('zoom').value=S.zoom;clampOffsets();draw();},{passive:false});
 })();
 function clampOffsets(){const m=(S.zoom-1)/2+.5;S.ox=Math.max(-m,Math.min(m,S.ox));S.oy=Math.max(-m,Math.min(m,S.oy));}
+$('flip').addEventListener('click',()=>{S.flip=!S.flip;draw();});
 $('zoom').addEventListener('input',e=>{S.zoom=Number(e.target.value);clampOffsets();draw();});
 $('retake').onclick=()=>show('s-home');
 $('again').onclick=()=>show('s-home');
@@ -4267,7 +4326,7 @@ function render(){
   return new Promise(res=>{
     const c=document.createElement('canvas');c.width=OUT_W;c.height=OUT_H;const x=c.getContext('2d');
     x.scale(OUT_W/NumedFrames.W,OUT_H/NumedFrames.H);
-    NumedFrames.draw(x,S.img,S.frame,data(),{zoom:S.zoom,ox:S.ox,oy:S.oy});
+    NumedFrames.draw(x,S.img,S.frame,data(),{zoom:S.zoom,ox:S.ox,oy:S.oy,mirror:S.flip});
     c.toBlob(b=>res(b),'image/jpeg',.94);
   });
 }
