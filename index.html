@@ -647,6 +647,56 @@ body.numed-touch .q-opt{min-height:124px}
   #fx-canvas{display:none}
 }
 
+/* ═════════ PLAN PERSONALIZADO ═════════ */
+.rx{display:grid;gap:clamp(18px,2vw,28px)}
+.rx-hero{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding:clamp(22px,2.2vw,34px);border-radius:28px;background:linear-gradient(120deg,#f4f8e7,#eef3f8);border:1px solid #dfe8b8}
+.rx-hero>div:first-child{flex:1;min-width:280px}
+.rx-kicker{font-size:12px;font-weight:800;letter-spacing:2.5px;color:var(--accent)}
+.rx-hero h3{font-size:clamp(24px,2.2vw,36px);letter-spacing:-1px;line-height:1.15;margin:8px 0 10px}
+.rx-hero p{color:var(--muted);font-size:clamp(14px,1.05vw,17px);line-height:1.6;max-width:720px}
+.rx-counters{display:flex;gap:12px}
+.rx-counters div{min-width:120px;padding:16px 18px;border-radius:22px;background:#fff;border:1px solid var(--line);text-align:center}
+.rx-counters b{display:block;font-size:clamp(34px,3vw,48px);font-weight:800;letter-spacing:-1.5px;line-height:1}
+.rx-counters div:first-child b{color:var(--accent)}
+.rx-counters span{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.5px}
+.rx-first{display:flex;gap:20px;align-items:center;padding:clamp(20px,2vw,30px);border-radius:28px;background:var(--navy);color:#fff;box-shadow:0 20px 50px -22px rgba(36,74,111,.7);animation:item-in .7s var(--ease) both}
+.rx-first-ico{flex:none;width:clamp(64px,5vw,84px);aspect-ratio:1;border-radius:24px;display:grid;place-items:center;font-size:clamp(30px,2.6vw,42px);background:var(--lime)}
+.rx-first small{font-size:11px;font-weight:800;letter-spacing:2px;color:#d7e59a}
+.rx-first h4{font-size:clamp(20px,1.8vw,30px);letter-spacing:-.6px;margin:6px 0;color:#fff}
+.rx-first p{font-size:clamp(14px,1.05vw,17px);line-height:1.6;color:#dbe5ef}
+.rx-block h5{font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);margin-bottom:14px}
+.rx-chips{display:flex;flex-wrap:wrap;gap:10px}
+.rx-chips span{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:999px;background:#f4f8e7;border:1px solid #dfe8b8;font-size:clamp(13px,1vw,15px);font-weight:700;color:var(--text)}
+.rx-chips span::before{content:'✓';width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--lime);font-size:11px;font-weight:900}
+.rx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px}
+.rx-card{position:relative;display:flex;flex-direction:column;gap:10px;padding:clamp(20px,1.8vw,28px);border-radius:26px;background:#fff;border:1px solid var(--line);box-shadow:0 14px 34px -26px rgba(28,61,94,.45);overflow:hidden;animation:item-in .7s var(--ease) both;transition:transform .35s var(--spring)}
+.rx-card:hover{transform:translateY(-3px)}
+.rx-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--rx,var(--line))}
+.rx-bien{--rx:#b1c959;--rxbg:#f4f8e7;--rxfg:#56701a}
+.rx-mejora{--rx:#e3b25a;--rxbg:#fcf1dc;--rxfg:#8a5a0b}
+.rx-revisar{--rx:#244a6f;--rxbg:#eaf0f6;--rxfg:#244a6f}
+.rx-info{--rx:#8fa1b4;--rxbg:#eef3f8;--rxfg:#5d7690}
+.rx-card-head{display:flex;align-items:center;gap:12px}
+.rx-ico{flex:none;width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:22px;background:var(--rxbg)}
+.rx-card-head small{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.rx-card-head b{font-size:clamp(20px,1.6vw,26px);font-weight:800;letter-spacing:-.5px}
+.rx-badge{margin-left:auto;padding:7px 12px;border-radius:999px;font-size:11px;font-weight:800;background:var(--rxbg);color:var(--rxfg);text-align:center;line-height:1.3}
+.rx-card h4{font-size:clamp(17px,1.35vw,21px);letter-spacing:-.3px;margin-top:6px}
+.rx-card p{font-size:clamp(14px,1vw,15.5px);line-height:1.65;color:var(--muted)}
+.rx-steps{list-style:none;display:grid;gap:8px;margin-top:4px}
+.rx-steps li{position:relative;padding:11px 14px 11px 42px;border-radius:14px;background:var(--fill);font-size:clamp(13.5px,.95vw,15px);line-height:1.55;color:var(--text)}
+.rx-steps li::before{content:'✓';position:absolute;left:12px;top:11px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--lime);font-size:11px;font-weight:900;color:var(--text)}
+.rx-habits{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}
+.rx-habits article{display:flex;gap:14px;padding:18px;border-radius:22px;background:#fff;border:1px solid var(--line);animation:item-in .7s var(--ease) both}
+.rx-habits article>span{flex:none;width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:24px;background:#f4f8e7}
+.rx-habits b{font-size:clamp(15px,1.1vw,17px)}
+.rx-habits p{font-size:14px;line-height:1.6;color:var(--muted);margin-top:4px}
+.rx-next{display:flex;gap:16px;align-items:center;padding:20px 24px;border-radius:22px;background:#eef3f8;border:1px solid #dbe5ef}
+.rx-next>span{font-size:30px}
+.rx-next b{font-size:16px}
+.rx-next p{font-size:14px;color:var(--muted);margin-top:3px;line-height:1.55}
+.rx-note{font-size:12px;color:var(--faint);line-height:1.6}
+
 </style>
 </head>
 <body data-k-stage="1" data-dir="fwd">
@@ -2960,6 +3010,295 @@ function boot(){
   $('fx-habit-prompt')?.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();window.openQuestionnaire();}});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+</script>
+
+<script id="numed-plan-2026">
+/* ═══════════════════════════════════════════════════════════════
+   NUMED · Plan personalizado y reporte PDF
+   Mismos umbrales que la versión anterior (IMC 18.5/25/30, cintura/talla
+   0.50/0.60, tabla interna de fuerza). Solo cambia el mensaje y la forma.
+   Nunca muestra ni exporta una edad biológica.
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=(n,d=1)=>Number(n).toFixed(d);
+
+/* ── Datos: del formulario actual o de un registro del historial ── */
+function planData(h){
+  const v=id=>parseFloat($(id)?.value);
+  const d=h?{
+    name:h.nombre,age:Number(h.edad),sex:h.genero,weight:Number(h.peso),height:Number(h.talla),
+    waist:Number(h.abdomen),grip:Number(h.fuerzaOriginal),answers:h.questionnaireAnswers||{},date:h.fecha
+  }:{
+    name:$('patient-name')?.value.trim(),age:Number($('patient-age')?.value),sex:$('patient-gender')?.value,
+    weight:v('patient-weight'),height:v('patient-height'),waist:v('abdominal-perimeter'),grip:v('strength-value'),
+    answers:window._questionnaireAnswers||{},date:new Date().toISOString()
+  };
+  d.bmi=d.weight>0&&d.height>0?d.weight/((d.height/100)**2):NaN;
+  d.ratio=d.waist>0&&d.height>0?d.waist/d.height:NaN;
+  let lv=null;try{lv=calculateStrengthLevel(d.age,d.sex,d.grip);}catch(e){}
+  d.strength=lv;d.strengthRef=Boolean(lv&&lv.thresholds&&d.age>=10&&d.age<=99);
+  d.first=(d.name||'').split(/\s+/)[0]||'';
+  const a={};for(const[k,x]of Object.entries(d.answers||{}))a[k]=Number(x);d.answers=a;
+  return d;
+}
+
+/* ── Construcción del plan (mensajes) ── */
+const STATUS={bien:'Vas bien',mejora:'Oportunidad de mejora',revisar:'Revisar con el equipo NUMED',info:'Para conversar'};
+function buildPlan(d){
+  const A=d.answers,areas=[],habits=[],strengths=[];
+  const chronic=A.cronicas===2;
+  const careNote=chronic?' Como tienes una condición crónica diagnosticada, consulta con tu médico antes de aumentar la intensidad.':'';
+
+  /* Fuerza */
+  if(d.grip>0){
+    const g=fmt(d.grip)+' kg',lvl=d.strength?.level,noTrain=A.fuerza_q===0;
+    const th=d.strength?.thresholds;
+    if(d.strengthRef&&lvl==='Bajo'){
+      areas.push({key:'fuerza',icon:'💪',area:'Fuerza muscular',value:g,status:'mejora',
+        headline:'Tu fuerza tiene espacio para crecer',
+        message:`Registraste ${g} de fuerza de agarre, por debajo de la referencia para tu grupo de edad y sexo${th?` (${th.weak}–${th.strong} kg)`:''}. La buena noticia: la fuerza muscular mejora a cualquier edad con práctica constante.${noTrain?' Nos contaste que hoy no entrenas fuerza, así que tienes mucho por ganar.':''}`,
+        actions:['Haz ejercicios de fuerza 2 o 3 días por semana: sentadillas desde una silla, flexiones apoyadas en la pared y ejercicios con bandas elásticas.',
+                 'Para tus manos: aprieta una pelota blanda 10 veces con cada mano, 2 o 3 veces al día.',
+                 'Incluye una fuente de proteína en cada comida (huevo, legumbres, pescado, pollo o lácteos), salvo que tu médico te haya indicado otra cosa.',
+                 'Pide al equipo NUMED que revise la medición y te oriente antes de empezar.'+careNote]});
+    }else if(d.strengthRef&&lvl==='Alto'){
+      strengths.push('Tu fuerza de agarre está por encima de la referencia');
+      areas.push({key:'fuerza',icon:'💪',area:'Fuerza muscular',value:g,status:'bien',
+        headline:'Tu fuerza es una de tus fortalezas',
+        message:`Registraste ${g}, por encima de la referencia para tu grupo de edad y sexo. Conservar esta fuerza te ayuda a moverte con seguridad y energía con el paso de los años.`,
+        actions:['Mantén tu rutina de fuerza al menos 2 días por semana.','Alterna grupos musculares y respeta los días de descanso.','Cuida la técnica y la postura para proteger tus articulaciones.']});
+    }else if(d.strengthRef&&lvl==='Medio'){
+      strengths.push('Tu fuerza de agarre está dentro de la referencia');
+      areas.push({key:'fuerza',icon:'💪',area:'Fuerza muscular',value:g,status:'bien',
+        headline:'Tu fuerza está dentro de lo esperado',
+        message:`Registraste ${g}, dentro de la referencia para tu grupo de edad y sexo${th?` (${th.weak}–${th.strong} kg)`:''}. Es una buena base para seguir construyendo.${noTrain?' Sumar ejercicios de fuerza te ayudará a mantenerla con los años.':''}`,
+        actions:[noTrain?'Empieza con 2 sesiones cortas de fuerza por semana (20 a 30 minutos).':'Mantén tus ejercicios de fuerza al menos 2 días por semana.',
+                 'Incluye piernas, espalda y brazos; sube la intensidad poco a poco.'+careNote]});
+    }else{
+      areas.push({key:'fuerza',icon:'💪',area:'Fuerza muscular',value:g,status:'info',
+        headline:'Tu fuerza quedó registrada',
+        message:`Registraste ${g} de fuerza de agarre. Para tu edad no contamos con una tabla de referencia aplicable, por eso el equipo NUMED la interpretará contigo.`,
+        actions:['Realiza actividades de fuerza adaptadas a tu condición, si es apropiado.','Consulta si necesitas una valoración personalizada de fuerza.']});
+    }
+  }
+
+  /* Cintura / talla */
+  if(d.ratio>0){
+    const r=fmt(d.ratio,2),eligible=d.age>=18&&d.bmi<35&&d.ratio>=0.4;
+    const tip='Una forma fácil de recordarlo: tu cintura debería medir menos de la mitad de tu estatura.';
+    if(eligible&&d.ratio>=0.6){
+      areas.push({key:'cintura',icon:'📏',area:'Cintura / talla',value:r,status:'revisar',
+        headline:'Tu salud cardiometabólica es la prioridad',
+        message:`Tu relación cintura/talla es ${r}. La meta orientativa es menos de 0.50; un valor de 0.60 o más indica acumulación de grasa en el abdomen, la que más se relaciona con la salud del corazón y el metabolismo. ${tip}`,
+        actions:['Revisa este resultado con el equipo NUMED para definir un plan a tu medida.','Acumula al menos 150 minutos de actividad moderada a la semana, como caminar a paso rápido.','Reduce bebidas azucaradas, frituras y productos ultraprocesados.','Vuelve a medir tu cintura con la misma técnica para ver tu progreso.']});
+    }else if(eligible&&d.ratio>=0.5){
+      areas.push({key:'cintura',icon:'📏',area:'Cintura / talla',value:r,status:'mejora',
+        headline:'Tu cintura merece atención',
+        message:`Tu relación cintura/talla es ${r}, un poco por encima de la meta orientativa de 0.50. Pequeños cambios sostenidos en movimiento y alimentación suelen reflejarse primero en la cintura. ${tip}`,
+        actions:['Camina a paso rápido 30 minutos, 5 días por semana.','Cambia las bebidas azucaradas por agua y prioriza comidas caseras.','Vuelve a medir tu cintura con la misma técnica en unos meses.']});
+    }else if(eligible){
+      strengths.push('Tu cintura está en proporción con tu estatura');
+      areas.push({key:'cintura',icon:'📏',area:'Cintura / talla',value:r,status:'bien',
+        headline:'Tu cintura está en buena proporción',
+        message:`Tu relación cintura/talla es ${r}, por debajo de la meta orientativa de 0.50. Es una señal positiva sobre la distribución de la grasa corporal.`,
+        actions:['Mantén tu actividad física regular y una alimentación variada.']});
+    }else{
+      areas.push({key:'cintura',icon:'📏',area:'Cintura / talla',value:r,status:'info',
+        headline:'Tu medida de cintura quedó registrada',
+        message:`Tu relación cintura/talla es ${r}. En tu caso conviene interpretarla de forma individual junto al equipo NUMED.`,
+        actions:['Comenta este resultado con el equipo NUMED.']});
+    }
+  }
+
+  /* IMC */
+  if(d.bmi>0){
+    const b=fmt(d.bmi),why='El IMC es una referencia útil, pero no distingue entre músculo y grasa; por eso lo leemos junto con tu cintura y tu fuerza.';
+    if(d.age<18){
+      areas.push({key:'imc',icon:'⚖️',area:'Índice de masa corporal',value:b,status:'info',headline:'Tu IMC requiere tablas por edad',message:`Tu IMC es ${b}. Antes de los 18 años se interpreta con percentiles por edad y sexo.`,actions:['Revisa el resultado con el equipo NUMED.']});
+    }else if(d.bmi<18.5){
+      areas.push({key:'imc',icon:'⚖️',area:'Índice de masa corporal',value:b,status:'revisar',headline:'Revisemos tu alimentación',
+        message:`Tu IMC es ${b}, por debajo del intervalo habitual (18.5–24.9). ${why}`,
+        actions:['Cuéntale al equipo NUMED si has perdido peso sin proponértelo o si te cuesta comer lo suficiente.','Haz comidas regulares que incluyan proteína, cereales integrales y grasas saludables.']});
+    }else if(d.bmi<25){
+      strengths.push('Tu peso está en un rango saludable para tu estatura');
+      areas.push({key:'imc',icon:'⚖️',area:'Índice de masa corporal',value:b,status:'bien',headline:'Tu peso está en un rango saludable',
+        message:`Tu IMC es ${b}, dentro del intervalo habitual (18.5–24.9). ${why}`,
+        actions:['Mantén una alimentación variada con suficiente proteína y actividad física regular.']});
+    }else{
+      areas.push({key:'imc',icon:'⚖️',area:'Índice de masa corporal',value:b,status:d.bmi>=30?'revisar':'mejora',headline:'Leamos tu IMC en contexto',
+        message:`Tu IMC es ${b}, por encima del intervalo habitual (18.5–24.9). ${why} No tomes decisiones solo por este número.`,
+        actions:['Revisa con el equipo NUMED tu cintura, tus antecedentes y tu composición corporal.','Si te propones bajar de peso, apunta a cambios pequeños y sostenibles, no a dietas extremas.']});
+    }
+  }
+
+  /* Hábitos */
+  const H=(icon,title,text)=>habits.push({icon,title,text});
+  if(A.fuma_actual===2)H('🚭','Dejar de fumar es el cambio con mayor impacto','Pide orientación al equipo NUMED: con acompañamiento profesional y tratamiento aumentan mucho las probabilidades de lograrlo.');
+  else if(A.ex_fumador===1)H('🚭','Sigue sin fumar','Mantenerte sin tabaco es un gran logro. Comenta tus antecedentes de consumo con tu médico.');
+  if(A.actividad===0)H('🏃','Muévete un poco más cada día','Meta: 150 minutos a la semana de actividad moderada. Puedes empezar con caminatas de 10 minutos después de cada comida.');
+  if(A.fuerza_q===0&&!(d.strengthRef&&['Bajo','Medio'].includes(d.strength?.level)))H('🏋️','Suma 2 días de fuerza','Ejercicios con tu propio peso o bandas elásticas, dos veces por semana, ayudan a conservar tu músculo.');
+  if(A.dieta===0)H('🥗','Llena medio plato de vegetales','Incluye frutas y vegetales en cada comida, legumbres varias veces por semana y prefiere agua en lugar de bebidas azucaradas.');
+  if(A.sueno===1)H('😴','Cuida tu descanso','Intenta dormir de 7 a 9 horas: acuéstate y levántate a la misma hora y deja las pantallas 30 minutos antes de dormir. Si te cuesta descansar con frecuencia, coméntalo con el equipo.');
+  if(A.estres===1)H('🧘','Dale un respiro a tu mente','Prueba 5 minutos diarios de respiración lenta, una caminata al aire libre o una actividad que disfrutes. Si el estrés afecta tu día a día, pide apoyo.');
+  if(A.alcohol===2)H('🍷','Reduce el alcohol','Busca tener varios días a la semana sin alcohol y alterna cada trago con un vaso de agua. Si te resulta difícil reducirlo, coméntalo con un profesional.');
+  if(A.cronicas===2)H('🩺','Mantén el control de tus condiciones','Sigue tus citas y tratamientos al día y consulta antes de iniciar ejercicio intenso.');
+  if(A.familia===1)H('👪','Tus antecedentes familiares cuentan','Tener familiares con enfermedades crónicas hace aún más valioso el chequeo periódico. Coméntalos con tu médico.');
+
+  if(A.fuma_actual===0&&A.ex_fumador===0)strengths.push('No fumas');
+  if(A.alcohol===0)strengths.push('No consumes alcohol');
+  if(A.actividad===-2)strengths.push('Haces actividad física regularmente');
+  if(A.fuerza_q===-1)strengths.push('Entrenas fuerza cada semana');
+  if(A.sueno===-1)strengths.push('Duermes de 7 a 9 horas');
+  if(A.dieta===-1)strengths.push('Tu alimentación incluye frutas, vegetales y proteína');
+  if(A.estres===0)strengths.push('Manejas bien tu nivel de estrés');
+
+  /* Primer paso: una sola prioridad clara */
+  const by=k=>areas.find(a=>a.key===k);
+  let first=null;
+  if(A.fuma_actual===2)first={icon:'🚭',title:'Dejar de fumar',text:'Es el cambio que más beneficios trae a tu salud. Pide hoy mismo orientación al equipo NUMED.'};
+  else if(by('cintura')?.status==='revisar')first={icon:'📏',title:'Cuidar tu cintura',text:'Agenda una conversación con el equipo NUMED y empieza con caminatas diarias de 30 minutos.'};
+  else if(by('fuerza')?.status==='mejora')first={icon:'💪',title:'Fortalecer tus músculos',text:'Empieza esta semana con 2 sesiones cortas de ejercicios de fuerza, como sentadillas desde una silla.'};
+  else if(A.actividad===0)first={icon:'🏃',title:'Moverte más',text:'Empieza con 10 minutos de caminata después de cada comida y ve aumentando poco a poco.'};
+  else if(by('cintura')?.status==='mejora')first={icon:'📏',title:'Cuidar tu cintura',text:'Camina a paso rápido 30 minutos al día y cambia las bebidas azucaradas por agua.'};
+  else if(by('imc')?.status==='revisar')first={icon:'⚖️',title:'Revisar tu peso en contexto',text:'Conversa con el equipo NUMED para definir un plan de alimentación a tu medida.'};
+  else if(habits.length)first={icon:habits[0].icon,title:habits[0].title,text:habits[0].text};
+  else first={icon:'🌟',title:'Mantener lo que ya haces bien',text:'Tus resultados y hábitos son una base sólida. Sigue así y repite tu evaluación para dar seguimiento.'};
+
+  const opps=areas.filter(a=>a.status==='mejora'||a.status==='revisar').length+habits.length;
+  return {d,areas,habits,strengths,first,opps};
+}
+
+/* ── Vista en pantalla ── */
+function renderPlan(p){
+  const hi=p.d.first?`${esc(p.d.first)}, este`:'Este';
+  const area=a=>`<article class="rx-card rx-${a.status}">
+    <header class="rx-card-head"><span class="rx-ico">${a.icon}</span><div><small>${esc(a.area)}</small><b>${esc(a.value)}</b></div><span class="rx-badge">${esc(STATUS[a.status])}</span></header>
+    <h4>${esc(a.headline)}</h4><p>${esc(a.message)}</p>
+    <ul class="rx-steps">${a.actions.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></article>`;
+  return `<div class="rx">
+   <section class="rx-hero">
+     <div><span class="rx-kicker">TU PLAN PERSONALIZADO</span>
+     <h3>${hi} es tu plan para sentirte mejor.</h3>
+     <p>Lo preparamos con tus mediciones y tus respuestas. No necesitas cambiarlo todo a la vez: elige uno o dos pasos y hazlos parte de tu rutina.</p></div>
+     <div class="rx-counters"><div><b>${p.strengths.length}</b><span>fortalezas</span></div><div><b>${p.opps}</b><span>pasos sugeridos</span></div></div>
+   </section>
+   <section class="rx-first"><span class="rx-first-ico">${p.first.icon}</span><div><small>SI SOLO ELIGES UNA COSA, QUE SEA ESTA</small><h4>${esc(p.first.title)}</h4><p>${esc(p.first.text)}</p></div></section>
+   ${p.strengths.length?`<section class="rx-block"><h5>✓ Lo que ya estás haciendo bien</h5><div class="rx-chips">${p.strengths.map(s=>`<span>${esc(s)}</span>`).join('')}</div></section>`:''}
+   <section class="rx-block"><h5>Lo que dicen tus mediciones</h5><div class="rx-grid">${p.areas.map(area).join('')}</div></section>
+   ${p.habits.length?`<section class="rx-block"><h5>Tus hábitos, paso a paso</h5><div class="rx-habits">${p.habits.map(h=>`<article><span>${h.icon}</span><div><b>${esc(h.title)}</b><p>${esc(h.text)}</p></div></article>`).join('')}</div></section>`:''}
+   <section class="rx-next"><span>🗓️</span><div><b>Tu próximo paso</b><p>Comenta estos resultados con el equipo NUMED y repite esta evaluación en 3 a 6 meses para ver tu progreso.</p></div></section>
+   <p class="rx-note">Recomendaciones educativas basadas en tus mediciones y respuestas. No sustituyen una consulta médica ni corresponden a una edad biológica.</p>
+  </div>`;
+}
+window.fxBuildPlan=d=>buildPlan(planData(d));
+// displayResults() llama a estas dos funciones por nombre: las reemplazamos sin tocar su lógica.
+window.numedRenderV19Recommendations=function(){return renderPlan(buildPlan(planData()));};
+// Revela las tarjetas con un pequeño escalonado
+const rcObs=new MutationObserver(()=>{
+  document.querySelectorAll('#recommendations-content .rx-card,#recommendations-content .rx-habits article').forEach((el,i)=>{el.style.animationDelay=(i*70)+'ms';});
+});
+document.addEventListener('DOMContentLoaded',()=>{const rc=$('recommendations-content');if(rc)rcObs.observe(rc,{childList:true});});
+
+/* ── Reporte PDF estructurado ── */
+const C={navy:[36,74,111],ink:[28,61,94],muted:[93,118,144],lime:[177,201,89],limeDark:[107,138,29],limeTint:[244,248,231],navyTint:[238,243,248],line:[221,229,236],amber:[154,99,14],amberTint:[252,240,218],white:[255,255,255]};
+const BADGE={bien:[C.limeTint,C.limeDark],mejora:[C.amberTint,C.amber],revisar:[C.navyTint,C.navy],info:[C.navyTint,C.muted]};
+window.downloadPDF=function(){
+  if(!numedRequireAuth())return;
+  if(!window.jspdf?.jsPDF){window.fxToast?window.fxToast('No se pudo cargar la herramienta PDF. Verifica tu conexión.','err'):alert('No se pudo cargar la herramienta PDF.');return;}
+  const hist=window._historyMode?(window._historyData||null):null;
+  const p=buildPlan(planData(hist)),d=p.d;
+  const doc=new window.jspdf.jsPDF({unit:'mm',format:'a4'});
+  const W=210,M=16,CW=W-2*M,BOTTOM=280;let y=0;
+  const fill=c=>doc.setFillColor(...c),stroke=c=>doc.setDrawColor(...c),color=c=>doc.setTextColor(...c);
+  const font=(sz,st='normal',c=C.ink)=>{doc.setFont('helvetica',st);doc.setFontSize(sz);color(c);};
+  const lines=(t,w,sz,st='normal')=>{if(sz){doc.setFont('helvetica',st);doc.setFontSize(sz);}return doc.splitTextToSize(String(t).replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}️]/gu,'').trim(),w);};
+  const lh=sz=>sz*0.42;
+  const newPage=()=>{doc.addPage();y=20;};
+  const need=h=>{if(y+h>BOTTOM)newPage();};
+  const section=(title)=>{need(16);y+=4;font(12,'bold',C.navy);doc.text(title,M,y);fill(C.lime);doc.rect(M,y+2,14,1.2,'F');y+=9;};
+  const dateTxt=(()=>{const t=new Date(d.date||Date.now());return isNaN(t)?String(d.date||'').slice(0,10):t.toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'});})();
+
+  /* Encabezado */
+  fill(C.navy);doc.rect(0,0,W,42,'F');fill(C.lime);doc.rect(0,42,W,1.6,'F');
+  const logo=document.querySelector('.header-logo img')?.src;
+  if(logo&&logo.startsWith('data:image')){try{fill(C.white);doc.roundedRect(M,9,24,24,4,4,'F');doc.addImage(logo,'PNG',M+3,11.5,18,19.8);}catch(e){}}
+  font(19,'bold',C.white);doc.text('Reporte de indicadores de salud',M+31,20);
+  font(9.5,'normal',[214,226,238]);doc.text('NUMED Experience 360°  ·  Evaluación funcional y plan personalizado',M+31,27.5);
+  doc.text('Fecha: '+dateTxt,M+31,33.5);
+  y=54;
+
+  /* Datos del participante */
+  fill(C.navyTint);doc.roundedRect(M,y-6,CW,20,3,3,'F');
+  const info=[['Participante',d.name||'—'],['Edad',(d.age||'—')+' años'],['Sexo',d.sex?d.sex[0].toUpperCase()+d.sex.slice(1):'—'],['Peso / estatura',`${d.weight>0?fmt(d.weight):'—'} kg · ${d.height>0?fmt(d.height,0):'—'} cm`]];
+  const colW=CW/4;
+  info.forEach(([k,v],i)=>{const x=M+5+i*colW;font(7.5,'bold',C.muted);doc.text(k.toUpperCase(),x,y);font(10.5,'bold',C.ink);doc.text(lines(v,colW-8)[0]||'—',x,y+6.5);});
+  y+=24;
+
+  /* Indicadores */
+  section('Tus indicadores');
+  const notes={imc:Number.isFinite(d.bmi)?(d.bmi<18.5?'Por debajo del intervalo habitual':d.bmi<25?'Dentro del intervalo habitual':'Interpretar junto a otras medidas'):'—',
+    ratio:Number.isFinite(d.ratio)?(d.ratio<0.5?'Por debajo de 0.50 (meta)':d.ratio<0.6?'A partir de 0.50':'A partir de 0.60'):'—',
+    grip:d.strengthRef?({Bajo:'Por debajo de la referencia',Medio:'Dentro de la referencia',Alto:'Por encima de la referencia'}[d.strength.level]||'Medición registrada'):'Medición registrada',
+    waist:'Medición registrada'};
+  const metrics=[['Índice de masa corporal',Number.isFinite(d.bmi)?fmt(d.bmi):'—','kg/m',notes.imc],['Cintura / talla',Number.isFinite(d.ratio)?fmt(d.ratio,2):'—','',notes.ratio],['Fuerza de agarre',d.grip>0?fmt(d.grip):'—','kg',notes.grip],['Perímetro abdominal',d.waist>0?fmt(d.waist):'—','cm',notes.waist]];
+  const gap=4,bw=(CW-gap*3)/4,bh=34;need(bh+4);
+  metrics.forEach(([lab,val,unit,note],i)=>{const x=M+i*(bw+gap);
+    fill(C.white);stroke(C.line);doc.setLineWidth(.3);doc.roundedRect(x,y,bw,bh,3,3,'FD');fill(C.lime);doc.rect(x+4,y+4,8,1,'F');
+    font(7.5,'bold',C.muted);doc.text(lab.toUpperCase(),x+4,y+9.5,{maxWidth:bw-8});
+    font(18,'bold',C.ink);doc.text(val,x+4,y+20);const vw=doc.getTextWidth(val);font(8,'normal',C.muted);doc.text(unit,x+5+vw,y+20);if(unit==='kg/m'){const uw=doc.getTextWidth(unit);doc.setFontSize(5.5);doc.text('2',x+5+vw+uw+.3,y+17.8);}
+    color(C.limeDark);doc.text(lines(note,bw-8,7.5).slice(0,2),x+4,y+26.5);});
+  y+=bh+6;
+
+  /* Primer paso */
+  section('Si solo eliges una cosa, que sea esta');
+  const fl=lines(p.first.text,CW-14,10);const fh=10+fl.length*lh(10)+4;need(fh);
+  fill(C.limeTint);doc.roundedRect(M,y-3,CW,fh,3,3,'F');fill(C.lime);doc.rect(M,y-3,2.2,fh,'F');
+  font(12,'bold',C.ink);doc.text(p.first.title,M+8,y+4);font(10,'normal',C.ink);doc.text(fl,M+8,y+10.5);y+=fh+3;
+
+  /* Fortalezas */
+  if(p.strengths.length){section('Lo que ya estás haciendo bien');
+    p.strengths.forEach(s=>{const l=lines(s,CW-10,10);need(l.length*lh(10)+2.5);fill(C.lime);doc.circle(M+2,y-1.3,1.3,'F');font(10,'normal',C.ink);doc.text(l,M+7,y);y+=l.length*lh(10)+2.5;});y+=2;}
+
+  /* Áreas */
+  section('Lo que dicen tus mediciones');
+  p.areas.forEach(a=>{
+    const ml=lines(a.message,CW-12,9.5),al=a.actions.map(t=>lines(t,CW-20,9.5));
+    const h=19+ml.length*lh(9.5)+al.reduce((s,l)=>s+l.length*lh(9.5)+2,0)+4;
+    need(Math.min(h,120));
+    const top=y,topPage=doc.getCurrentPageInfo().pageNumber;stroke(C.line);doc.setLineWidth(.3);
+    font(8,'bold',C.muted);doc.text(a.area.toUpperCase()+'  ·  '+a.value,M+6,y+3);
+    const [bg,fg]=BADGE[a.status]||BADGE.info;const bt=STATUS[a.status];font(7.5,'bold',fg);const tw=doc.getTextWidth(bt)+6;
+    fill(bg);doc.roundedRect(M+CW-tw-4,y-1,tw,6,3,3,'F');doc.text(bt,M+CW-tw-1,y+3);
+    font(12,'bold',C.ink);doc.text(a.headline,M+6,y+10);y+=16;
+    font(9.5,'normal',C.ink);doc.text(ml,M+6,y);y+=ml.length*lh(9.5)+3;
+    al.forEach(l=>{need(l.length*lh(9.5)+2);fill(C.lime);doc.circle(M+9.2,y-1.3,1.2,'F');font(9.5,'normal',C.ink);doc.text(l,M+13,y);y+=l.length*lh(9.5)+2;});
+    if(doc.getCurrentPageInfo().pageNumber===topPage){fill((BADGE[a.status]||BADGE.info)[1]);doc.rect(M,top-2,1.4,Math.max(8,y-top),'F');}
+    y+=5;stroke(C.line);doc.line(M,y-2.5,M+CW,y-2.5);y+=2;
+  });
+
+  /* Hábitos */
+  if(p.habits.length){section('Tus hábitos, paso a paso');
+    p.habits.forEach((hb,i)=>{const l=lines(hb.text,CW-14,9.5);need(7+l.length*lh(9.5)+3);
+      fill(C.navy);doc.circle(M+3,y-1.2,3,'F');font(8,'bold',C.white);doc.text(String(i+1),M+3,y,{align:'center'});
+      font(10.5,'bold',C.ink);doc.text(hb.title,M+10,y);font(9.5,'normal',C.ink);doc.text(l,M+10,y+5.5);y+=5.5+l.length*lh(9.5)+4;});}
+
+  /* Próximo paso + aviso */
+  need(30);y+=2;fill(C.navyTint);doc.roundedRect(M,y,CW,16,3,3,'F');
+  font(10.5,'bold',C.navy);doc.text('Tu próximo paso',M+6,y+6.5);font(9.5,'normal',C.ink);
+  doc.text(lines('Comenta estos resultados con el equipo NUMED y repite esta evaluación en 3 a 6 meses para ver tu progreso.',CW-12,9.5),M+6,y+12);y+=23;
+  const aviso='Aviso de uso: este documento presenta indicadores funcionales y recomendaciones educativas. No es un diagnóstico ni una edad biológica científicamente validada. Revisa este reporte con un profesional de la salud. No usar con datos reales hasta completar la validación institucional.';
+  const avl=lines(aviso,CW,7.8);need(avl.length*3.4+2);font(7.8,'normal',C.muted);doc.text(avl,M,y);
+
+  /* Pie de página */
+  const n=doc.getNumberOfPages();
+  for(let i=1;i<=n;i++){doc.setPage(i);stroke(C.line);doc.setLineWidth(.3);doc.line(M,287,W-M,287);font(7.5,'normal',C.muted);
+    doc.text('NUMED Experience 360°  ·  Reporte de indicadores de salud',M,291.5);doc.text(`Página ${i} de ${n}`,W-M,291.5,{align:'right'});}
+  const safe=(d.name||'participante').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_|_$/g,'');
+  doc.save(`NUMED_Reporte_${safe}_${String(d.date||'').slice(0,10)||'evaluacion'}.pdf`);
+};
 })();
 </script>
 
