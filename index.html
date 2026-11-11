@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NUMED | Edad Biológica · Experience 360°</title>
-    <meta name="theme-color" content="#020f1c">
+    <meta name="theme-color" content="#ffffff">
+<script>/* Modo celular: la misma página abierta desde el QR personal */(function(){var q=new URLSearchParams(location.search);if(q.has("s")){window.NUMED_MOBILE=true;document.documentElement.classList.add("m-mode");}})();</script>
+<style>html.m-mode body>*:not(#m-host){display:none!important}html.m-mode,html.m-mode body{background:#fff!important;overflow:auto!important}</style>
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -818,6 +821,29 @@ body.numed-touch .q-opt{min-height:124px}
   #fx-booth .bo-consent{font-size:16px}#fx-booth .bo-consent b{font-size:19px}
   #fx-booth .bo-frame-list{grid-template-columns:repeat(3,minmax(0,200px));justify-content:center}
 }
+
+/* Código QR personal */
+.np-take{grid-template-columns:minmax(0,1fr) auto!important;align-items:stretch!important}
+.np-take-steps{list-style:none;counter-reset:s;display:grid;gap:10px;margin:14px 0 18px}
+.np-take-steps li{counter-increment:s;position:relative;padding-left:46px;font-size:clamp(14px,1.1vw,17px);color:var(--muted);line-height:1.45;min-height:32px;display:flex;align-items:center}
+.np-take-steps li::before{content:counter(s);position:absolute;left:0;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--navy);color:#fff;font-weight:800;font-size:14px}
+.np-take-steps b{color:var(--text);margin-right:4px}
+.np-take .np-frames{margin:4px 0 18px}
+.np-take .np-frame canvas{width:clamp(74px,6vw,104px)}
+.np-take-alt button{font-size:13px!important;padding:12px 18px!important;min-height:48px!important}
+.np-take-qr{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:clamp(18px,1.6vw,26px);border-radius:28px;background:#fff;border:1px solid var(--line);box-shadow:0 20px 50px -26px rgba(28,61,94,.45);min-width:clamp(280px,22vw,380px)}
+.np-take-qrbox{width:clamp(220px,18vw,320px);aspect-ratio:1;border-radius:18px;padding:12px;background:#fff;box-shadow:0 0 0 1px var(--line),0 0 0 10px #f2f6e3}
+.np-take-qrbox canvas,.np-take-qrbox img{width:100%!important;height:auto!important;display:block}
+.np-take-cap{font-size:clamp(16px,1.2vw,20px)}
+.np-take-qr small{font-size:12px;color:var(--muted);text-align:center;max-width:300px}
+.np-take-wait{display:none;flex-direction:column;align-items:center;gap:14px;font-size:14px;color:var(--muted);font-weight:600}
+.np-take-wait span{width:52px;height:52px;border-radius:50%;border:5px solid #e8eff4;border-top-color:var(--lime);animation:orb-spin .8s linear infinite}
+.np-take-retry{display:none;border:1px solid var(--line-2);background:#fff;border-radius:999px;padding:10px 18px;font:700 13px Montserrat,sans-serif;cursor:pointer;color:var(--text)}
+.np-take-qr[data-state="loading"] .np-take-qrbox,.np-take-qr[data-state="loading"] .np-take-cap,.np-take-qr[data-state="error"] .np-take-qrbox,.np-take-qr[data-state="error"] .np-take-cap{display:none}
+.np-take-qr[data-state="loading"] .np-take-wait{display:flex;min-height:260px;justify-content:center}
+.np-take-qr[data-state="error"] .np-take-retry{display:inline-block}
+.np-take-qr[data-state="ready"] .np-take-qrbox{animation:fx-pop .7s var(--spring)}
+@media(orientation:portrait) and (min-height:1400px){.np-take-qrbox{width:340px}}
 
 </style>
 </head>
@@ -2582,9 +2608,21 @@ function numedRunResearchTests(){const base={age:35,sex:'masculino',weightKg:70,
   </div>
   <div class="np-disclaimer"><strong>Edad biológica:</strong> pendiente de validación del modelo. Consulta tus resultados con el personal NUMED.</div>
   <div class="np-share np-take">
-   <div class="np-take-intro"><span class="np-kicker">LLÉVATE TU EXPERIENCIA</span><h3>Tu foto NUMED, lista para compartir</h3><p>Tómate una foto con el marco que más te guste y escanea el código para guardarla en tu teléfono.</p>
-    <div class="np-actions"><button class="np-primary np-booth-btn" type="button" onclick="fxBoothOpen()">📸 Abrir photo booth</button><button type="button" onclick="numedShowShareQR()">QR solo con mis valores</button><button type="button" onclick="numedCopyParticipantSummary()">Copiar resumen</button></div></div>
-   <div class="np-frames" id="np-frames" aria-hidden="true"></div>
+   <div class="np-take-intro"><span class="np-kicker">LLÉVATE TU EXPERIENCIA</span><h3>Todo en tu celular, con un solo código</h3>
+    <ol class="np-take-steps">
+     <li><b>Escanea el código</b> con la cámara de tu celular o iPad.</li>
+     <li><b>Descarga tu reporte en PDF</b> con tus indicadores y tu plan.</li>
+     <li><b>Tómate tu foto NUMED</b> con tu propia cámara y elige tu marco.</li>
+    </ol>
+    <div class="np-frames" id="np-frames" aria-hidden="true"></div>
+    <div class="np-actions np-take-alt"><button type="button" onclick="fxBoothOpen()">📸 Usar la cámara de esta pantalla</button><button type="button" onclick="numedShowShareQR()">QR solo con mis valores</button></div></div>
+   <div class="np-take-qr" id="np-take-qr" data-state="loading">
+     <div class="np-take-qrbox" id="np-take-code"></div>
+     <div class="np-take-wait"><span></span>Preparando tu código personal…</div>
+     <b class="np-take-cap">Escanea con tu cámara</b>
+     <small id="np-take-exp">Código personal · vence en 48 horas</small>
+     <button type="button" class="np-take-retry" onclick="fxTakeRefresh(true)">Reintentar</button>
+   </div>
    <div id="np-booth-result" class="np-booth-result" hidden><img id="np-booth-photo" alt="Tu foto NUMED"><div class="np-booth-qr"><div id="np-booth-qr"></div><b>Escanea para guardar tu foto</b><small id="np-booth-exp"></small></div></div>
    <div id="np-qr-zone" class="np-qr-zone"><div class="np-qr-code" id="np-qr-code"></div><p class="np-qr-note">Este QR contiene solo texto con tus cuatro indicadores, sin nombre ni teléfono. No abre un expediente clínico.</p><button type="button" onclick="numedHideShareQR()">Ocultar QR</button></div>
    <div class="np-status" id="np-status" role="status" aria-live="polite"></div>
@@ -2868,7 +2906,7 @@ document.addEventListener('pointerdown',e=>{
 
 /* ── Partículas de fondo (constelación viva) ── */
 (function particles(){
-  const cv=$('fx-canvas');if(!cv||REDUCE.matches)return;
+  const cv=$('fx-canvas');if(!cv||REDUCE.matches||window.NUMED_MOBILE)return;
   const ctx=cv.getContext('2d');let W=0,H=0,pts=[],mouse={x:-999,y:-999},raf=0;
   function resize(){const dpr=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
     const n=Math.round(clamp(W*H/24000,30,80));pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.8+.6}));}
@@ -3435,102 +3473,150 @@ const rcObs=new MutationObserver(()=>{
 });
 document.addEventListener('DOMContentLoaded',()=>{const rc=$('recommendations-content');if(rc)rcObs.observe(rc,{childList:true});});
 
-/* ── Reporte PDF estructurado ── */
-const C={navy:[36,74,111],ink:[28,61,94],muted:[93,118,144],lime:[177,201,89],limeDark:[107,138,29],limeTint:[244,248,231],navyTint:[238,243,248],line:[221,229,236],amber:[154,99,14],amberTint:[252,240,218],white:[255,255,255]};
+/* ── Reporte PDF (para el personal y para el teléfono del participante) ── */
+const C={navy:[36,74,111],navyDeep:[27,58,89],ink:[28,61,94],muted:[93,118,144],faint:[143,161,180],lime:[177,201,89],limeDark:[107,138,29],limeTint:[244,248,231],navyTint:[238,243,248],line:[221,229,236],amber:[154,99,14],amberTint:[252,240,218],amberBar:[227,178,90],coralBar:[230,150,130],skyBar:[142,170,203],white:[255,255,255]};
 const BADGE={bien:[C.limeTint,C.limeDark],mejora:[C.amberTint,C.amber],revisar:[C.navyTint,C.navy],info:[C.navyTint,C.muted]};
+function buildReport(hist){
+  const p=buildPlan(planData(hist)),d=p.d;
+  const doc=new window.jspdf.jsPDF({unit:'mm',format:'a4',compress:true});
+  doc.setProperties({title:'NUMED · Reporte de bienestar',subject:'Indicadores de salud y plan personalizado',author:'NUMED Experience 360°',creator:'NUMED Experience 360°'});
+  const W=210,M=16,CW=W-2*M,BOTTOM=278;let y=0;
+  const fill=c=>doc.setFillColor(...c),stroke=c=>doc.setDrawColor(...c),color=c=>doc.setTextColor(...c);
+  const font=(sz,st='normal',c=C.ink)=>{doc.setFont('helvetica',st);doc.setFontSize(sz);color(c);};
+  const clean=t=>String(t??'').replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}️]/gu,'').trim();
+  const lines=(t,w,sz,st='normal')=>{doc.setFont('helvetica',st);doc.setFontSize(sz);return doc.splitTextToSize(clean(t),w);};
+  const lh=sz=>sz*0.43;
+  const header2=()=>{fill(C.navy);doc.rect(0,0,W,14,'F');fill(C.lime);doc.rect(0,14,W,0.9,'F');font(8.5,'bold',C.white);doc.text('NUMED Experience 360°  ·  Tu reporte de bienestar',M,9);font(8.5,'normal',[214,226,238]);doc.text(clean(d.name||''),W-M,9,{align:'right'});};
+  const newPage=()=>{doc.addPage();header2();y=26;};
+  const need=h=>{if(y+h>BOTTOM)newPage();};
+  const section=(title,sub)=>{need(22);y+=3;font(13,'bold',C.navy);doc.text(title,M,y);fill(C.lime);doc.roundedRect(M,y+2.2,16,1.4,.7,.7,'F');y+=8;if(sub){const l=lines(sub,CW,9);font(9,'normal',C.muted);doc.text(l,M,y);y+=l.length*lh(9)+3;}y+=1;};
+  const dt=new Date(d.date||Date.now());
+  const dateTxt=isNaN(dt)?String(d.date||'').slice(0,10):dt.toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'});
+  const logo=document.querySelector('.header-logo img')?.src;
+
+  /* ── Portada compacta ── */
+  fill(C.navy);doc.rect(0,0,W,58,'F');
+  fill(C.navyDeep);doc.circle(W-10,4,46,'F');fill(C.navy);doc.circle(W-10,4,34,'F');
+  fill(C.lime);doc.rect(0,58,W,2,'F');
+  if(logo&&logo.startsWith('data:image')){try{fill(C.white);doc.roundedRect(M,13,26,26,5,5,'F');doc.addImage(logo,'PNG',M+3.4,15.6,19.2,21.1);}catch(e){}}
+  font(8.5,'bold',C.lime);doc.text('NUMED EXPERIENCE 360°',M+33,18.5,{charSpace:.6});
+  font(22,'bold',C.white);doc.text('Tu reporte de bienestar',M+33,28.5);
+  font(10,'normal',[214,226,238]);doc.text('Indicadores de salud y plan personalizado',M+33,35.5);
+  font(9,'normal',[190,206,222]);doc.text(dateTxt,M+33,41.5);
+  // ficha
+  y=48;fill(C.white);doc.roundedRect(M,y,CW,22,4,4,'F');stroke(C.line);doc.setLineWidth(.3);doc.roundedRect(M,y,CW,22,4,4,'S');
+  const info=[['PARTICIPANTE',d.name||'—'],['EDAD',(d.age||'—')+' años'],['SEXO',d.sex?d.sex[0].toUpperCase()+d.sex.slice(1):'—'],['PESO · ESTATURA',`${d.weight>0?fmt(d.weight):'—'} kg · ${d.height>0?fmt(d.height,0):'—'} cm`]];
+  const cws=[CW*.34,CW*.16,CW*.18,CW*.32];let cx=M+6;
+  info.forEach(([k,v],i)=>{font(7,'bold',C.faint);doc.text(k,cx,y+8,{charSpace:.3});font(i?11:12,'bold',C.ink);doc.text(lines(v,cws[i]-6,i?11:12,'bold')[0]||'—',cx,y+15.5);if(i<3){stroke(C.line);doc.line(cx+cws[i]-5,y+5,cx+cws[i]-5,y+17);}cx+=cws[i];});
+  y+=31;
+
+  /* ── Saludo ── */
+  font(15,'bold',C.ink);doc.text(d.first?`Hola, ${clean(d.first)}.`:'Hola.',M,y);y+=6.5;
+  const intro=lines('Este reporte reúne tus mediciones de hoy y un plan con pasos concretos. No necesitas cambiarlo todo a la vez: elige uno o dos pasos y hazlos parte de tu rutina.',CW-56,9.8);
+  font(9.8,'normal',C.muted);doc.text(intro,M,y);
+  // contadores
+  const cy0=y-9;[[p.strengths.length,'fortalezas',C.limeTint,C.limeDark],[p.opps,'pasos sugeridos',C.navyTint,C.navy]].forEach(([n,l,bg,fg],i)=>{const x=W-M-50+i*26;fill(bg);doc.roundedRect(x,cy0,24,20,3,3,'F');font(17,'bold',fg);doc.text(String(n),x+12,cy0+10,{align:'center'});font(6.8,'bold',C.muted);doc.text(l,x+12,cy0+16,{align:'center'});});
+  y+=intro.length*lh(9.8)+8;
+
+  /* ── Indicadores con escala ── */
+  section('Tus indicadores');
+  const g=d.strength?.thresholds;
+  const cards=[
+    {lab:'Índice de masa corporal',val:Number.isFinite(d.bmi)?fmt(d.bmi):'—',unit:'kg/m2',v:d.bmi,min:15,max:40,
+     zones:[[15,18.5,C.skyBar],[18.5,25,C.lime],[25,30,C.amberBar],[30,40,C.coralBar]],ticks:[18.5,25,30],
+     note:!Number.isFinite(d.bmi)?'—':d.bmi<18.5?'Por debajo del intervalo habitual (18.5–24.9)':d.bmi<25?'Dentro del intervalo habitual (18.5–24.9)':'Por encima del intervalo habitual (18.5–24.9)'},
+    {lab:'Relación cintura / talla',val:Number.isFinite(d.ratio)?fmt(d.ratio,2):'—',unit:'',v:d.ratio,min:.3,max:.8,
+     zones:[[.3,.5,C.lime],[.5,.6,C.amberBar],[.6,.8,C.coralBar]],ticks:[.5,.6],
+     note:!Number.isFinite(d.ratio)?'—':d.ratio<.5?'Por debajo de la meta orientativa de 0.50':d.ratio<.6?'Por encima de la meta orientativa de 0.50':'0.60 o más: conviene revisarlo con el equipo NUMED'},
+    g&&d.strengthRef?{lab:'Fuerza de agarre',val:d.grip>0?fmt(d.grip):'—',unit:'kg',v:d.grip,min:Math.floor(g.weak*.5),max:Math.ceil(g.strong*1.3),
+     zones:[[Math.floor(g.weak*.5),g.weak,C.amberBar],[g.weak,g.strong,C.lime],[g.strong,Math.ceil(g.strong*1.3),C.limeDark]],ticks:[g.weak,g.strong],
+     note:`Referencia para tu edad y sexo: ${g.weak}–${g.strong} kg`}
+     :{lab:'Fuerza de agarre',val:d.grip>0?fmt(d.grip):'—',unit:'kg',note:'Medición registrada; sin tabla de referencia aplicable'},
+    {lab:'Perímetro abdominal',val:d.waist>0?fmt(d.waist):'—',unit:'cm',note:'Se interpreta junto con tu estatura (relación cintura/talla)'}
+  ];
+  const gap=5,bw=(CW-gap)/2,bh=37;
+  cards.forEach((c,i)=>{
+    if(i%2===0)need(bh+gap);
+    const x=M+(i%2)*(bw+gap),yy=y;
+    fill(C.white);stroke(C.line);doc.setLineWidth(.3);doc.roundedRect(x,yy,bw,bh,3.5,3.5,'FD');
+    font(7.5,'bold',C.muted);doc.text(c.lab.toUpperCase(),x+6,yy+8,{charSpace:.3});
+    font(24,'bold',C.ink);doc.text(c.val,x+6,yy+19.5);const vw=doc.getTextWidth(c.val);
+    if(c.unit){font(9,'normal',C.muted);const u=c.unit==='kg/m2'?'kg/m':c.unit;doc.text(u,x+7.5+vw,yy+19.5);if(c.unit==='kg/m2'){const uw=doc.getTextWidth(u);doc.setFontSize(6);doc.text('2',x+7.8+vw+uw,yy+16.6);}}
+    if(c.zones&&Number.isFinite(c.v)){
+      const bx=x+6,bwid=bw-12,byy=yy+25,sc=v=>bx+bwid*Math.max(0,Math.min(1,(v-c.min)/(c.max-c.min)));
+      c.zones.forEach(([a,b,col],k)=>{fill(col);const x1=sc(a),x2=sc(b);doc.rect(x1,byy,Math.max(.1,x2-x1),2.6,'F');});
+      fill(C.white);doc.rect(bx-.5,byy-.1,.8,2.8,'F');
+      font(6,'normal',C.faint);c.ticks.forEach(t=>doc.text(String(t),sc(t),byy+6.2,{align:'center'}));
+      const mx=sc(c.v);fill(C.white);stroke(C.ink);doc.setLineWidth(.8);doc.circle(mx,byy+1.3,2.3,'FD');fill(C.ink);doc.circle(mx,byy+1.3,.9,'F');
+      font(7.6,'normal',C.limeDark);doc.text(lines(c.note,bwid,7.6)[0],x+6,yy+bh-2.6);
+    }else{font(8,'normal',C.limeDark);doc.text(lines(c.note,bw-12,8).slice(0,2),x+6,yy+27);}
+    if(i%2===1||i===cards.length-1)y+=bh+gap;
+  });
+  y+=2;
+
+  /* ── Primer paso ── */
+  {const tl=lines(p.first.text,CW-34,10);const fh=Math.max(26,14+tl.length*lh(10)+5);need(fh+4);
+   fill(C.navy);doc.roundedRect(M,y,CW,fh,4,4,'F');fill(C.lime);doc.roundedRect(M+6,y+(fh-16)/2,16,16,3,3,'F');
+   font(14,'bold',C.navy);doc.text('1',M+14,y+fh/2+2.2,{align:'center'});
+   font(7.2,'bold',C.lime);doc.text('SI SOLO ELIGES UNA COSA, QUE SEA ESTA',M+28,y+8,{charSpace:.4});
+   font(13,'bold',C.white);doc.text(clean(p.first.title),M+28,y+14.5);font(10,'normal',[219,229,239]);doc.text(tl,M+28,y+20.5);y+=fh+6;}
+
+  /* ── Fortalezas ── */
+  if(p.strengths.length){section('Lo que ya estás haciendo bien');
+    let x=M;const ph=8;
+    p.strengths.forEach(s=>{const t=clean(s);font(8.6,'bold',C.ink);const w=doc.getTextWidth(t)+13;if(x+w>M+CW){x=M;y+=ph+3;}need(ph+3);
+      fill(C.limeTint);doc.roundedRect(x,y,w,ph,4,4,'F');fill(C.lime);doc.circle(x+4.6,y+ph/2,2.2,'F');stroke(C.navy);doc.setLineWidth(.55);doc.line(x+3.5,y+ph/2+.1,x+4.3,y+ph/2+.9);doc.line(x+4.3,y+ph/2+.9,x+5.8,y+ph/2-.8);
+      font(8.6,'bold',C.ink);doc.text(t,x+8.8,y+ph/2+1.5);x+=w+3;});
+    y+=ph+7;}
+
+  /* ── Áreas ── */
+  section('Lo que dicen tus mediciones');
+  p.areas.forEach(a=>{
+    const ml=lines(a.message,CW-14,9.4),al=a.actions.map(t=>lines(t,CW-24,9.2));
+    const h=22+ml.length*lh(9.4)+al.reduce((s,l)=>s+l.length*lh(9.2)+3.2,0)+4;
+    need(Math.min(h,140));
+    const top=y,topPage=doc.getCurrentPageInfo().pageNumber;
+    const [bg,fg]=BADGE[a.status]||BADGE.info;
+    fill(bg);doc.roundedRect(M,y,CW,11,3,3,'F');doc.rect(M,y+6,CW,5,'F');
+    font(8,'bold',C.muted);doc.text(clean(a.area).toUpperCase(),M+7,y+7.2,{charSpace:.3});const aw=doc.getTextWidth(clean(a.area).toUpperCase())+(clean(a.area).length*.3);
+    font(10,'bold',C.ink);doc.text(String(a.value),M+9+aw,y+7.4);
+    const bt=STATUS[a.status];font(7.5,'bold',fg);const tw=doc.getTextWidth(bt)+7;fill(C.white);doc.roundedRect(M+CW-tw-4,y+2.4,tw,6.2,3.1,3.1,'F');doc.text(bt,M+CW-tw-0.5,y+6.8);
+    y+=17;font(12.5,'bold',C.ink);doc.text(clean(a.headline),M+7,y);y+=5.5;
+    font(9.4,'normal',C.ink);doc.text(ml,M+7,y);y+=ml.length*lh(9.4)+3;
+    al.forEach(l=>{need(l.length*lh(9.2)+3);fill(C.lime);doc.roundedRect(M+8,y-3.1,3.6,3.6,.8,.8,'F');font(9.2,'normal',C.ink);doc.text(l,M+15,y);y+=l.length*lh(9.2)+3.2;});
+    if(doc.getCurrentPageInfo().pageNumber===topPage){stroke(C.line);doc.setLineWidth(.3);doc.roundedRect(M,top,CW,y-top+1,3,3,'S');}
+    y+=7;
+  });
+
+  /* ── Hábitos ── */
+  if(p.habits.length){section('Tus hábitos, paso a paso','Sugerencias basadas en las respuestas de tu cuestionario.');
+    p.habits.forEach((hb,i)=>{const l=lines(hb.text,CW-16,9.2);const hh=8+l.length*lh(9.2);need(hh+4);
+      fill(C.navy);doc.circle(M+4,y+1.5,4,'F');font(9,'bold',C.white);doc.text(String(i+1),M+4,y+3.1,{align:'center'});
+      font(10.8,'bold',C.ink);doc.text(clean(hb.title),M+12,y+2.8);font(9.2,'normal',C.ink);doc.text(l,M+12,y+8.3);y+=hh+5;});}
+
+  /* ── Próximo paso + aviso ── */
+  need(40);y+=1;fill(C.limeTint);doc.roundedRect(M,y,CW,20,4,4,'F');
+  font(11,'bold',C.navy);doc.text('Tu próximo paso',M+7,y+8);font(9.4,'normal',C.ink);
+  doc.text(lines('Comenta estos resultados con el equipo NUMED y repite esta evaluación en 3 a 6 meses para ver tu progreso.',CW-14,9.4),M+7,y+14);y+=27;
+  const aviso='Aviso de uso: este documento presenta indicadores funcionales y recomendaciones educativas. No es un diagnóstico ni una edad biológica científicamente validada. Revisa este reporte con un profesional de la salud. No usar con datos reales hasta completar la validación institucional.';
+  const avl=lines(aviso,CW,7.6);need(avl.length*3.3+2);font(7.6,'normal',C.faint);doc.text(avl,M,y);
+
+  /* ── Pie de página ── */
+  const n=doc.getNumberOfPages();
+  for(let i=1;i<=n;i++){doc.setPage(i);stroke(C.line);doc.setLineWidth(.3);doc.line(M,286,W-M,286);font(7.5,'normal',C.faint);
+    doc.text('NUMED Experience 360°  ·  Reporte de bienestar  ·  '+dateTxt,M,291);doc.text(`Página ${i} de ${n}`,W-M,291,{align:'right'});}
+  const safe=(d.name||'participante').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_|_$/g,'');
+  return {doc,filename:`NUMED_Reporte_${safe}_${(isNaN(dt)?new Date():dt).toISOString().slice(0,10)}.pdf`,plan:p};
+}
 window.downloadPDF=function(){
   if(!numedRequireAuth())return;
   if(!window.jspdf?.jsPDF){window.fxToast?window.fxToast('No se pudo cargar la herramienta PDF. Verifica tu conexión.','err'):alert('No se pudo cargar la herramienta PDF.');return;}
-  const hist=window._historyMode?(window._historyData||null):null;
-  const p=buildPlan(planData(hist)),d=p.d;
-  const doc=new window.jspdf.jsPDF({unit:'mm',format:'a4'});
-  const W=210,M=16,CW=W-2*M,BOTTOM=280;let y=0;
-  const fill=c=>doc.setFillColor(...c),stroke=c=>doc.setDrawColor(...c),color=c=>doc.setTextColor(...c);
-  const font=(sz,st='normal',c=C.ink)=>{doc.setFont('helvetica',st);doc.setFontSize(sz);color(c);};
-  const lines=(t,w,sz,st='normal')=>{if(sz){doc.setFont('helvetica',st);doc.setFontSize(sz);}return doc.splitTextToSize(String(t).replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}️]/gu,'').trim(),w);};
-  const lh=sz=>sz*0.42;
-  const newPage=()=>{doc.addPage();y=20;};
-  const need=h=>{if(y+h>BOTTOM)newPage();};
-  const section=(title)=>{need(16);y+=4;font(12,'bold',C.navy);doc.text(title,M,y);fill(C.lime);doc.rect(M,y+2,14,1.2,'F');y+=9;};
-  const dateTxt=(()=>{const t=new Date(d.date||Date.now());return isNaN(t)?String(d.date||'').slice(0,10):t.toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'});})();
-
-  /* Encabezado */
-  fill(C.navy);doc.rect(0,0,W,42,'F');fill(C.lime);doc.rect(0,42,W,1.6,'F');
-  const logo=document.querySelector('.header-logo img')?.src;
-  if(logo&&logo.startsWith('data:image')){try{fill(C.white);doc.roundedRect(M,9,24,24,4,4,'F');doc.addImage(logo,'PNG',M+3,11.5,18,19.8);}catch(e){}}
-  font(19,'bold',C.white);doc.text('Reporte de indicadores de salud',M+31,20);
-  font(9.5,'normal',[214,226,238]);doc.text('NUMED Experience 360°  ·  Evaluación funcional y plan personalizado',M+31,27.5);
-  doc.text('Fecha: '+dateTxt,M+31,33.5);
-  y=54;
-
-  /* Datos del participante */
-  fill(C.navyTint);doc.roundedRect(M,y-6,CW,20,3,3,'F');
-  const info=[['Participante',d.name||'—'],['Edad',(d.age||'—')+' años'],['Sexo',d.sex?d.sex[0].toUpperCase()+d.sex.slice(1):'—'],['Peso / estatura',`${d.weight>0?fmt(d.weight):'—'} kg · ${d.height>0?fmt(d.height,0):'—'} cm`]];
-  const colW=CW/4;
-  info.forEach(([k,v],i)=>{const x=M+5+i*colW;font(7.5,'bold',C.muted);doc.text(k.toUpperCase(),x,y);font(10.5,'bold',C.ink);doc.text(lines(v,colW-8)[0]||'—',x,y+6.5);});
-  y+=24;
-
-  /* Indicadores */
-  section('Tus indicadores');
-  const notes={imc:Number.isFinite(d.bmi)?(d.bmi<18.5?'Por debajo del intervalo habitual':d.bmi<25?'Dentro del intervalo habitual':'Interpretar junto a otras medidas'):'—',
-    ratio:Number.isFinite(d.ratio)?(d.ratio<0.5?'Por debajo de 0.50 (meta)':d.ratio<0.6?'A partir de 0.50':'A partir de 0.60'):'—',
-    grip:d.strengthRef?({Bajo:'Por debajo de la referencia',Medio:'Dentro de la referencia',Alto:'Por encima de la referencia'}[d.strength.level]||'Medición registrada'):'Medición registrada',
-    waist:'Medición registrada'};
-  const metrics=[['Índice de masa corporal',Number.isFinite(d.bmi)?fmt(d.bmi):'—','kg/m',notes.imc],['Cintura / talla',Number.isFinite(d.ratio)?fmt(d.ratio,2):'—','',notes.ratio],['Fuerza de agarre',d.grip>0?fmt(d.grip):'—','kg',notes.grip],['Perímetro abdominal',d.waist>0?fmt(d.waist):'—','cm',notes.waist]];
-  const gap=4,bw=(CW-gap*3)/4,bh=34;need(bh+4);
-  metrics.forEach(([lab,val,unit,note],i)=>{const x=M+i*(bw+gap);
-    fill(C.white);stroke(C.line);doc.setLineWidth(.3);doc.roundedRect(x,y,bw,bh,3,3,'FD');fill(C.lime);doc.rect(x+4,y+4,8,1,'F');
-    font(7.5,'bold',C.muted);doc.text(lab.toUpperCase(),x+4,y+9.5,{maxWidth:bw-8});
-    font(18,'bold',C.ink);doc.text(val,x+4,y+20);const vw=doc.getTextWidth(val);font(8,'normal',C.muted);doc.text(unit,x+5+vw,y+20);if(unit==='kg/m'){const uw=doc.getTextWidth(unit);doc.setFontSize(5.5);doc.text('2',x+5+vw+uw+.3,y+17.8);}
-    color(C.limeDark);doc.text(lines(note,bw-8,7.5).slice(0,2),x+4,y+26.5);});
-  y+=bh+6;
-
-  /* Primer paso */
-  section('Si solo eliges una cosa, que sea esta');
-  const fl=lines(p.first.text,CW-14,10);const fh=10+fl.length*lh(10)+4;need(fh);
-  fill(C.limeTint);doc.roundedRect(M,y-3,CW,fh,3,3,'F');fill(C.lime);doc.rect(M,y-3,2.2,fh,'F');
-  font(12,'bold',C.ink);doc.text(p.first.title,M+8,y+4);font(10,'normal',C.ink);doc.text(fl,M+8,y+10.5);y+=fh+3;
-
-  /* Fortalezas */
-  if(p.strengths.length){section('Lo que ya estás haciendo bien');
-    p.strengths.forEach(s=>{const l=lines(s,CW-10,10);need(l.length*lh(10)+2.5);fill(C.lime);doc.circle(M+2,y-1.3,1.3,'F');font(10,'normal',C.ink);doc.text(l,M+7,y);y+=l.length*lh(10)+2.5;});y+=2;}
-
-  /* Áreas */
-  section('Lo que dicen tus mediciones');
-  p.areas.forEach(a=>{
-    const ml=lines(a.message,CW-12,9.5),al=a.actions.map(t=>lines(t,CW-20,9.5));
-    const h=19+ml.length*lh(9.5)+al.reduce((s,l)=>s+l.length*lh(9.5)+2,0)+4;
-    need(Math.min(h,120));
-    const top=y,topPage=doc.getCurrentPageInfo().pageNumber;stroke(C.line);doc.setLineWidth(.3);
-    font(8,'bold',C.muted);doc.text(a.area.toUpperCase()+'  ·  '+a.value,M+6,y+3);
-    const [bg,fg]=BADGE[a.status]||BADGE.info;const bt=STATUS[a.status];font(7.5,'bold',fg);const tw=doc.getTextWidth(bt)+6;
-    fill(bg);doc.roundedRect(M+CW-tw-4,y-1,tw,6,3,3,'F');doc.text(bt,M+CW-tw-1,y+3);
-    font(12,'bold',C.ink);doc.text(a.headline,M+6,y+10);y+=16;
-    font(9.5,'normal',C.ink);doc.text(ml,M+6,y);y+=ml.length*lh(9.5)+3;
-    al.forEach(l=>{need(l.length*lh(9.5)+2);fill(C.lime);doc.circle(M+9.2,y-1.3,1.2,'F');font(9.5,'normal',C.ink);doc.text(l,M+13,y);y+=l.length*lh(9.5)+2;});
-    if(doc.getCurrentPageInfo().pageNumber===topPage){fill((BADGE[a.status]||BADGE.info)[1]);doc.rect(M,top-2,1.4,Math.max(8,y-top),'F');}
-    y+=5;stroke(C.line);doc.line(M,y-2.5,M+CW,y-2.5);y+=2;
-  });
-
-  /* Hábitos */
-  if(p.habits.length){section('Tus hábitos, paso a paso');
-    p.habits.forEach((hb,i)=>{const l=lines(hb.text,CW-14,9.5);need(7+l.length*lh(9.5)+3);
-      fill(C.navy);doc.circle(M+3,y-1.2,3,'F');font(8,'bold',C.white);doc.text(String(i+1),M+3,y,{align:'center'});
-      font(10.5,'bold',C.ink);doc.text(hb.title,M+10,y);font(9.5,'normal',C.ink);doc.text(l,M+10,y+5.5);y+=5.5+l.length*lh(9.5)+4;});}
-
-  /* Próximo paso + aviso */
-  need(30);y+=2;fill(C.navyTint);doc.roundedRect(M,y,CW,16,3,3,'F');
-  font(10.5,'bold',C.navy);doc.text('Tu próximo paso',M+6,y+6.5);font(9.5,'normal',C.ink);
-  doc.text(lines('Comenta estos resultados con el equipo NUMED y repite esta evaluación en 3 a 6 meses para ver tu progreso.',CW-12,9.5),M+6,y+12);y+=23;
-  const aviso='Aviso de uso: este documento presenta indicadores funcionales y recomendaciones educativas. No es un diagnóstico ni una edad biológica científicamente validada. Revisa este reporte con un profesional de la salud. No usar con datos reales hasta completar la validación institucional.';
-  const avl=lines(aviso,CW,7.8);need(avl.length*3.4+2);font(7.8,'normal',C.muted);doc.text(avl,M,y);
-
-  /* Pie de página */
-  const n=doc.getNumberOfPages();
-  for(let i=1;i<=n;i++){doc.setPage(i);stroke(C.line);doc.setLineWidth(.3);doc.line(M,287,W-M,287);font(7.5,'normal',C.muted);
-    doc.text('NUMED Experience 360°  ·  Reporte de indicadores de salud',M,291.5);doc.text(`Página ${i} de ${n}`,W-M,291.5,{align:'right'});}
-  const safe=(d.name||'participante').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_|_$/g,'');
-  doc.save(`NUMED_Reporte_${safe}_${String(d.date||'').slice(0,10)||'evaluacion'}.pdf`);
+  const r=buildReport(window._historyMode?(window._historyData||null):null);r.doc.save(r.filename);
+};
+// Para el código QR del participante: el mismo reporte como archivo.
+window.fxReportBlob=function(){
+  if(!window.jspdf?.jsPDF)throw new Error('La herramienta PDF no está disponible.');
+  const r=buildReport(null);return {blob:r.doc.output('blob'),filename:r.filename,plan:r.plan};
 };
 })();
 </script>
@@ -3592,65 +3678,32 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-<script id="numed-photobooth">
-/* ═══════════════════════════════════════════════════════════════
-   NUMED · Photo booth
-   - Cámara con vista previa en vivo, 3 marcos, cuenta regresiva y flash.
-   - La foto (formato historia 1080×1920) se sube a Supabase Storage y el QR
-     abre un enlace firmado que vence. Si la subida falla, se puede descargar aquí.
-   - Permiso para Instagram: opcional y desmarcado por defecto. Las fotos con
-     permiso se guardan en la carpeta "con-permiso-instagram/".
-   ═══════════════════════════════════════════════════════════════ */
+<script id="numed-frames">
+/* NUMED · Marcos del photo booth (compartido por la pantalla y por mi.html) */
 (function(){
-/* ── Configuración ── */
-const BUCKET='numed-photobooth';      // bucket de Supabase Storage
-const LINK_HOURS=24;                  // vigencia del enlace del QR
-const SHOW_BIO_AGE=false;             // ⚠ Mantener en false hasta que el modelo esté validado clínicamente.
 const W=1080,H=1920;
-
-const $=id=>document.getElementById(id);
 const C={navy:'#244a6f',ink:'#1c3d5e',lime:'#b1c959',limeDark:'#6b8a1d',muted:'#5d7690',white:'#ffffff'};
 const FRAMES=[
   {key:'edad',label:'Mi edad'},
   {key:'bio',label:'NUMED Edad Biológica'},
   {key:'pregunta',label:'¿Y tú ya te la tomaste?'}
 ];
-let frame='edad',stream=null,raf=0,mode='idle',shot=null,shotBlob=null,lastUrl=null,busy=false;
-const video=()=>$('bo-video');
-const img=src=>{const i=new Image();i.src=src;return i;};
 let LOGO=null,WORD=null;
-function logos(){
-  if(!LOGO){const s=document.querySelector('.header-logo img')?.src;if(s)LOGO=img(s);}
-  if(!WORD){const s=document.querySelector('#numed-auth-gate img')?.src;if(s)WORD=img(s);}
-}
-
-/* ── Datos de la persona ── */
-function data(){
-  const name=($('patient-name')?.value||'').trim().replace(/\s+/g,' ');
-  const age=Number($('patient-age')?.value)||null;
-  return {name,first:name.split(' ')[0]||'',age,bio:bioAge(),date:new Date().toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})};
-}
-function bioAge(){
-  if(!SHOW_BIO_AGE||!window.NUMED_EXP)return null;
-  try{
-    const v=id=>Number($(id)?.value),answers={};
-    for(const k of NUMED_EXP.REQUIRED){const x=window._questionnaireAnswers?.[k];if(x!=null&&x!=='')answers[k]=Number(x);}
-    const r=NUMED_EXP.evaluate({age:v('patient-age'),sex:$('patient-gender')?.value,weightKg:v('patient-weight'),heightCm:v('patient-height'),waistCm:v('abdominal-perimeter'),gripKg:v('strength-value'),answers});
-    return r.status==='experimental'&&Number.isFinite(r.hypotheticalAge)?r.hypotheticalAge:null;
-  }catch(e){return null;}
-}
-
-/* ── Utilidades de dibujo ── */
+const img=src=>{const i=new Image();i.decoding='async';i.src=src;return i;};
+function setLogos(logo,word){if(logo&&!LOGO)LOGO=img(logo);if(word&&!WORD)WORD=img(word);}
 const F=(w,s)=>`${w} ${s}px Montserrat, "Helvetica Neue", Arial, sans-serif`;
 function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
 function fit(ctx,text,maxW,size,weight='800',min=24){let s=size;ctx.font=F(weight,s);while(ctx.measureText(text).width>maxW&&s>min){s-=2;ctx.font=F(weight,s);}return s;}
 function spaced(ctx,text,x,y,sp){let cx=x;for(const ch of text){ctx.fillText(ch,cx,y);cx+=ctx.measureText(ch).width+sp;}return cx-x;}
-function drawPhoto(ctx,src,x,y,w,h,mirror){
-  ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();
-  const sw=src?(src.videoWidth||src.width):0,sh=src?(src.videoHeight||src.height):0;
+function drawPhoto(ctx,src,x,y,w,h,o){
+  o=o||{};ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();
+  const sw=src?(src.videoWidth||src.naturalWidth||src.width):0,sh=src?(src.videoHeight||src.naturalHeight||src.height):0;
   if(src&&sw&&sh){
-    const k=Math.max(w/sw,h/sh),dw=sw*k,dh=sh*k,dx=x+(w-dw)/2,dy=y+(h-dh)/2;
-    if(mirror){ctx.translate(x*2+w,0);ctx.scale(-1,1);}
+    const z=Math.max(1,o.zoom||1),k=Math.max(w/sw,h/sh)*z,dw=sw*k,dh=sh*k;
+    const mx=(dw-w)/2,my=(dh-h)/2,ox=Math.max(-mx,Math.min(mx,(o.ox||0)*w)),oy=Math.max(-my,Math.min(my,(o.oy||0)*h));
+    const dx=x+(w-dw)/2+ox,dy=y+(h-dh)/2+oy;
+    ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+    if(o.mirror){ctx.translate(x*2+w,0);ctx.scale(-1,1);}
     ctx.drawImage(src,dx,dy,dw,dh);
   }else{ // silueta de ejemplo para las miniaturas
     const g=ctx.createLinearGradient(x,y,x+w,y+h);g.addColorStop(0,'#e3ecf5');g.addColorStop(1,'#eef4dc');ctx.fillStyle=g;ctx.fillRect(x,y,w,h);
@@ -3665,11 +3718,12 @@ function logoTile(ctx,x,y,size){
 }
 
 /* ── Marcos ── */
-function drawScene(ctx,src,key,d,mirror){
+function drawScene(ctx,src,key,d,o){
+  if(typeof o==='boolean')o={mirror:o};d=d||{};d.date=d.date||new Date().toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'});
   ctx.save();ctx.clearRect(0,0,W,H);
   if(key==='bio'){
     ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
-    drawPhoto(ctx,src,60,60,W-120,H-520,mirror);
+    drawPhoto(ctx,src,60,60,W-120,H-520,o);
     ctx.fillStyle=C.lime;ctx.fillRect(60,H-460,W-120,10);
     if(WORD?.complete&&WORD.naturalWidth){const ww=290,wh=ww*WORD.naturalHeight/WORD.naturalWidth;ctx.drawImage(WORD,70,H-410+(300-wh)/2-10,ww,wh);}
     ctx.fillStyle=C.navy;ctx.textAlign='right';ctx.textBaseline='alphabetic';
@@ -3678,7 +3732,7 @@ function drawScene(ctx,src,key,d,mirror){
     ctx.font=F('800',96);ctx.fillText('BIOLÓGICA',W-70,H-115);
     ctx.font=F('600',34);ctx.fillStyle=C.muted;ctx.fillText(d.date,W-70,H-60);
   }else if(key==='pregunta'){
-    drawPhoto(ctx,src,0,0,W,H,mirror);
+    drawPhoto(ctx,src,0,0,W,H,o);
     let g=ctx.createLinearGradient(0,H*.45,0,H);g.addColorStop(0,'rgba(28,61,94,0)');g.addColorStop(1,'rgba(20,45,70,.55)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
     logoTile(ctx,60,70,150);
     // sticker
@@ -3695,7 +3749,7 @@ function drawScene(ctx,src,key,d,mirror){
     ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=F('600',30);ctx.fillText(d.date,100,by+560);
     ctx.lineWidth=22;ctx.strokeStyle=C.lime;ctx.strokeRect(11,11,W-22,H-22);
   }else{ // 'edad'
-    drawPhoto(ctx,src,0,0,W,H,mirror);
+    drawPhoto(ctx,src,0,0,W,H,o);
     let g=ctx.createLinearGradient(0,0,0,380);g.addColorStop(0,'rgba(20,45,70,.6)');g.addColorStop(1,'rgba(20,45,70,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,380);
     logoTile(ctx,60,60,140);
     ctx.fillStyle='#fff';ctx.textAlign='left';ctx.font=F('800',56);ctx.fillText('NUMED',230,128);
@@ -3718,6 +3772,50 @@ function drawScene(ctx,src,key,d,mirror){
   }
   ctx.restore();
 }
+window.NumedFrames={W,H,FRAMES,setLogos,draw:drawScene,
+  ready:()=>Promise.all([LOGO,WORD].filter(Boolean).map(i=>i.decode?i.decode().catch(()=>{}):Promise.resolve()))};
+})();
+</script>
+<script id="numed-photobooth">
+/* ═══════════════════════════════════════════════════════════════
+   NUMED · Photo booth
+   - Cámara con vista previa en vivo, 3 marcos, cuenta regresiva y flash.
+   - La foto (formato historia 1080×1920) se sube a Supabase Storage y el QR
+     abre un enlace firmado que vence. Si la subida falla, se puede descargar aquí.
+   - Permiso para Instagram: opcional y desmarcado por defecto. Las fotos con
+     permiso se guardan en la carpeta "con-permiso-instagram/".
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+/* ── Configuración ── */
+const BUCKET='numed-experience';      // bucket de Supabase Storage
+const LINK_HOURS=24;                  // vigencia del enlace del QR
+const SHOW_BIO_AGE=false;             // ⚠ Mantener en false hasta que el modelo esté validado clínicamente.
+const W=1080,H=1920;
+
+const $=id=>document.getElementById(id);
+const FRAMES=NumedFrames.FRAMES;
+let frame='edad',stream=null,raf=0,mode='idle',shot=null,shotBlob=null,lastUrl=null,busy=false;
+const video=()=>$('bo-video');
+const img=src=>{const i=new Image();i.src=src;return i;};
+function logos(){NumedFrames.setLogos(document.querySelector('.header-logo img')?.src,document.querySelector('#numed-auth-gate img')?.src);}
+
+/* ── Datos de la persona ── */
+function data(){
+  const name=($('patient-name')?.value||'').trim().replace(/\s+/g,' ');
+  const age=Number($('patient-age')?.value)||null;
+  return {name,first:name.split(' ')[0]||'',age,bio:bioAge(),date:new Date().toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})};
+}
+function bioAge(){
+  if(!SHOW_BIO_AGE||!window.NUMED_EXP)return null;
+  try{
+    const v=id=>Number($(id)?.value),answers={};
+    for(const k of NUMED_EXP.REQUIRED){const x=window._questionnaireAnswers?.[k];if(x!=null&&x!=='')answers[k]=Number(x);}
+    const r=NUMED_EXP.evaluate({age:v('patient-age'),sex:$('patient-gender')?.value,weightKg:v('patient-weight'),heightCm:v('patient-height'),waistCm:v('abdominal-perimeter'),gripKg:v('strength-value'),answers});
+    return r.status==='experimental'&&Number.isFinite(r.hypotheticalAge)?r.hypotheticalAge:null;
+  }catch(e){return null;}
+}
+
+const drawScene=(ctx,src,key,d,mirror)=>NumedFrames.draw(ctx,src,key,d,{mirror});
 
 /* ── Miniaturas ── */
 function thumb(key,d,cls){
@@ -3783,7 +3881,7 @@ async function upload(blob,consent){
   if(typeof numedClient==='undefined'||!numedClient||typeof numedUser==='undefined'||!numedUser)throw new Error('No hay una sesión del personal activa.');
   const day=new Date().toISOString().slice(0,10);
   const id=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));
-  const path=`${consent?'con-permiso-instagram':'privadas'}/${day}/${id}.jpg`;
+  const path=`${consent?'fotos-instagram':'fotos-privadas'}/estacion/${day}/${id}.jpg`;
   const st=numedClient.storage.from(BUCKET);
   const up=await st.upload(path,blob,{contentType:'image/jpeg',upsert:false});
   if(up.error)throw up.error;
@@ -3860,5 +3958,345 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
+<script id="numed-take-qr">
+/* ═══════════════════════════════════════════════════════════════
+   NUMED · Código QR personal "Llévate tu experiencia"
+   Al abrir la vista del participante:
+   1) genera el reporte PDF y lo sube a Supabase Storage (bucket privado),
+   2) crea una sesión temporal en numed_booth_sessions con un enlace firmado al PDF,
+   3) muestra un QR hacia mi.html?s=<sesión>, donde la persona descarga su PDF
+      y se toma la foto con la cámara de su propio teléfono.
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+const BUCKET='numed-experience';
+const SESSION_HOURS=48;          // tiempo para abrir el código
+const PDF_LINK_DAYS=7;           // vigencia del enlace del PDF
+const $=id=>document.getElementById(id);
+let cache={key:null,url:null},running=null;
+
+function fingerprint(){
+  return ['patient-name','patient-age','patient-gender','patient-weight','patient-height','abdominal-perimeter','strength-value'].map(id=>$(id)?.value||'').join('|')+'|'+JSON.stringify(window._questionnaireAnswers||{});
+}
+function setState(s,msg){const box=$('np-take-qr');if(!box)return;box.dataset.state=s;if(msg)$('np-take-exp').textContent=msg;}
+function drawQR(url){
+  const el=$('np-take-code');el.replaceChildren();
+  if(typeof window.QRCode!=='function')throw new Error('El generador de QR no está disponible.');
+  new window.QRCode(el,{text:url,width:520,height:520,colorDark:'#1c3d5e',colorLight:'#ffffff',correctLevel:window.QRCode.CorrectLevel.M});
+}
+async function create(){
+  if(typeof numedClient==='undefined'||!numedClient||typeof numedUser==='undefined'||!numedUser)throw new Error('No hay una sesión del personal activa.');
+  const rep=window.fxReportBlob();
+  const day=new Date().toISOString().slice(0,10);
+  const rid=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));
+  const path=`reportes/${day}/${rid}.pdf`;
+  const st=numedClient.storage.from(BUCKET);
+  const up=await st.upload(path,rep.blob,{contentType:'application/pdf',upsert:false});
+  if(up.error)throw up.error;
+  const sg=await st.createSignedUrl(path,PDF_LINK_DAYS*86400,{download:rep.filename});
+  if(sg.error)throw sg.error;
+  const name=($('patient-name')?.value||'').trim().replace(/\s+/g,' ');
+  const ins=await numedClient.from('numed_booth_sessions').insert({
+    display_name:name||null,age_years:Number($('patient-age')?.value)||null,
+    report_url:sg.data.signedUrl,report_filename:rep.filename,
+    expires_at:new Date(Date.now()+SESSION_HOURS*3600e3).toISOString(),created_by:numedUser.id
+  }).select('id').single();
+  if(ins.error)throw ins.error;
+  return location.origin+location.pathname+'?s='+encodeURIComponent(ins.data.id);
+}
+window.fxTakeRefresh=async function(force){
+  if(!$('np-take-qr'))return;
+  const key=fingerprint();
+  if(!force&&cache.key===key&&cache.url){drawQR(cache.url);setState('ready',`Código personal · vence en ${SESSION_HOURS} horas`);return;}
+  if(running)return running;
+  setState('loading');
+  running=(async()=>{
+    try{const url=await create();cache={key,url};drawQR(url);setState('ready',`Código personal · vence en ${SESSION_HOURS} horas`);}
+    catch(e){console.warn('NUMED QR',e);setState('error','No pudimos preparar el código: '+(e.message||e));}
+    finally{running=null;}
+  })();
+  return running;
+};
+window.fxTakeUrl=()=>cache.url;
+function init(){
+  const open=window.numedOpenParticipantResult;
+  window.numedOpenParticipantResult=function(...a){const r=open.apply(this,a);if(!$('numed-participant').hidden)setTimeout(()=>window.fxTakeRefresh(false),400);return r;};
+  const lo=window.numedLogout;
+  window.numedLogout=async function(...a){cache={key:null,url:null};$('np-take-code')?.replaceChildren();return lo.apply(this,a);};
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<template id="m-tpl"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:host{--navy:#244a6f;--ink:#1c3d5e;--lime:#b1c959;--lime-d:#6b8a1d;--muted:#5d7690;--faint:#8fa1b4;--line:#e2eaf0;--fill:#f4f8fb;--tint:#f4f8e7;
+  --grad:linear-gradient(120deg,#c6da7d,#b1c959 50%,#99b443);--r:22px;--ease:cubic-bezier(.2,.85,.25,1);--spring:cubic-bezier(.34,1.56,.64,1)}
+:host{display:block;min-height:100dvh;font-family:Montserrat,system-ui,sans-serif;color:var(--ink);background:radial-gradient(600px 400px at 100% 0,#e8eff6,transparent 60%),radial-gradient(500px 400px at 0 100%,#f1f6e2,transparent 60%),#fff;min-height:100dvh;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button,input{font-family:inherit}
+.wrap{max-width:560px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 18px max(28px,env(safe-area-inset-bottom))}
+.screen[hidden]{display:none!important}
+.screen{animation:in .5s var(--ease) both}
+@keyframes in{from{opacity:0;transform:translateY(14px)}}
+header.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+header.top img{height:46px;width:auto}
+.tag{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--lime-d);text-transform:uppercase}
+h1{font-size:clamp(28px,8vw,38px);letter-spacing:-1.2px;line-height:1.08;margin:6px 0 10px}
+h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:22px}
+.card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:20px;box-shadow:0 18px 40px -28px rgba(28,61,94,.5);margin-bottom:16px}
+.card h2{font-size:20px;letter-spacing:-.4px;margin:4px 0 6px;display:flex;align-items:center;gap:10px}
+.card p{font-size:14px;line-height:1.55;color:var(--muted)}
+.ico{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:22px;background:var(--tint);flex:none}
+.row{display:flex;gap:12px;align-items:center}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border:0;border-radius:999px;font-weight:800;font-size:16px;cursor:pointer;text-decoration:none;transition:transform .2s var(--spring);touch-action:manipulation}
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.5}
+.btn-primary{background:var(--grad);color:var(--ink);box-shadow:0 12px 26px -12px rgba(140,165,55,.8)}
+.btn-navy{background:var(--navy);color:#fff}
+.btn-ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+.btns{display:grid;gap:10px;margin-top:16px}
+.btns.two{grid-template-columns:1fr 1fr}
+.frames{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 4px}
+.frame{border:2px solid var(--line);border-radius:18px;padding:6px;background:#fff;display:flex;flex-direction:column;gap:6px;align-items:center;font-size:11px;font-weight:700;color:var(--ink);cursor:pointer;text-align:center;line-height:1.25;transition:all .25s var(--spring)}
+.frame canvas{width:100%;aspect-ratio:9/16;height:auto;border-radius:12px;background:var(--fill)}
+.frame[aria-pressed="true"]{border-color:var(--lime);background:var(--tint);box-shadow:0 10px 22px -12px rgba(140,165,55,.9)}
+.note{font-size:12px;color:var(--faint);line-height:1.5;text-align:center;margin-top:12px}
+.alert{padding:14px 16px;border-radius:16px;background:#fff6e8;color:#7a4a0c;font-size:14px;line-height:1.5;margin-bottom:16px}
+/* editor */
+.stage{position:relative;width:100%;max-width:min(100%,calc(64dvh*9/16));margin:0 auto;aspect-ratio:9/16;border-radius:24px;overflow:hidden;box-shadow:0 24px 50px -24px rgba(28,61,94,.6);touch-action:none;background:var(--fill)}
+.stage canvas{width:100%;height:100%;display:block}
+.hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:rgba(28,61,94,.78);color:#fff;font-size:12px;font-weight:700;padding:8px 14px;border-radius:999px;white-space:nowrap;pointer-events:none;transition:opacity .5s}
+.hint.off{opacity:0}
+.zoom{display:flex;align-items:center;gap:12px;margin:14px 2px 4px;font-size:18px}
+.zoom input{flex:1;accent-color:#8ea83a;height:28px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 2px;scrollbar-width:none}
+.chips button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{border-color:var(--lime);background:var(--tint)}
+.consent{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:18px;border:1.5px solid var(--line);background:#fff;margin-top:14px;font-size:12.5px;line-height:1.5;color:var(--muted);cursor:pointer}
+.consent input{flex:none;width:26px;height:26px;accent-color:#8ea83a;margin-top:1px}
+.consent b{display:block;color:var(--ink);font-size:14px;margin-bottom:2px}
+.consent:has(input:checked){border-color:var(--lime);background:var(--tint)}
+.consent.off{opacity:.55;pointer-events:none}
+.result{width:100%;max-width:min(100%,calc(60dvh*9/16));display:block;margin:0 auto;border-radius:22px;box-shadow:0 24px 50px -24px rgba(28,61,94,.6);-webkit-touch-callout:default}
+.ok{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--lime-d);background:var(--tint);padding:8px 12px;border-radius:999px;margin:14px auto 0}
+.center{text-align:center}
+.spin{width:52px;height:52px;border-radius:50%;border:5px solid var(--line);border-top-color:var(--lime);animation:sp .8s linear infinite;margin:0 auto 18px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.busy{position:fixed;inset:0;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);display:grid;place-content:center;text-align:center;z-index:50;font-weight:700}
+.busy[hidden]{display:none}
+.toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;font-size:14px;font-weight:600;padding:12px 18px;border-radius:16px;z-index:60;max-width:calc(100% - 32px);text-align:center;animation:in .4s var(--spring)}
+footer{text-align:center;font-size:11px;letter-spacing:2px;color:var(--faint);margin-top:26px}
+input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+</style>
+<div class="wrap">
+ <header class="top"><img data-word alt="NUMED"><span class="tag">Experience 360°</span></header>
+
+ <section class="screen" id="s-loading"><div class="center" style="padding:80px 0"><div class="spin"></div><b>Abriendo tu experiencia…</b></div></section>
+
+ <section class="screen" id="s-home" hidden>
+  <div class="tag">Tu experiencia NUMED</div>
+  <h1 id="hello">¡Hola!</h1>
+  <p class="lede">Aquí tienes tu reporte de bienestar y tu photo booth NUMED, listos en tu teléfono.</p>
+  <div class="alert" id="expired" hidden>Este código ya venció o no es válido. Pide uno nuevo en la estación NUMED. Igual puedes tomarte tu foto.</div>
+
+  <article class="card" id="c-report" hidden>
+   <div class="row"><span class="ico">📄</span><div><h2>Mi reporte de bienestar</h2><p>Tus indicadores y tu plan personalizado en PDF.</p></div></div>
+   <div class="btns two"><a class="btn btn-navy" id="r-open" target="_blank" rel="noopener">Ver PDF</a><button class="btn btn-ghost" id="r-save" type="button">Guardar</button></div>
+   <p class="note" id="r-exp"></p>
+  </article>
+
+  <article class="card">
+   <div class="row"><span class="ico">📸</span><div><h2>Photo booth NUMED</h2><p>Elige tu marco y tómate la foto con la cámara de tu teléfono.</p></div></div>
+   <div class="frames" id="frames"></div>
+   <div class="btns">
+    <button class="btn btn-primary" type="button" id="take">📸 Tomar mi foto</button>
+    <button class="btn btn-ghost" type="button" id="pick">🖼️ Elegir de mi galería</button>
+   </div>
+   <input type="file" id="f-cam" accept="image/*" capture="user">
+   <input type="file" id="f-lib" accept="image/*">
+  </article>
+ </section>
+
+ <section class="screen" id="s-edit" hidden>
+  <div class="tag">Ajusta tu foto</div>
+  <h1 style="font-size:26px">Mueve y acerca <span>a tu gusto</span></h1>
+  <div class="stage" id="stage"><canvas id="pv" width="720" height="1280"></canvas><div class="hint" id="hint">Arrastra y pellizca para ajustar</div></div>
+  <div class="zoom"><span>−</span><input type="range" id="zoom" min="1" max="3" step="0.01" value="1" aria-label="Acercar"><span>+</span></div>
+  <div class="chips" id="chips"></div>
+  <label class="consent" id="consent-box"><input type="checkbox" id="consent"><span><b>Autorizo a NUMED a publicar esta foto en sus historias de Instagram.</b>Es opcional. Tu foto se guarda en tu teléfono aunque no marques esta casilla, y puedes retirar tu permiso cuando quieras escribiéndole a NUMED.</span></label>
+  <div class="btns">
+   <button class="btn btn-primary" type="button" id="save">✓ Guardar mi foto</button>
+   <button class="btn btn-ghost" type="button" id="retake">↺ Tomar otra</button>
+  </div>
+ </section>
+
+ <section class="screen" id="s-done" hidden>
+  <div class="tag center">¡Lista!</div>
+  <h1 class="center" style="font-size:28px">Tu foto <span>NUMED</span></h1>
+  <img class="result" id="result" alt="Tu foto NUMED">
+  <div class="center"><span class="ok" id="done-ok" hidden>✓ Gracias por autorizarnos a compartirla</span></div>
+  <p class="note">Toca “Compartir o guardar”. En iPhone también puedes mantener presionada la imagen y elegir “Guardar en Fotos”.</p>
+  <div class="btns">
+   <button class="btn btn-primary" type="button" id="share">⬆ Compartir o guardar</button>
+   <button class="btn btn-ghost" type="button" id="again">📸 Tomar otra</button>
+   <button class="btn btn-ghost" type="button" id="home">← Volver</button>
+  </div>
+ </section>
+
+ <footer>NUMED EXPERIENCE 360°</footer>
+</div>
+<div class="busy" id="busy" hidden><div><div class="spin"></div><span id="busy-txt">Creando tu foto en alta resolución…</span></div></div>
+
+</template>
+<div id="m-host"></div>
+<script id="numed-mobile">
+/* Vista del participante en su celular/iPad: misma página abierta con ?s=<sesión> desde el QR. */
+if(window.NUMED_MOBILE){
+const R=document.getElementById("m-host").attachShadow({mode:"open"});R.append(document.getElementById("m-tpl").content.cloneNode(true));
+R.querySelector("img[data-word]").src=document.querySelector("#numed-auth-gate img").src;
+(function(){
+const BUCKET='numed-experience';
+const OUT_W=1440,OUT_H=2560;          // 2K vertical, formato historia
+const $=id=>R.getElementById(id);
+const sid=new URLSearchParams(location.search).get('s');
+const S={client:null,session:null,frame:'edad',img:null,zoom:1,ox:0,oy:0,blob:null,url:null,uploaded:false};
+NumedFrames.setLogos(document.querySelector('.header-logo img')?.src,document.querySelector('#numed-auth-gate img')?.src);
+
+function show(id){R.querySelectorAll('.screen').forEach(s=>s.hidden=s.id!==id);window.scrollTo(0,0);}
+function toast(t){const e=document.createElement('div');e.className='toast';e.textContent=t;R.append(e);setTimeout(()=>e.remove(),3600);}
+function busy(on,t){$('busy').hidden=!on;if(t)$('busy-txt').textContent=t;}
+const data=()=>({name:S.session?.display_name||'',age:S.session?.age_years||null,bio:null});
+const fontsReady=()=>Promise.race([Promise.all(['800 60px Montserrat','700 30px Montserrat','600 30px Montserrat'].map(f=>document.fonts.load(f))),new Promise(r=>setTimeout(r,2500))]).catch(()=>{});
+
+/* ── Sesión ── */
+async function boot(){
+  await new Promise(r=>window.addEventListener('load',r,{once:true}));
+  try{
+    const cfg=window.NUMED_SUPABASE;
+    if(cfg?.url&&cfg?.anonKey&&window.supabase?.createClient)S.client=window.supabase.createClient(cfg.url,cfg.anonKey,{auth:{persistSession:false}});
+    if(S.client&&sid){
+      const {data:rows,error}=await S.client.rpc('numed_get_booth_session',{p_id:sid});
+      if(!error&&rows&&rows.length)S.session=rows[0];
+    }
+  }catch(e){console.warn(e);}
+  await Promise.all([fontsReady(),NumedFrames.ready()]);
+  const first=(S.session?.display_name||'').split(' ')[0];
+  $('hello').innerHTML='';$('hello').append(document.createTextNode(first?`¡Hola, ${first}! `:'¡Hola! '));const sp=document.createElement('span');sp.textContent='👋';$('hello').append(sp);
+  if(S.session?.report_url){
+    $('c-report').hidden=false;$('r-open').href=S.session.report_url;
+    $('r-exp').textContent='Guárdalo en tu teléfono: el enlace funciona por tiempo limitado.';
+  }
+  if(!S.session){$('expired').hidden=!sid;$('consent-box').classList.add('off');$('consent').disabled=true;}
+  renderFrames();show('s-home');
+}
+
+/* ── Reporte ── */
+$('r-save').addEventListener('click',async()=>{
+  const s=S.session;if(!s?.report_url)return;
+  try{
+    busy(true,'Descargando tu reporte…');
+    const b=await (await fetch(s.report_url)).blob();
+    const file=new File([b],s.report_filename||'NUMED_Reporte.pdf',{type:'application/pdf'});
+    busy(false);
+    if(navigator.canShare?.({files:[file]})){await navigator.share({files:[file],title:'Mi reporte NUMED'}).catch(()=>{});}
+    else{const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=file.name;document.body.append(a);a.click();a.remove();}
+  }catch(e){busy(false);location.href=s.report_url;}
+});
+
+/* ── Marcos ── */
+function thumb(key){const c=document.createElement('canvas');c.width=360;c.height=640;const x=c.getContext('2d');x.scale(1/3,1/3);NumedFrames.draw(x,null,key,data(),{});return c;}
+function renderFrames(){
+  const box=$('frames');box.replaceChildren();
+  NumedFrames.FRAMES.forEach(f=>{const b=document.createElement('button');b.type='button';b.className='frame';b.setAttribute('aria-pressed',String(f.key===S.frame));b.append(thumb(f.key));const s=document.createElement('span');s.textContent=f.label;b.append(s);
+    b.onclick=()=>{S.frame=f.key;box.querySelectorAll('.frame').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));};box.append(b);});
+  const chips=$('chips');chips.replaceChildren();
+  NumedFrames.FRAMES.forEach(f=>{const b=document.createElement('button');b.type='button';b.textContent=f.label;b.setAttribute('aria-pressed',String(f.key===S.frame));
+    b.onclick=()=>{S.frame=f.key;chips.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();};chips.append(b);});
+}
+
+/* ── Foto ── */
+$('take').onclick=()=>$('f-cam').click();
+$('pick').onclick=()=>$('f-lib').click();
+async function load(file){
+  if(!file)return;busy(true,'Preparando tu foto…');
+  try{
+    let src;
+    try{src=await createImageBitmap(file,{imageOrientation:'from-image'});}
+    catch(e){src=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(file);});}
+    S.img=src;S.zoom=1;S.ox=0;S.oy=0;S.blob=null;S.uploaded=false;$('zoom').value=1;$('consent').checked=false;
+    renderFrames();show('s-edit');draw();setTimeout(()=>$('hint').classList.add('off'),3500);
+  }catch(e){toast('No pudimos abrir esa imagen. Intenta con otra.');}
+  finally{busy(false);}
+}
+['f-cam','f-lib'].forEach(id=>$(id).addEventListener('change',e=>{load(e.target.files[0]);e.target.value='';}));
+
+function draw(){
+  const c=$('pv'),x=c.getContext('2d');x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,c.width,c.height);
+  x.scale(c.width/NumedFrames.W,c.height/NumedFrames.H);
+  NumedFrames.draw(x,S.img,S.frame,data(),{zoom:S.zoom,ox:S.ox,oy:S.oy});
+}
+// Gestos: arrastrar y pellizcar
+(function(){
+  const st=$('stage'),pts=new Map();let base=null;
+  const rect=()=>st.getBoundingClientRect();
+  st.addEventListener('pointerdown',e=>{st.setPointerCapture(e.pointerId);pts.set(e.pointerId,{x:e.clientX,y:e.clientY});base=null;$('hint').classList.add('off');});
+  st.addEventListener('pointermove',e=>{
+    if(!pts.has(e.pointerId))return;const prev=pts.get(e.pointerId);pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    const r=rect();
+    if(pts.size===1){S.ox+=(e.clientX-prev.x)/r.width;S.oy+=(e.clientY-prev.y)/r.height;}
+    else if(pts.size===2){const [a,b]=[...pts.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(base){S.zoom=Math.max(1,Math.min(3,S.zoom*d/base));$('zoom').value=S.zoom;}base=d;}
+    clampOffsets();requestAnimationFrame(draw);
+  });
+  const end=e=>{pts.delete(e.pointerId);base=null;};
+  ['pointerup','pointercancel','pointerleave'].forEach(t=>st.addEventListener(t,end));
+  st.addEventListener('wheel',e=>{e.preventDefault();S.zoom=Math.max(1,Math.min(3,S.zoom*(e.deltaY<0?1.06:.94)));$('zoom').value=S.zoom;clampOffsets();draw();},{passive:false});
+})();
+function clampOffsets(){const m=(S.zoom-1)/2+.5;S.ox=Math.max(-m,Math.min(m,S.ox));S.oy=Math.max(-m,Math.min(m,S.oy));}
+$('zoom').addEventListener('input',e=>{S.zoom=Number(e.target.value);clampOffsets();draw();});
+$('retake').onclick=()=>show('s-home');
+$('again').onclick=()=>show('s-home');
+$('home').onclick=()=>show('s-home');
+
+/* ── Exportar en alta resolución ── */
+function render(){
+  return new Promise(res=>{
+    const c=document.createElement('canvas');c.width=OUT_W;c.height=OUT_H;const x=c.getContext('2d');
+    x.scale(OUT_W/NumedFrames.W,OUT_H/NumedFrames.H);
+    NumedFrames.draw(x,S.img,S.frame,data(),{zoom:S.zoom,ox:S.ox,oy:S.oy});
+    c.toBlob(b=>res(b),'image/jpeg',.94);
+  });
+}
+async function upload(blob){
+  if(!S.client||!S.session||S.uploaded)return;
+  const id=crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);
+  const path=`fotos-instagram/${S.session.id}/${id}.jpg`;
+  const up=await S.client.storage.from(BUCKET).upload(path,blob,{contentType:'image/jpeg',upsert:false});
+  if(up.error)throw up.error;
+  await S.client.rpc('numed_log_photo_consent',{p_session:S.session.id,p_path:path,p_frame:S.frame});
+  S.uploaded=true;
+}
+async function share(){
+  if(!S.blob)return;
+  const file=new File([S.blob],`NUMED_${new Date().toISOString().slice(0,10)}.jpg`,{type:'image/jpeg'});
+  if(navigator.canShare?.({files:[file]})){try{await navigator.share({files:[file],title:'Mi foto NUMED'});return;}catch(e){if(e.name==='AbortError')return;}}
+  const a=document.createElement('a');a.href=S.url;a.download=file.name;document.body.append(a);a.click();a.remove();
+}
+$('save').onclick=async()=>{
+  if(!S.img)return;busy(true,'Creando tu foto en alta resolución…');
+  try{
+    S.blob=await render();if(S.url)URL.revokeObjectURL(S.url);S.url=URL.createObjectURL(S.blob);
+    $('result').src=S.url;
+    const consent=$('consent').checked;$('done-ok').hidden=true;
+    if(consent){try{busy(true,'Enviando tu foto a NUMED…');await upload(S.blob);$('done-ok').hidden=false;}catch(e){toast('No pudimos enviar la foto a NUMED, pero ya es tuya.');}}
+    busy(false);show('s-done');
+  }catch(e){busy(false);toast('Algo salió mal al crear la foto. Intenta de nuevo.');}
+};
+$('share').onclick=share;
+
+boot();
+})();
+
+}
+</script>
 </body>
 </html>
