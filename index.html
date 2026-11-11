@@ -751,6 +751,74 @@ body.numed-touch .q-opt{min-height:124px}
 .sleep-tick-l{font-size:11px}
 .q-item{overflow-y:auto;justify-content:safe center;padding-bottom:8px}
 
+/* ═════════ LLÉVATE TU EXPERIENCIA + PHOTO BOOTH ═════════ */
+.np-take{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:clamp(20px,2.4vw,40px);align-items:center;background:linear-gradient(120deg,#f4f8e7,#eef3f8)!important;border:1px solid #dfe8b8!important}
+.np-take-intro .np-kicker{display:block}
+.np-take-intro h3{font-size:clamp(22px,2vw,34px);letter-spacing:-.8px;margin:6px 0 8px}
+.np-take-intro p{margin-bottom:20px}
+.np-booth-btn{font-size:16px!important;padding:18px 30px!important;animation:cta-breathe 2.4s ease-in-out infinite}
+.np-frames{display:flex;gap:14px}
+.np-frame{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;background:none;cursor:pointer;font:700 12px Montserrat,sans-serif;color:var(--text);transition:transform .35s var(--spring)}
+.np-frame:nth-child(1){transform:rotate(-4deg)}.np-frame:nth-child(3){transform:rotate(4deg)}
+.np-frame:hover{transform:translateY(-6px) rotate(0)}
+.np-frame canvas{width:clamp(96px,8vw,132px);aspect-ratio:9/16;height:auto;border-radius:14px;box-shadow:0 14px 30px -14px rgba(28,61,94,.5);background:#fff}
+.np-take>.np-qr-zone,.np-take>.np-status,.np-take>.np-booth-result{grid-column:1/-1}
+.np-booth-result{display:flex;gap:24px;align-items:center;flex-wrap:wrap;padding:20px;border-radius:24px;background:#fff;border:1px solid var(--line);animation:fx-pop .6s var(--spring)}
+.np-booth-result[hidden]{display:none}
+.np-booth-result img{height:220px;aspect-ratio:9/16;object-fit:cover;border-radius:14px;box-shadow:0 14px 30px -14px rgba(28,61,94,.5)}
+.np-booth-qr{display:flex;flex-direction:column;gap:8px}
+.np-booth-qr>div{background:#fff;padding:10px;border-radius:14px;box-shadow:0 0 0 1px var(--line)}
+.np-booth-qr small{color:var(--muted);font-size:12px}
+@media(max-width:900px){.np-take{grid-template-columns:1fr}.np-frames{justify-content:center}}
+
+#fx-booth[hidden]{display:none!important}
+#fx-booth{position:fixed;inset:0;z-index:46000;overflow:auto;background:radial-gradient(900px 600px at 85% 0%,#e3f4fa,transparent 60%),radial-gradient(800px 500px at 0% 100%,#f0f9e2,transparent 60%),#fff;padding:clamp(16px,2.4vw,40px);animation:fx-fade .4s ease;color:var(--text)}
+.bo-shell{max-width:1500px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;gap:clamp(14px,2vh,24px)}
+.bo-head{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.bo-head h2{font-size:clamp(26px,2.6vw,44px);letter-spacing:-1.2px;margin-top:4px}
+.bo-close{width:58px;height:58px;border-radius:50%;border:1px solid var(--line-2);background:#fff;font-size:20px;cursor:pointer;color:var(--text)}
+.bo-main{flex:1;display:grid;grid-template-columns:auto minmax(300px,440px);gap:clamp(20px,3vw,56px);align-items:center;justify-content:center}
+.bo-stage{position:relative;height:min(78vh,1100px);aspect-ratio:9/16;border-radius:30px;overflow:hidden;background:#e9eff5;box-shadow:0 30px 70px -30px rgba(28,61,94,.55)}
+.bo-stage canvas{width:100%;height:100%;display:block}
+.bo-stage video{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.bo-count{position:absolute;inset:0;display:grid;place-items:center;font:800 clamp(140px,16vh,240px) Montserrat,sans-serif;color:#fff;text-shadow:0 10px 40px rgba(0,0,0,.35);pointer-events:none}
+.bo-count.go{animation:bo-count 1s var(--ease) both}
+@keyframes bo-count{0%{transform:scale(1.8);opacity:0}25%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:scale(.7);opacity:0}}
+.bo-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.bo-flash.go{animation:bo-flash .7s ease-out}
+@keyframes bo-flash{0%{opacity:1}100%{opacity:0}}
+.bo-loading{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:16px;background:rgba(255,255,255,.82);backdrop-filter:blur(4px);font-size:18px}
+.bo-loading[hidden]{display:none}
+.bo-loading span{width:64px;height:64px;border-radius:50%;border:6px solid #e8eff4;border-top-color:var(--lime);animation:orb-spin .8s linear infinite}
+.bo-side{display:flex;flex-direction:column}
+.bo-step{display:flex;flex-direction:column;gap:14px;animation:item-in .5s var(--ease) both}
+.bo-step[hidden]{display:none}
+.bo-step>small{font-size:12px;font-weight:800;letter-spacing:2px;color:var(--accent)}
+.bo-frame-list{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.bo-frame{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px;border-radius:20px;border:2px solid var(--line);background:#fff;cursor:pointer;font:700 12px Montserrat,sans-serif;color:var(--text);text-align:center;transition:all .3s var(--spring)}
+.bo-frame canvas{width:100%;aspect-ratio:9/16;height:auto;border-radius:10px}
+.bo-frame[aria-pressed="true"]{border-color:var(--lime);background:#f4f8e7;box-shadow:var(--glow)}
+.bo-frame:active{transform:scale(.95)}
+.bo-shoot{min-height:84px!important;font-size:22px!important;margin-top:8px}
+.bo-hint{font-size:14px;color:var(--muted);line-height:1.55}
+.bo-consent{display:flex;gap:14px;align-items:flex-start;padding:18px;border-radius:20px;background:#fff;border:2px solid var(--line);cursor:pointer;font-size:13px;line-height:1.55;color:var(--muted);transition:border-color .3s}
+.bo-consent b{display:block;font-size:15px;color:var(--text);margin-bottom:4px}
+.bo-consent input{flex:none;width:30px;height:30px;accent-color:#8ea83a;margin-top:2px}
+.bo-consent:has(input:checked){border-color:var(--lime);background:#f4f8e7}
+.bo-step .btn{width:100%}
+.bo-qr{align-self:center;background:#fff;padding:16px;border-radius:24px;box-shadow:0 0 0 1px var(--line),0 0 0 10px #f2f6e3}
+.bo-qr:empty{display:none}
+.bo-qr-title{text-align:center;font-size:18px}
+@media(orientation:portrait),(max-width:1000px){.bo-main{grid-template-columns:1fr;justify-items:center}.bo-stage{height:min(56vh,900px)}.bo-side{width:min(100%,640px)}}
+@media (orientation:portrait) and (min-height:1400px){
+  #fx-booth .bo-stage{height:62vh}
+  #fx-booth .bo-head h2{font-size:52px}
+  #fx-booth .bo-side{width:min(100%,820px)}
+  #fx-booth .bo-step .btn{min-height:84px;font-size:22px}
+  #fx-booth .bo-consent{font-size:16px}#fx-booth .bo-consent b{font-size:19px}
+  #fx-booth .bo-frame-list{grid-template-columns:repeat(3,minmax(0,200px));justify-content:center}
+}
+
 </style>
 </head>
 <body data-k-stage="1" data-dir="fwd">
@@ -2513,8 +2581,53 @@ function numedRunResearchTests(){const base={age:35,sex:'masculino',weightKg:70,
    <article class="np-metric" data-k="waist"><span class="np-icon">🌿</span><span class="np-label">Cintura</span><div class="np-ring"></div><strong id="np-waist">—</strong><small>centímetros</small><span class="np-chip"></span></article>
   </div>
   <div class="np-disclaimer"><strong>Edad biológica:</strong> pendiente de validación del modelo. Consulta tus resultados con el personal NUMED.</div>
-  <div class="np-share"><div><h3>Llévate tus indicadores</h3><p>Genera voluntariamente un QR con estos cuatro valores, sin nombre, teléfono ni identificador. Cualquier persona que escanee el QR podrá leer los valores.</p></div><div class="np-actions"><button class="np-primary" type="button" onclick="numedShowShareQR()">Generar QR de mis valores</button><button type="button" onclick="numedCopyParticipantSummary()">Copiar resumen</button></div><div id="np-qr-zone" class="np-qr-zone"><div class="np-qr-code" id="np-qr-code"></div><p class="np-qr-note">Escanea el código con tu teléfono. El QR contiene texto con tus indicadores y no abre un expediente clínico.</p><button type="button" onclick="numedHideShareQR()">Ocultar QR</button></div><div class="np-status" id="np-status" role="status" aria-live="polite"></div></div>
+  <div class="np-share np-take">
+   <div class="np-take-intro"><span class="np-kicker">LLÉVATE TU EXPERIENCIA</span><h3>Tu foto NUMED, lista para compartir</h3><p>Tómate una foto con el marco que más te guste y escanea el código para guardarla en tu teléfono.</p>
+    <div class="np-actions"><button class="np-primary np-booth-btn" type="button" onclick="fxBoothOpen()">📸 Abrir photo booth</button><button type="button" onclick="numedShowShareQR()">QR solo con mis valores</button><button type="button" onclick="numedCopyParticipantSummary()">Copiar resumen</button></div></div>
+   <div class="np-frames" id="np-frames" aria-hidden="true"></div>
+   <div id="np-booth-result" class="np-booth-result" hidden><img id="np-booth-photo" alt="Tu foto NUMED"><div class="np-booth-qr"><div id="np-booth-qr"></div><b>Escanea para guardar tu foto</b><small id="np-booth-exp"></small></div></div>
+   <div id="np-qr-zone" class="np-qr-zone"><div class="np-qr-code" id="np-qr-code"></div><p class="np-qr-note">Este QR contiene solo texto con tus cuatro indicadores, sin nombre ni teléfono. No abre un expediente clínico.</p><button type="button" onclick="numedHideShareQR()">Ocultar QR</button></div>
+   <div class="np-status" id="np-status" role="status" aria-live="polite"></div>
+  </div>
   <p class="np-foot">NUMED EXPERIENCE 360°</p>
+ </div>
+</section>
+
+<section id="fx-booth" role="dialog" aria-modal="true" aria-label="Photo booth NUMED" hidden>
+ <div class="bo-shell">
+  <header class="bo-head"><div><span class="np-kicker">PHOTO BOOTH NUMED</span><h2 id="bo-title">Elige tu marco y sonríe</h2></div><button type="button" class="bo-close" onclick="fxBoothClose()" aria-label="Cerrar photo booth">✕</button></header>
+  <div class="bo-main">
+   <div class="bo-stage">
+    <canvas id="bo-canvas" width="1080" height="1920"></canvas>
+    <video id="bo-video" playsinline muted autoplay></video>
+    <div class="bo-count" id="bo-count" aria-live="assertive"></div>
+    <div class="bo-flash" id="bo-flash"></div>
+    <div class="bo-loading" id="bo-loading" hidden><span></span><b id="bo-loading-txt">Preparando tu foto…</b></div>
+   </div>
+   <aside class="bo-side">
+    <div class="bo-step" id="bo-step-frame">
+     <small>1 · ELIGE TU MARCO</small>
+     <div class="bo-frame-list" id="bo-frame-list"></div>
+     <button type="button" class="btn btn-primary bo-shoot" id="bo-shoot">📸 Tomar foto</button>
+     <p class="bo-hint">Cuenta regresiva de 3 segundos. ¡Mira a la cámara!</p>
+    </div>
+    <div class="bo-step" id="bo-step-review" hidden>
+     <small>2 · ¿TE GUSTA?</small>
+     <label class="bo-consent"><input type="checkbox" id="bo-insta"><span><b>Autorizo a NUMED a publicar esta foto en sus historias de Instagram.</b>Es opcional. Puedes llevarte tu foto aunque no marques esta casilla, y puedes retirar tu permiso cuando quieras escribiéndole a NUMED.</span></label>
+     <button type="button" class="btn btn-primary" id="bo-keep">✓ Usar esta foto</button>
+     <button type="button" class="btn btn-outline" id="bo-retake">↺ Repetir</button>
+    </div>
+    <div class="bo-step" id="bo-step-done" hidden>
+     <small>3 · LLÉVATELA</small>
+     <div class="bo-qr" id="bo-qr"></div>
+     <b class="bo-qr-title">Escanea con la cámara de tu teléfono</b>
+     <p class="bo-hint" id="bo-done-txt"></p>
+     <button type="button" class="btn btn-navy" id="bo-download">⬇ Descargar en esta estación</button>
+     <button type="button" class="btn btn-outline" id="bo-again">📸 Tomar otra</button>
+     <button type="button" class="btn btn-primary" onclick="fxBoothClose()">Listo</button>
+    </div>
+   </aside>
+  </div>
  </div>
 </section>
 
@@ -3474,6 +3587,274 @@ function init(){
   document.querySelectorAll('.sleep-rest-opts button').forEach(b=>b.addEventListener('click',()=>{st.rest=b.dataset.rest;draw();commit(true);}));
   $('questionnaire-form')?.addEventListener('reset',()=>{st.bed=22*60+30;st.wake=6*60+30;st.rest=null;setTimeout(draw,0);});
   draw();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<script id="numed-photobooth">
+/* ═══════════════════════════════════════════════════════════════
+   NUMED · Photo booth
+   - Cámara con vista previa en vivo, 3 marcos, cuenta regresiva y flash.
+   - La foto (formato historia 1080×1920) se sube a Supabase Storage y el QR
+     abre un enlace firmado que vence. Si la subida falla, se puede descargar aquí.
+   - Permiso para Instagram: opcional y desmarcado por defecto. Las fotos con
+     permiso se guardan en la carpeta "con-permiso-instagram/".
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+/* ── Configuración ── */
+const BUCKET='numed-photobooth';      // bucket de Supabase Storage
+const LINK_HOURS=24;                  // vigencia del enlace del QR
+const SHOW_BIO_AGE=false;             // ⚠ Mantener en false hasta que el modelo esté validado clínicamente.
+const W=1080,H=1920;
+
+const $=id=>document.getElementById(id);
+const C={navy:'#244a6f',ink:'#1c3d5e',lime:'#b1c959',limeDark:'#6b8a1d',muted:'#5d7690',white:'#ffffff'};
+const FRAMES=[
+  {key:'edad',label:'Mi edad'},
+  {key:'bio',label:'NUMED Edad Biológica'},
+  {key:'pregunta',label:'¿Y tú ya te la tomaste?'}
+];
+let frame='edad',stream=null,raf=0,mode='idle',shot=null,shotBlob=null,lastUrl=null,busy=false;
+const video=()=>$('bo-video');
+const img=src=>{const i=new Image();i.src=src;return i;};
+let LOGO=null,WORD=null;
+function logos(){
+  if(!LOGO){const s=document.querySelector('.header-logo img')?.src;if(s)LOGO=img(s);}
+  if(!WORD){const s=document.querySelector('#numed-auth-gate img')?.src;if(s)WORD=img(s);}
+}
+
+/* ── Datos de la persona ── */
+function data(){
+  const name=($('patient-name')?.value||'').trim().replace(/\s+/g,' ');
+  const age=Number($('patient-age')?.value)||null;
+  return {name,first:name.split(' ')[0]||'',age,bio:bioAge(),date:new Date().toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})};
+}
+function bioAge(){
+  if(!SHOW_BIO_AGE||!window.NUMED_EXP)return null;
+  try{
+    const v=id=>Number($(id)?.value),answers={};
+    for(const k of NUMED_EXP.REQUIRED){const x=window._questionnaireAnswers?.[k];if(x!=null&&x!=='')answers[k]=Number(x);}
+    const r=NUMED_EXP.evaluate({age:v('patient-age'),sex:$('patient-gender')?.value,weightKg:v('patient-weight'),heightCm:v('patient-height'),waistCm:v('abdominal-perimeter'),gripKg:v('strength-value'),answers});
+    return r.status==='experimental'&&Number.isFinite(r.hypotheticalAge)?r.hypotheticalAge:null;
+  }catch(e){return null;}
+}
+
+/* ── Utilidades de dibujo ── */
+const F=(w,s)=>`${w} ${s}px Montserrat, "Helvetica Neue", Arial, sans-serif`;
+function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function fit(ctx,text,maxW,size,weight='800',min=24){let s=size;ctx.font=F(weight,s);while(ctx.measureText(text).width>maxW&&s>min){s-=2;ctx.font=F(weight,s);}return s;}
+function spaced(ctx,text,x,y,sp){let cx=x;for(const ch of text){ctx.fillText(ch,cx,y);cx+=ctx.measureText(ch).width+sp;}return cx-x;}
+function drawPhoto(ctx,src,x,y,w,h,mirror){
+  ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();
+  const sw=src?(src.videoWidth||src.width):0,sh=src?(src.videoHeight||src.height):0;
+  if(src&&sw&&sh){
+    const k=Math.max(w/sw,h/sh),dw=sw*k,dh=sh*k,dx=x+(w-dw)/2,dy=y+(h-dh)/2;
+    if(mirror){ctx.translate(x*2+w,0);ctx.scale(-1,1);}
+    ctx.drawImage(src,dx,dy,dw,dh);
+  }else{ // silueta de ejemplo para las miniaturas
+    const g=ctx.createLinearGradient(x,y,x+w,y+h);g.addColorStop(0,'#e3ecf5');g.addColorStop(1,'#eef4dc');ctx.fillStyle=g;ctx.fillRect(x,y,w,h);
+    ctx.fillStyle='rgba(36,74,111,.18)';ctx.beginPath();ctx.arc(x+w/2,y+h*.38,w*.17,0,7);ctx.fill();
+    rr(ctx,x+w*.2,y+h*.56,w*.6,h*.6,w*.25);ctx.fill();
+  }
+  ctx.restore();
+}
+function logoTile(ctx,x,y,size){
+  ctx.save();ctx.fillStyle='#fff';ctx.shadowColor='rgba(0,0,0,.18)';ctx.shadowBlur=24;rr(ctx,x,y,size,size,size*.26);ctx.fill();ctx.restore();
+  if(LOGO?.complete&&LOGO.naturalWidth){const p=size*.14,lw=size-2*p,lh=lw*LOGO.naturalHeight/LOGO.naturalWidth;ctx.drawImage(LOGO,x+p,y+(size-lh)/2,lw,lh);}
+}
+
+/* ── Marcos ── */
+function drawScene(ctx,src,key,d,mirror){
+  ctx.save();ctx.clearRect(0,0,W,H);
+  if(key==='bio'){
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+    drawPhoto(ctx,src,60,60,W-120,H-520,mirror);
+    ctx.fillStyle=C.lime;ctx.fillRect(60,H-460,W-120,10);
+    if(WORD?.complete&&WORD.naturalWidth){const ww=290,wh=ww*WORD.naturalHeight/WORD.naturalWidth;ctx.drawImage(WORD,70,H-410+(300-wh)/2-10,ww,wh);}
+    ctx.fillStyle=C.navy;ctx.textAlign='right';ctx.textBaseline='alphabetic';
+    ctx.font=F('600',40);ctx.fillStyle=C.limeDark;ctx.fillText('NUMED EXPERIENCE 360°',W-70,H-330);
+    ctx.fillStyle=C.navy;ctx.font=F('800',110);ctx.fillText('EDAD',W-70,H-215);
+    ctx.font=F('800',96);ctx.fillText('BIOLÓGICA',W-70,H-115);
+    ctx.font=F('600',34);ctx.fillStyle=C.muted;ctx.fillText(d.date,W-70,H-60);
+  }else if(key==='pregunta'){
+    drawPhoto(ctx,src,0,0,W,H,mirror);
+    let g=ctx.createLinearGradient(0,H*.45,0,H);g.addColorStop(0,'rgba(28,61,94,0)');g.addColorStop(1,'rgba(20,45,70,.55)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    logoTile(ctx,60,70,150);
+    // sticker
+    ctx.save();ctx.translate(W-200,250);ctx.rotate(-.16);ctx.fillStyle=C.lime;ctx.beginPath();ctx.arc(0,0,140,0,7);ctx.fill();
+    ctx.fillStyle=C.navy;ctx.textAlign='center';ctx.font=F('800',62);ctx.fillText('¡YO SÍ!',0,8);ctx.font=F('700',30);ctx.fillText('ya me la tomé',0,56);ctx.restore();
+    // banner
+    const by=H-700;ctx.fillStyle=C.navy;rr(ctx,50,by,W-100,620,48);ctx.fill();
+    ctx.fillStyle=C.lime;rr(ctx,50,by,W-100,16,8);ctx.fill();
+    ctx.textAlign='left';ctx.fillStyle='#fff';
+    fit(ctx,'¿Y tú ya te tomaste tu',W-200,78);ctx.fillText('¿Y tú ya te tomaste tu',100,by+150);
+    ctx.fillStyle=C.lime;fit(ctx,'edad biológica?',W-200,128);ctx.fillText('edad biológica?',100,by+300);
+    ctx.fillStyle='#fff';ctx.font=F('600',42);ctx.fillText('Hazla en NUMED Experience 360°',100,by+410);
+    ctx.fillStyle=C.lime;ctx.font=F('800',40);ctx.fillText('#NUMEDExperience360',100,by+500);
+    ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=F('600',30);ctx.fillText(d.date,100,by+560);
+    ctx.lineWidth=22;ctx.strokeStyle=C.lime;ctx.strokeRect(11,11,W-22,H-22);
+  }else{ // 'edad'
+    drawPhoto(ctx,src,0,0,W,H,mirror);
+    let g=ctx.createLinearGradient(0,0,0,380);g.addColorStop(0,'rgba(20,45,70,.6)');g.addColorStop(1,'rgba(20,45,70,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,380);
+    logoTile(ctx,60,60,140);
+    ctx.fillStyle='#fff';ctx.textAlign='left';ctx.font=F('800',56);ctx.fillText('NUMED',230,128);
+    ctx.fillStyle=C.lime;ctx.font=F('700',30);spaced(ctx,'EXPERIENCE 360°',232,176,4);
+    const cy=H-650,cw=W-100;
+    ctx.save();ctx.shadowColor='rgba(0,0,0,.25)';ctx.shadowBlur=40;ctx.fillStyle='rgba(255,255,255,.97)';rr(ctx,50,cy,cw,590,48);ctx.fill();ctx.restore();
+    ctx.fillStyle=C.lime;rr(ctx,50,cy,cw,16,8);ctx.fill();
+    ctx.fillStyle=C.limeDark;ctx.font=F('800',30);spaced(ctx,'HOY ME EVALUÉ EN NUMED',100,cy+95,3);
+    ctx.fillStyle=C.ink;const nm=d.name||'Mi evaluación';fit(ctx,nm,cw-100,84);ctx.fillText(nm,100,cy+190);
+    // bloques de edad
+    const bw=(cw-130)/2,by=cy+240,bh=250;
+    [[100,'EDAD CRONOLÓGICA',d.age?String(d.age):'—','años',false],[100+bw+30,'EDAD BIOLÓGICA',d.bio!=null?String(d.bio):'Pronto',d.bio!=null?'años':'en validación',true]].forEach(([x,lab,val,unit,hi])=>{
+      ctx.fillStyle=hi?'#f2f6e3':'#eef3f8';rr(ctx,x,by,bw,bh,32);ctx.fill();
+      ctx.fillStyle=C.muted;ctx.font=F('800',26);spaced(ctx,lab,x+34,by+60,2);
+      ctx.fillStyle=hi?C.limeDark:C.ink;const vs=fit(ctx,val,bw-68,val.length>3?92:130);ctx.fillText(val,x+34,by+(vs>100?190:175));
+      ctx.fillStyle=C.muted;ctx.font=F('700',32);ctx.fillText(unit,x+34,by+228);
+    });
+    ctx.fillStyle=C.muted;ctx.font=F('600',28);ctx.textAlign='right';ctx.fillText(d.date,50+cw-50,cy+95);
+    ctx.lineWidth=16;ctx.strokeStyle=C.lime;ctx.strokeRect(8,8,W-16,H-16);
+  }
+  ctx.restore();
+}
+
+/* ── Miniaturas ── */
+function thumb(key,d,cls){
+  const c=document.createElement('canvas');c.width=W;c.height=H;c.className=cls||'';
+  drawScene(c.getContext('2d'),null,key,d,false);return c;
+}
+function renderThumbs(){
+  logos();const d=data();
+  const box=$('np-frames');
+  if(box){box.replaceChildren();FRAMES.forEach(f=>{const b=document.createElement('button');b.type='button';b.className='np-frame';b.append(thumb(f.key,d));const s=document.createElement('span');s.textContent=f.label;b.append(s);b.onclick=()=>{frame=f.key;window.fxBoothOpen();};box.append(b);});}
+  const list=$('bo-frame-list');
+  if(list){list.replaceChildren();FRAMES.forEach(f=>{const b=document.createElement('button');b.type='button';b.className='bo-frame';b.setAttribute('aria-pressed',String(f.key===frame));b.append(thumb(f.key,d));const s=document.createElement('span');s.textContent=f.label;b.append(s);
+    b.onclick=()=>{frame=f.key;list.querySelectorAll('.bo-frame').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));if(mode!=='live')redrawStill();};list.append(b);});}
+}
+
+/* ── Cámara y vista previa ── */
+async function startCamera(){
+  if(stream)return true;
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:1920},height:{ideal:1080}},audio:false});
+    const v=video();v.srcObject=stream;await v.play().catch(()=>{});return true;
+  }catch(e){
+    window.fxToast?.('No pudimos acceder a la cámara. Revisa que esté conectada y que el navegador tenga permiso.','err');return false;
+  }
+}
+function stopCamera(){cancelAnimationFrame(raf);raf=0;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}}
+function loop(){
+  const ctx=$('bo-canvas').getContext('2d'),d=data();
+  const tick=()=>{if(mode!=='live')return;drawScene(ctx,video(),frame,d,true);raf=requestAnimationFrame(tick);};
+  cancelAnimationFrame(raf);raf=requestAnimationFrame(tick);
+}
+function redrawStill(){if(shot)drawScene($('bo-canvas').getContext('2d'),shot,frame,data(),false);else if(mode!=='live')drawScene($('bo-canvas').getContext('2d'),null,frame,data(),false);}
+function step(s){['frame','review','done'].forEach(k=>{$('bo-step-'+k).hidden=k!==s;});
+  $('bo-title').textContent={frame:'Elige tu marco y sonríe',review:'¡Qué buena foto!',done:'¡Lista! Llévatela'}[s];}
+function loading(on,txt){$('bo-loading').hidden=!on;if(txt)$('bo-loading-txt').textContent=txt;}
+
+async function goLive(){
+  shot=null;shotBlob=null;step('frame');renderThumbs();
+  const ok=await startCamera();
+  mode=ok?'live':'idle';$('bo-shoot').disabled=!ok;
+  if(ok)loop();else redrawStill();
+}
+function countdown(){
+  return new Promise(res=>{
+    const el=$('bo-count');let n=3;
+    const show=()=>{el.textContent=n;el.classList.remove('go');void el.offsetWidth;el.classList.add('go');};
+    show();const iv=setInterval(()=>{n--;if(n>0)show();else{clearInterval(iv);el.textContent='';el.classList.remove('go');res();}},1000);
+  });
+}
+async function shoot(){
+  if(mode!=='live'||busy)return;busy=true;$('bo-shoot').disabled=true;
+  await countdown();
+  const v=video(),fr=document.createElement('canvas');fr.width=v.videoWidth;fr.height=v.videoHeight;
+  const fx=fr.getContext('2d');fx.translate(fr.width,0);fx.scale(-1,1);fx.drawImage(v,0,0); // selfie tal como se ve
+  shot=fr;mode='review';cancelAnimationFrame(raf);
+  const fl=$('bo-flash');fl.classList.remove('go');void fl.offsetWidth;fl.classList.add('go');
+  redrawStill();$('bo-insta').checked=false;step('review');busy=false;$('bo-shoot').disabled=false;
+}
+function finalBlob(){
+  return new Promise(res=>{const c=document.createElement('canvas');c.width=W;c.height=H;drawScene(c.getContext('2d'),shot,frame,data(),false);c.toBlob(b=>res(b),'image/jpeg',.9);});
+}
+async function upload(blob,consent){
+  if(typeof numedClient==='undefined'||!numedClient||typeof numedUser==='undefined'||!numedUser)throw new Error('No hay una sesión del personal activa.');
+  const day=new Date().toISOString().slice(0,10);
+  const id=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));
+  const path=`${consent?'con-permiso-instagram':'privadas'}/${day}/${id}.jpg`;
+  const st=numedClient.storage.from(BUCKET);
+  const up=await st.upload(path,blob,{contentType:'image/jpeg',upsert:false});
+  if(up.error)throw up.error;
+  const sg=await st.createSignedUrl(path,LINK_HOURS*3600);
+  if(sg.error)throw sg.error;
+  // Registro opcional del permiso (si la tabla existe). Un error aquí no bloquea la entrega.
+  try{await numedClient.from('numed_photobooth').insert({storage_path:path,frame,instagram_consent:consent,created_by:numedUser.id});}catch(e){}
+  return sg.data.signedUrl;
+}
+function qr(el,text,size){
+  el.replaceChildren();
+  if(typeof window.QRCode!=='function'){const p=document.createElement('p');p.className='bo-hint';p.textContent='El generador de QR no está disponible. Usa la descarga en esta estación.';el.append(p);return false;}
+  new window.QRCode(el,{text,width:size,height:size,colorDark:'#1c3d5e',colorLight:'#ffffff',correctLevel:window.QRCode.CorrectLevel.L});return true;
+}
+async function keep(){
+  if(busy)return;busy=true;
+  const consent=$('bo-insta').checked;
+  loading(true,'Guardando tu foto…');
+  shotBlob=await finalBlob();
+  if(lastUrl)URL.revokeObjectURL(lastUrl);lastUrl=URL.createObjectURL(shotBlob);
+  let url=null,err=null;
+  try{url=await upload(shotBlob,consent);}catch(e){err=e;}
+  loading(false);step('done');busy=false;
+  const done=$('bo-done-txt'),qrBox=$('bo-qr');
+  if(url){
+    qr(qrBox,url,300);
+    done.textContent=`El enlace funciona durante ${LINK_HOURS} horas.${consent?' ¡Gracias por autorizarnos a compartirla en Instagram!':''}`;
+    const res=$('np-booth-result');if(res){$('np-booth-photo').src=lastUrl;qr($('np-booth-qr'),url,170);$('np-booth-exp').textContent=`Vence en ${LINK_HOURS} horas`;res.hidden=false;}
+    window.fxToast?.('¡Tu foto está lista! Escanea el código para guardarla.','ok');
+  }else{
+    qrBox.replaceChildren();
+    done.textContent='No pudimos subir la foto para el QR ('+(err?.message||'error desconocido')+'). Puedes descargarla en esta estación.';
+    window.fxToast?.('No se pudo subir la foto. Puedes descargarla en esta estación.','warn');
+  }
+}
+function download(){
+  if(!shotBlob)return;const a=document.createElement('a');a.href=lastUrl||URL.createObjectURL(shotBlob);
+  a.download=`NUMED_foto_${new Date().toISOString().slice(0,10)}.jpg`;document.body.append(a);a.click();a.remove();
+}
+
+/* ── API pública ── */
+window.fxBoothOpen=async function(){
+  const b=$('fx-booth');if(!b)return;logos();
+  b.hidden=false;document.body.classList.add('numed-modal-open');
+  await goLive();
+};
+window.fxBoothClose=function(){
+  const b=$('fx-booth');if(!b||b.hidden)return;
+  mode='idle';stopCamera();b.hidden=true;
+  if($('numed-participant')?.hidden!==false)document.body.classList.remove('numed-modal-open');
+};
+function clearResult(){const r=$('np-booth-result');if(r){r.hidden=true;$('np-booth-qr')?.replaceChildren();$('np-booth-photo')?.removeAttribute('src');}shot=null;shotBlob=null;}
+
+function init(){
+  if(!$('fx-booth'))return;
+  logos();
+  $('bo-shoot').addEventListener('click',shoot);
+  $('bo-retake').addEventListener('click',goLive);
+  $('bo-again').addEventListener('click',goLive);
+  $('bo-keep').addEventListener('click',keep);
+  $('bo-download').addEventListener('click',download);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('fx-booth').hidden)window.fxBoothClose();});
+  // Cada participante empieza sin la foto anterior.
+  const open=window.numedOpenParticipantResult;
+  window.numedOpenParticipantResult=function(...a){const r=open.apply(this,a);clearResult();setTimeout(renderThumbs,60);return r;};
+  const close=window.numedCloseParticipantResult;
+  window.numedCloseParticipantResult=function(...a){window.fxBoothClose();return close.apply(this,a);};
+  const lo=window.numedLogout;
+  window.numedLogout=async function(...a){window.fxBoothClose();clearResult();return lo.apply(this,a);};
+  // Las fuentes pueden cargar después: volver a dibujar las miniaturas.
+  document.fonts?.ready?.then(()=>{if($('numed-participant')&&!$('numed-participant').hidden)renderThumbs();});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
