@@ -1,0 +1,15 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const path = require('node:path');
+const engine = require('./numed-experimental-engine.js');
+const html=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
+const fn=html.match(/function numedRunResearchTests\(\)\{[^\n]*\}/);
+assert(fn,'Research UI test function absent');
+let output='';
+const ctx={ NUMED_EXP:engine, document:{getElementById(id){assert.equal(id,'nr-output');return {set textContent(v){output=v;}}}}};
+vm.runInNewContext(fn[0]+';numedRunResearchTests();',ctx);
+const lines=output.split('\n');
+assert.equal(lines.length,5);
+assert(lines.every(l=>l.startsWith('✓')),output);
+console.log('Research UI: 5/5 checks passed');
