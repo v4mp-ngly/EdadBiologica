@@ -4762,6 +4762,7 @@ h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text
 .consent.off{opacity:.55;pointer-events:none}
 .result{width:100%;max-width:min(100%,calc(60dvh*9/16));display:block;margin:0 auto;border-radius:22px;box-shadow:0 24px 50px -24px rgba(28,61,94,.6);-webkit-touch-callout:default}
 .ok{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--lime-d);background:var(--tint);padding:8px 12px;border-radius:999px;margin:14px auto 0}
+.ok[hidden]{display:none}
 .center{text-align:center}
 .spin{width:52px;height:52px;border-radius:50%;border:5px solid var(--line);border-top-color:var(--lime);animation:sp .8s linear infinite;margin:0 auto 18px}
 @keyframes sp{to{transform:rotate(360deg)}}
@@ -4972,6 +4973,12 @@ function render(){
     c.toBlob(b=>res(b),'image/jpeg',.94);
   });
 }
+function renderCopy(){ // copia para el expediente NUMED: 1080×1920, más liviana para subir por datos móviles
+  return new Promise(res=>{const c=document.createElement('canvas');c.width=NumedFrames.W;c.height=NumedFrames.H;
+    NumedFrames.draw(c.getContext('2d'),S.img,S.frame,data(),{zoom:S.zoom,ox:S.ox,oy:S.oy,mirror:S.flip});c.toBlob(b=>res(b),'image/jpeg',.86);});
+}
+function why(e){const m=String(e?.message||e?.error||e||'');
+  return /row-level security|policy|unauthorized|403/i.test(m)?'permiso de Supabase':/too large|size|413/i.test(m)?'archivo muy grande':/fetch|network|load failed/i.test(m)?'sin conexión':m.slice(0,60);}
 async function upload(blob,consent){
   if(!S.client||!S.session||S.uploaded)return;
   const id=crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);
@@ -4994,7 +5001,7 @@ $('save').onclick=async()=>{
     S.blob=await render();if(S.url)URL.revokeObjectURL(S.url);S.url=URL.createObjectURL(S.blob);
     $('result').src=S.url;
     const consent=$('consent').checked;$('done-ok').hidden=true;
-    if(S.session){try{busy(true,'Guardando tu foto en NUMED…');await upload(S.blob,consent);$('done-ok').textContent=consent?'✓ Guardada en NUMED · gracias por autorizarnos a compartirla':'✓ Guardada en tu expediente NUMED';$('done-ok').hidden=false;}catch(e){console.warn(e);toast('No pudimos guardar la foto en NUMED, pero ya es tuya.');}}
+    if(S.session){try{busy(true,'Guardando tu foto en NUMED…');await upload(await renderCopy(),consent);$('done-ok').textContent=consent?'✓ Guardada en NUMED · gracias por autorizarnos a compartirla':'✓ Guardada en tu expediente NUMED';$('done-ok').hidden=false;}catch(e){console.warn('NUMED foto celular',e);toast(`No pudimos guardar la copia en NUMED (${why(e)}), pero tu foto ya es tuya.`);}}
     busy(false);show('s-done');
   }catch(e){busy(false);toast('Algo salió mal al crear la foto. Intenta de nuevo.');}
 };
