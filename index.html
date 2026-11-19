@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NUMED | Edad Biológica · Experience 360°</title>
     <meta name="theme-color" content="#ffffff">
+<script>/* Compatibilidad con navegadores de pantallas LG/Smart TV (Chrome viejo) */(function(){
+if(!Object.hasOwn)Object.hasOwn=function(o,k){return Object.prototype.hasOwnProperty.call(o,k);};
+if(!String.prototype.replaceAll)String.prototype.replaceAll=function(a,b){return a instanceof RegExp?this.replace(a,b):this.split(a).join(typeof b==='function'?b(a):b);};
+[window.Element,window.Document,window.DocumentFragment].forEach(function(C){if(C&&!C.prototype.replaceChildren)C.prototype.replaceChildren=function(){while(this.lastChild)this.removeChild(this.lastChild);this.append.apply(this,arguments);};});
+var ua=navigator.userAgent||'',q=new URLSearchParams(location.search);
+/* Pantallas LG (webOS), Smart TV o equipos con poca memoria: modo ligero automático. ?lite=0 lo desactiva. */
+if(q.get('lite')!=='0'&&(q.get('lite')==='1'||/Web0S|webOS|SmartTV|SMART-TV|NetCast|Tizen|LG Browser|HbbTV/i.test(ua)||(navigator.deviceMemory&&navigator.deviceMemory<=2)))document.documentElement.classList.add('fx-lite','fx-tv');
+})();</script>
 <script>/* Modo celular: la misma página abierta desde el QR personal */(function(){var q=new URLSearchParams(location.search);if(q.has("s")){window.NUMED_MOBILE=true;document.documentElement.classList.add("m-mode");}})();</script>
 <script>/* ⚙️ CONFIGURACIÓN NUMED · Número de WhatsApp de la jornada (código de país + número, solo dígitos). Ej.: 18095551234 */
 window.NUMED_CONFIG={whatsapp:"18098932009"};</script>
@@ -689,6 +697,10 @@ html.fx-lite #fx-canvas{display:none}
 html.fx-lite .fx-aurora i{animation:none}
 html.fx-lite .orb-spin,html.fx-lite .header-mark,html.fx-lite .header-mark span,html.fx-lite .header-mark small,html.fx-lite .aside-orb::before,html.fx-lite .aside-orb::after,html.fx-lite .bio-age-hero::before,html.fx-lite .rx2-hero::after,html.fx-lite .rv-orb::before,html.fx-lite .wc-title .accent{animation:none!important}
 html.fx-lite #evaluate-btn,html.fx-lite .np-booth-btn,html.fx-lite .numed-reveal-cta:not([hidden]){animation:none!important}
+html.fx-tv *,html.fx-tv *::before,html.fx-tv *::after{animation-iteration-count:1!important}
+html.fx-tv .bo-loading span,html.fx-tv .np-take-wait span,html.fx-tv .rv-checks li.run::before,html.fx-tv .spin{animation-iteration-count:infinite!important}
+html.fx-tv .fx-aurora{display:none}
+html.fx-tv *{will-change:auto!important}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   #fx-canvas{display:none}
@@ -3120,8 +3132,8 @@ document.addEventListener('pointerdown',e=>{
 (function particles(){
   const cv=$('fx-canvas');if(!cv||REDUCE.matches||window.NUMED_MOBILE)return;
   const root=document.documentElement,q=new URLSearchParams(location.search);
-  if(q.get('lite')==='1'){root.classList.add('fx-lite');return;}
-  const ctx=cv.getContext('2d',{alpha:true});let W=0,H=0,pts=[],mouse={x:-999,y:-999},raf=0,last=0,samples=[],stopped=false;
+  if(q.get('lite')==='1'||root.classList.contains('fx-tv')){root.classList.add('fx-lite');return;}
+  const ctx=cv.getContext('2d',{alpha:true});let W=0,H=0,pts=[],mouse={x:-999,y:-999},raf=0,last=0,samples=[],stopped=false,idle=false;
   const STEP=1000/30,LINK=16900,BUCKETS=4;
   function resize(){W=innerWidth;H=innerHeight;cv.width=W;cv.height=H;
     const n=Math.round(clamp(W*H/32000,24,55));pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.6,vy:(Math.random()-.5)*.6,r:Math.random()*1.8+.6}));}
@@ -3129,6 +3141,8 @@ document.addEventListener('pointerdown',e=>{
   function frame(now){
     raf=requestAnimationFrame(frame);
     const dt=now-last;if(dt<STEP-2)return;
+    // Fuera de la bienvenida el fondo queda tapado: no gastar en dibujarlo.
+    if(!document.body.classList.contains('fx-welcome')){if(!idle){ctx.clearRect(0,0,W,H);idle=true;}last=now;return;}idle=false;
     // Detector: si en los primeros segundos la pantalla va lenta, pasamos a modo ligero
     if(last&&samples.length<90){samples.push(dt);if(samples.length===90){const avg=samples.slice(15).reduce((a,b)=>a+b,0)/75;if(avg>48){stop();return;}}}
     last=now;
@@ -4483,9 +4497,9 @@ function bioAge(){if(!SHOW_BIO_AGE)return null;try{return window.fxBioAge?window
 const drawScene=(ctx,src,key,d,mirror)=>NumedFrames.draw(ctx,src,key,d,{mirror});
 
 /* ── Miniaturas ── */
-function thumb(key,d,cls){
-  const c=document.createElement('canvas');c.width=W;c.height=H;c.className=cls||'';
-  drawScene(c.getContext('2d'),null,key,d,false);return c;
+function thumb(key,d,cls){ // miniatura liviana: 270×480 (1/16 de la memoria)
+  const c=document.createElement('canvas');c.width=W/4;c.height=H/4;c.className=cls||'';
+  const x=c.getContext('2d');x.scale(.25,.25);drawScene(x,null,key,d,false);return c;
 }
 function renderThumbs(){
   logos();const d=data();
