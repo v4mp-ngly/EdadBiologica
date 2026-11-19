@@ -158,6 +158,11 @@ html.fx-lite .wc-grid::before{animation:none}
 .wc-btn-pulse,.wc-btn-pulse::after{position:absolute;inset:0;border-radius:inherit;border:2px solid var(--lime);animation:wc-halo 2.4s ease-out infinite;pointer-events:none}
 .wc-btn-pulse::after{content:'';inset:-2px;animation-delay:1.2s}
 @keyframes wc-halo{from{opacity:.8;transform:scale(1)}to{opacity:0;transform:scale(1.35,1.7)}}
+.wc-today{display:inline-flex;align-items:center;gap:14px;margin-top:clamp(18px,3vh,30px);padding:14px 22px 14px 18px;border-radius:999px;background:#f4f8e7;border:1px solid #dfe8b8;color:var(--text);font-size:clamp(14px,1.05vw,18px);font-weight:600;line-height:1.35;animation:wc-rise .9s .9s var(--ease) both}
+.wc-today[hidden]{display:none}
+.wc-today>i{flex:none;width:12px;height:12px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(177,201,89,.7);animation:wc-ping 1.8s infinite}
+.wc-today b{font-weight:800;color:var(--accent)}
+@media (max-width:900px){.wc-today{border-radius:22px;text-align:left}}
 .wc-meta{display:flex;flex-wrap:wrap;gap:clamp(18px,2.4vw,44px);margin-top:clamp(26px,4vh,48px);animation:wc-rise .9s .75s var(--ease) both}
 .wc-meta span{font-size:clamp(12px,.9vw,15px);color:var(--muted);font-weight:600;letter-spacing:.5px}
 .wc-meta b{display:block;font-size:clamp(28px,2.4vw,42px);color:var(--text);font-weight:800;letter-spacing:-1px;line-height:1.1}
@@ -516,6 +521,25 @@ body[data-k-stage="4"] .k-result-return{display:flex;gap:12px;flex-wrap:wrap;mar
 .htable th{position:sticky;top:0;background:#f4f8fb;text-align:left;padding:12px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
 .htable td{padding:12px;border-top:1px solid var(--line);color:var(--text)!important}
 .htable tr:hover td{background:#f8faef}
+.dp-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;padding:18px 26px 0}
+.dp-kpi{padding:18px;border-radius:20px;background:#fff;border:1px solid var(--line);box-shadow:0 14px 30px -26px rgba(28,61,94,.5)}
+.dp-kpi small{display:block;font-size:11px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+.dp-kpi b{display:block;font-size:34px;font-weight:800;color:var(--text);letter-spacing:-1px;margin-top:6px;line-height:1}
+.dp-kpi span{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+.dp-kpi.hi{background:#f4f8e7;border-color:#dfe8b8}.dp-kpi.hi b{color:var(--accent)}
+.dp-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;padding:14px 26px 0}
+.dp-card{padding:18px;border-radius:20px;border:1px solid var(--line);background:#fff}
+.dp-card h4{font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:12px}
+.dp-bar{display:grid;grid-template-columns:110px 1fr 46px;gap:10px;align-items:center;font-size:13px;color:var(--text);margin:8px 0}
+.dp-bar i{display:block;height:12px;border-radius:6px;background:var(--fill);overflow:hidden}
+.dp-bar i em{display:block;height:100%;border-radius:6px;background:var(--navy)}
+.dp-bar.lime i em{background:var(--lime)}.dp-bar.amber i em{background:#e3b25a}
+.dp-bar b{text-align:right;font-weight:800}
+.dp-table-wrap{margin:14px 26px 26px;border:1px solid var(--line);border-radius:16px;overflow:auto;max-height:340px}
+.dp-table{width:100%;border-collapse:collapse;font-size:13px}
+.dp-table th{position:sticky;top:0;background:var(--surface-2);text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:10px 12px}
+.dp-table td{padding:9px 12px;border-top:1px solid var(--line);color:var(--text);white-space:nowrap}
+.dp-scroll{overflow:auto}
 .pg-modal{position:fixed;inset:0;z-index:64000;display:grid;place-items:center;padding:24px;background:rgba(28,61,94,.42)}
 .pg-modal[hidden]{display:none}
 .pg-box{width:min(1180px,100%);max-height:calc(100dvh - 48px);display:flex;flex-direction:column;background:#fff;border-radius:28px;box-shadow:0 40px 90px -30px rgba(16,38,60,.6);overflow:hidden}
@@ -1102,6 +1126,7 @@ html.fx-tv *{will-change:auto!important}
       <button class="wc-btn" type="button" onclick="startEvaluation()"><span class="wc-btn-pulse" aria-hidden="true"></span><span>Descubrir mi Edad Biológica</span><span class="arrow" aria-hidden="true">→</span></button>
       <div class="wc-touch">Toca la pantalla para comenzar</div>
       <div class="wc-meta"><span><b>4</b>mediciones</span><span><b>10</b>preguntas</span><span><b>1</b>Edad Biológica</span></div>
+      <div class="wc-today" id="wc-today" hidden><i aria-hidden="true"></i><span>Hoy <b id="wc-today-n">0</b> <span id="wc-today-who">personas descubrieron</span> su edad biológica<span id="wc-today-young" hidden> · <b id="wc-today-r">0 de cada 10</b> salieron más jóvenes</span></span></div>
     </div>
     <div class="wc-visual" aria-hidden="true">
       <svg viewBox="0 0 600 600">
@@ -1457,7 +1482,7 @@ html.fx-tv *{will-change:auto!important}
     <div id="numed-save-status" role="status" aria-live="polite"></div>
     <div id="history-section" style="display:none; margin-top:24px;">
         <div class="card">
-            <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">Historial seguro de evaluaciones · Supabase<button class="btn btn-primary" style="padding:10px 20px;font-size:13px" type="button" onclick="numedOpenPhotos()">📸 Fotos del photo booth</button></div><p style="color:#587083;font-size:12px;margin-bottom:14px">Los registros se recuperan de Supabase. La edad biológica en años permanece sin calcular hasta contar con una metodología validada.</p>
+            <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">Historial seguro de evaluaciones · Supabase<span style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-navy" style="padding:10px 20px;font-size:13px" type="button" onclick="numedOpenDayPanel()">📊 Panel del día</button><button class="btn btn-primary" style="padding:10px 20px;font-size:13px" type="button" onclick="numedOpenPhotos()">📸 Fotos del photo booth</button></span></div><p style="color:#587083;font-size:12px;margin-bottom:14px">Los registros se recuperan de Supabase. La edad biológica en años permanece sin calcular hasta contar con una metodología validada.</p>
 
             <!-- Leyenda de columnas -->
             <details class="history-guide"><summary>Guía de las columnas del historial <span>+</span></summary>
@@ -1751,9 +1776,14 @@ async function loadFromSupabase(){
   if(!numedClient||!numedUser)return [];
   const {data,error}=await numedClient.from('numed_evaluations')
     .select('id,patient_id,evaluated_at,age_years,gender,weight_kg,height_cm,waist_cm,grip_kg,bmi,waist_height_ratio,lifestyle_score,grip_category,waist_category,bmi_category,questionnaire,history_payload,numed_patients(full_name,phone)')
-    .order('evaluated_at',{ascending:true}).limit(500);
+    .order('evaluated_at',{ascending:false}).limit(500);
   if(error){numedMessage('Error al cargar historial: '+error.message,true);return [];}
-  window.evaluations=(data||[]).map(row=>({
+  window.evaluations=(data||[]).reverse().map(numedRowToEval);
+  renderHistoryTable();window.numedRefreshWelcomeCount?.();return window.evaluations;
+}
+const NUMED_EVAL_COLS='id,patient_id,evaluated_at,age_years,gender,weight_kg,height_cm,waist_cm,grip_kg,bmi,waist_height_ratio,lifestyle_score,grip_category,waist_category,bmi_category,questionnaire,history_payload,numed_patients(full_name,phone)';
+function numedRowToEval(row){
+  return ({
     ...(row.history_payload||{}),
     id:row.id,patient_id:row.patient_id,fecha:row.evaluated_at,
     nombre:row.numed_patients?.full_name||'',telefono:row.numed_patients?.phone||'',
@@ -1763,9 +1793,10 @@ async function loadFromSupabase(){
     nivelFuerza:row.grip_category,nivelAbdomen:row.waist_category,imcCategoria:row.bmi_category,
     edadBiologica:null,
     questionnaireAnswers:row.questionnaire||row.history_payload?.questionnaireAnswers||{}
-  }));
-  renderHistoryTable();return window.evaluations;
+  });
 }
+window.numedRowToEval=numedRowToEval;
+window.numedEvalCols=()=>NUMED_EVAL_COLS;
 async function saveEvaluation(evaluation){
   if(numedSaving)return false;
   if(!numedRequireAuth())return false;
@@ -3632,6 +3663,7 @@ function bioText(d){
     :'Tu edad biológica coincide con tu edad cronológica. Con este plan puedes seguir mejorándola.';
 }
 window.fxBioAge=()=>planData().bio;
+window.fxBioAgeOf=h=>{try{return planData(h).bio;}catch(e){return null;}};
 document.addEventListener('DOMContentLoaded',()=>{
   const open=window.numedOpenParticipantResult;if(!open)return;
   window.numedOpenParticipantResult=function(...a){const r=open.apply(this,a);try{const d=planData();
@@ -4377,6 +4409,142 @@ window.NumedFrames={W,H,FRAMES,setLogos,draw:drawScene,
  </div>
 </div>
 <div class="pg-big" id="pg-big" hidden><img id="pg-big-img" alt="Foto del photo booth"></div>
+<div class="pg-modal" id="dp-modal" hidden role="dialog" aria-modal="true" aria-labelledby="dp-title">
+ <div class="pg-box">
+  <header class="pg-head"><div><small>JORNADA NUMED</small><h3 id="dp-title">Panel del día</h3></div><button class="pg-x" type="button" id="dp-close" aria-label="Cerrar">✕</button></header>
+  <div class="pg-search"><input id="dp-date" type="date" style="flex:0 0 220px"><button class="btn btn-outline" type="button" id="dp-reload" style="padding:0 18px">↻ Actualizar</button><span style="flex:1"></span><button class="btn btn-primary" type="button" id="dp-xlsx" style="padding:0 22px">⬇ Exportar a Excel</button></div>
+  <div class="dp-scroll">
+   <p class="pg-status" id="dp-status"></p>
+   <div class="dp-kpis" id="dp-kpis"></div>
+   <div class="dp-cols" id="dp-cols"></div>
+   <div class="dp-table-wrap" id="dp-table-wrap" hidden><table class="dp-table"><thead><tr><th>Hora</th><th>Nombre</th><th>Género</th><th>Edad</th><th>Edad biológica</th><th>Diferencia</th><th>Fotos</th></tr></thead><tbody id="dp-rows"></tbody></table></div>
+  </div>
+ </div>
+</div>
+<script id="numed-day-stats">
+/* ═══════════════════════════════════════════════════════════════
+   NUMED · Contador de la bienvenida y Panel del día (solo personal)
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+const $=id=>document.getElementById(id);
+const esc=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dayKey=d=>{const x=new Date(d);if(isNaN(x))return '';return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');};
+const todayKey=()=>dayKey(new Date());
+
+/* Resumen puro de una lista de evaluaciones (se usa en la bienvenida, el panel y las pruebas) */
+function dayStats(evals,bioOf){
+  const rows=evals.map(e=>{const age=Number(e.edad),bio=bioOf?bioOf(e):null;return {e,age:Number.isFinite(age)&&age>0?age:null,bio:Number.isFinite(bio)?bio:null};});
+  const withBio=rows.filter(r=>r.bio!=null&&r.age!=null);
+  const younger=withBio.filter(r=>r.bio<r.age).length,equal=withBio.filter(r=>r.bio===r.age).length,older=withBio.length-younger-equal;
+  const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+  const groups=[['18–29',18,29],['30–39',30,39],['40–49',40,49],['50–59',50,59],['60+',60,200]].map(([l,a,b])=>[l,rows.filter(r=>r.age!=null&&r.age>=a&&r.age<=b).length]);
+  const sex={femenino:0,masculino:0,otro:0};rows.forEach(r=>{const g=String(r.e.genero||'').toLowerCase();sex[g in sex?g:'otro']++;});
+  return {total:rows.length,withBio:withBio.length,younger,equal,older,
+    youngerPerTen:withBio.length?Math.floor(10*younger/withBio.length):null,
+    avgAge:avg(rows.filter(r=>r.age!=null).map(r=>r.age)),avgBio:avg(withBio.map(r=>r.bio)),
+    avgDiff:avg(withBio.map(r=>r.bio-r.age)),groups,sex,rows};
+}
+window.numedDayStats=dayStats;
+
+/* ── 7) Contador de la bienvenida ── */
+const MIN_FOR_RATIO=5; // la proporción solo se muestra con al menos 5 personas
+window.numedRefreshWelcomeCount=function(){
+  const box=$('wc-today');if(!box)return;
+  const today=(window.evaluations||[]).filter(e=>dayKey(e.fecha)===todayKey());
+  const st=dayStats(today,window.fxBioAgeOf);
+  if(!st.total){box.hidden=true;return;}
+  $('wc-today-n').textContent=st.total;
+  $('wc-today-who').textContent=st.total===1?'persona descubrió':'personas descubrieron';
+  const showRatio=st.withBio>=MIN_FOR_RATIO&&st.youngerPerTen>=1;
+  $('wc-today-young').hidden=!showRatio;
+  if(showRatio)$('wc-today-r').textContent=`${st.youngerPerTen} de cada 10`;
+  box.hidden=false;
+};
+
+/* ── 8) Panel del día ── */
+let current={day:null,evals:[],photos:[],stats:null};
+const pct=(n,t)=>t?Math.round(100*n/t):0;
+const f1=x=>x==null?'—':(Math.round(x*10)/10).toLocaleString('es-DO');
+function bar(label,n,total,cls){return `<div class="dp-bar ${cls||''}"><span>${esc(label)}</span><i><em style="width:${pct(n,total)}%"></em></i><b>${n}</b></div>`;}
+function status(t){$('dp-status').textContent=t||'';}
+async function load(day){
+  current={day,evals:[],photos:[],stats:null};$('dp-kpis').innerHTML='';$('dp-cols').innerHTML='';$('dp-rows').innerHTML='';$('dp-table-wrap').hidden=true;
+  status('Cargando la jornada…');
+  const start=new Date(day+'T00:00:00'),end=new Date(start.getTime()+86400e3);
+  const ev=await numedClient.from('numed_evaluations').select(window.numedEvalCols()).gte('evaluated_at',start.toISOString()).lt('evaluated_at',end.toISOString()).order('evaluated_at',{ascending:true}).limit(2000);
+  if(ev.error){status('No pudimos cargar las evaluaciones: '+ev.error.message);return;}
+  const ph=await numedClient.from('numed_photobooth').select('created_at,frame,source,instagram_consent,patient_id,evaluation_id').gte('created_at',start.toISOString()).lt('created_at',end.toISOString()).limit(5000);
+  const photos=ph.error?[]:(ph.data||[]);
+  const evals=(ev.data||[]).map(window.numedRowToEval);
+  const st=dayStats(evals,window.fxBioAgeOf);
+  current={day,evals,photos,stats:st,photoError:ph.error};
+  if(!st.total){status('No hay evaluaciones registradas en este día.');}else status('');
+  const ig=photos.filter(p=>p.instagram_consent).length,cel=photos.filter(p=>p.source==='celular').length;
+  $('dp-kpis').innerHTML=[
+    ['Participantes',st.total,`${st.withBio} con edad biológica`],
+    ['Edad promedio',f1(st.avgAge),'años cronológicos'],
+    ['Edad biológica promedio',f1(st.avgBio),st.avgDiff==null?'':`${st.avgDiff<=0?'':'+'}${f1(st.avgDiff)} años vs. cronológica`],
+    ['Salieron más jóvenes',st.withBio?pct(st.younger,st.withBio)+'%':'—',`${st.younger} de ${st.withBio}`,'hi'],
+    ['Fotos del photo booth',ph.error?'—':photos.length,ph.error?'Ejecuta photobooth_paciente.sql':`${photos.length-cel} estación · ${cel} celular`],
+    ['Permisos Instagram',ph.error?'—':ig,'fotos autorizadas para publicar']
+  ].map(([k,v,sub,cls])=>`<div class="dp-kpi ${cls||''}"><small>${esc(k)}</small><b>${esc(v)}</b><span>${esc(sub)}</span></div>`).join('');
+  if(st.total){
+    $('dp-cols').innerHTML=`<div class="dp-card"><h4>Resultado</h4>${bar('Más jóvenes',st.younger,st.withBio,'lime')}${bar('Igual',st.equal,st.withBio)}${bar('Mayor',st.older,st.withBio,'amber')}</div>
+      <div class="dp-card"><h4>Edades</h4>${st.groups.map(([l,n])=>bar(l+' años',n,st.total)).join('')}</div>
+      <div class="dp-card"><h4>Género</h4>${bar('Femenino',st.sex.femenino,st.total,'lime')}${bar('Masculino',st.sex.masculino,st.total)}${st.sex.otro?bar('Sin dato',st.sex.otro,st.total):''}</div>`;
+    const count={};photos.forEach(p=>{const k=p.evaluation_id||'';if(k)count[k]=(count[k]||0)+1;});
+    $('dp-rows').innerHTML=st.rows.slice().reverse().map(r=>{const d=r.bio!=null&&r.age!=null?r.bio-r.age:null;
+      return `<tr><td>${esc(new Date(r.e.fecha).toLocaleTimeString('es-DO',{hour:'numeric',minute:'2-digit'}))}</td><td><b>${esc(r.e.nombre||'—')}</b></td><td style="text-transform:capitalize">${esc(r.e.genero||'—')}</td><td>${esc(r.age??'—')}</td><td>${esc(r.bio??'—')}</td><td>${d==null?'—':(d>0?'+':'')+d}</td><td>${count[r.e.id]||0}</td></tr>`;}).join('');
+    $('dp-table-wrap').hidden=false;
+  }
+}
+/* Exportar a Excel (SheetJS se descarga solo al exportar) */
+function loadXLSX(){return window.XLSX?Promise.resolve(window.XLSX):new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';sc.onload=()=>res(window.XLSX);sc.onerror=()=>rej(new Error('No se pudo cargar el generador de Excel. Revisa la conexión.'));document.head.append(sc);});}
+async function exportXLSX(){
+  const c=current;if(!c.stats){return;}
+  const btn=$('dp-xlsx');btn.disabled=true;const old=btn.textContent;btn.textContent='Preparando…';
+  try{
+    const X=await loadXLSX(),st=c.stats,wb=X.utils.book_new();
+    const resumen=[['NUMED Experience 360° · Panel del día'],['Fecha',c.day],[],
+      ['Participantes',st.total],['Con edad biológica',st.withBio],['Edad promedio',st.avgAge==null?'':Math.round(st.avgAge*10)/10],['Edad biológica promedio',st.avgBio==null?'':Math.round(st.avgBio*10)/10],
+      ['Diferencia promedio (biológica − cronológica)',st.avgDiff==null?'':Math.round(st.avgDiff*10)/10],
+      ['Más jóvenes',st.younger],['Igual',st.equal],['Mayor',st.older],['% más jóvenes',st.withBio?pct(st.younger,st.withBio)/100:''],[],
+      ['Fotos del photo booth',c.photos.length],['Fotos desde el celular',c.photos.filter(p=>p.source==='celular').length],['Permisos de Instagram',c.photos.filter(p=>p.instagram_consent).length],[],
+      ['Edades'],...st.groups.map(([l,n])=>[l+' años',n]),[],['Género'],['Femenino',st.sex.femenino],['Masculino',st.sex.masculino]];
+    const ws1=X.utils.aoa_to_sheet(resumen);ws1['!cols']=[{wch:44},{wch:16}];
+    const count={};c.photos.forEach(p=>{if(p.evaluation_id)count[p.evaluation_id]=(count[p.evaluation_id]||0)+1;});
+    const part=st.rows.map(r=>({Fecha:dayKey(r.e.fecha),Hora:new Date(r.e.fecha).toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit'}),Nombre:r.e.nombre||'',Teléfono:r.e.telefono||'',Género:r.e.genero||'',
+      'Edad cronológica':r.age??'','Edad biológica':r.bio??'',Diferencia:r.bio!=null&&r.age!=null?r.bio-r.age:'','Peso (kg)':r.e.peso??'','Talla (cm)':r.e.talla??'',IMC:r.e.imc??'','Cintura (cm)':r.e.abdomen??'','Fuerza (kg)':r.e.fuerzaOriginal??'','Puntaje hábitos':r.e.estiloVidaScore??'',Fotos:count[r.e.id]||0}));
+    const ws2=X.utils.json_to_sheet(part.length?part:[{Nota:'Sin evaluaciones'}]);ws2['!cols']=Object.keys(part[0]||{Nota:1}).map(k=>({wch:Math.max(10,k.length+2)}));ws2['!cols'][2]={wch:28};
+    const names={};st.rows.forEach(r=>{if(r.e.patient_id)names[r.e.patient_id]=r.e.nombre;});
+    const FR=k=>(window.NumedFrames?.FRAMES||[]).find(f=>f.key===k)?.label||k||'';
+    const fotos=c.photos.map(p=>({Hora:new Date(p.created_at).toLocaleTimeString('es-DO',{hour:'2-digit',minute:'2-digit'}),Paciente:names[p.patient_id]||(p.patient_id?'(otro día)':'Sin paciente'),Marco:FR(p.frame),Origen:p.source==='celular'?'Celular':'Estación','Permiso Instagram':p.instagram_consent?'Sí':'No'}));
+    const ws3=X.utils.json_to_sheet(fotos.length?fotos:[{Nota:'Sin fotos'}]);ws3['!cols']=[{wch:10},{wch:28},{wch:30},{wch:12},{wch:18}];
+    X.utils.book_append_sheet(wb,ws1,'Resumen');X.utils.book_append_sheet(wb,ws2,'Participantes');X.utils.book_append_sheet(wb,ws3,'Fotos');
+    X.writeFile(wb,`NUMED_Jornada_${c.day}.xlsx`);
+  }catch(e){window.fxToast?.(e.message||'No se pudo exportar.','err');}
+  finally{btn.disabled=false;btn.textContent=old;}
+}
+window.numedOpenDayPanel=function(){
+  if(typeof numedRequireAuth==='function'&&!numedRequireAuth())return;
+  $('dp-modal').hidden=false;document.body.classList.add('numed-modal-open');
+  const d=$('dp-date');if(!d.value)d.value=todayKey();load(d.value);
+};
+function close(){$('dp-modal').hidden=true;if($('numed-participant')?.hidden!==false&&$('fx-booth')?.hidden!==false&&$('pg-modal')?.hidden!==false)document.body.classList.remove('numed-modal-open');}
+function init(){
+  if(!$('dp-modal'))return;
+  $('dp-close').onclick=close;$('dp-modal').addEventListener('click',e=>{if(e.target===$('dp-modal'))close();});
+  $('dp-reload').onclick=()=>load($('dp-date').value||todayKey());
+  $('dp-date').addEventListener('change',()=>load($('dp-date').value||todayKey()));
+  $('dp-xlsx').onclick=exportXLSX;
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('dp-modal').hidden)close();});
+  // La bienvenida se actualiza cada vez que vuelve a mostrarse
+  const sw=window.showWelcomeScreen;if(typeof sw==='function')window.showWelcomeScreen=function(...a){const r=sw.apply(this,a);try{window.numedRefreshWelcomeCount();}catch(e){}return r;};
+  window.numedRefreshWelcomeCount();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 <script id="numed-photo-gallery">
 /* ═══════════════════════════════════════════════════════════════
    NUMED · Galería del photo booth (solo personal)
