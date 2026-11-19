@@ -40,7 +40,7 @@
   const answerErrors=[];
   let rawHabits=0;
   for(const field of REQUIRED){
-    if(!answers||!Object.hasOwn(answers,field)||!ok(answers[field])||!RULES.questionnaire[field]?.some(opt=>opt.points===answers[field]))answerErrors.push(field);
+    if(!answers||!Object.prototype.hasOwnProperty.call(answers,field)||!ok(answers[field])||!RULES.questionnaire[field]?.some(opt=>opt.points===answers[field]))answerErrors.push(field);
     else rawHabits+=answers[field];
   }
   if(answerErrors.length)errors.push('Respuestas ausentes o no contempladas: '+answerErrors.join(', '));
